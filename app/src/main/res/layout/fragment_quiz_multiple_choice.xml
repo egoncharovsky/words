@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.quiz.MultiChoiceFragment">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/tableLayout"
+            android:layout_marginBottom="16dp">
+
+        <TextView
+                android:text="@string/choose_translation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView4"
+                android:textAlignment="center"
+                android:textSize="24sp"/>
+
+        <TextView
+                android:text="@string/word"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/textView5"
+                android:gravity="center"
+                android:textSize="36sp"/>
+    </LinearLayout>
+
+    <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="230dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:stretchColumns="*"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/tableLayout"
+            style="?android:attr/buttonBarStyle">
+
+        <TableRow
+                android:layout_weight="1"
+                android:gravity="center">
+
+            <Button
+                    android:text="@string/choice1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/multiChoiceButton1"
+                    style="?android:buttonBarButtonStyle"/>
+
+            <Button
+                    android:text="@string/choice2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/multiChoiceButton2"
+                    style="?android:buttonBarButtonStyle"/>
+
+        </TableRow>
+
+        <TableRow
+                android:layout_weight="1"
+                android:gravity="center">
+
+            <Button
+                    android:text="@string/choice3"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/multiChoiceButton3"
+                    style="?android:buttonBarButtonStyle"/>
+
+            <Button
+                    android:text="@string/choice4"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/multiChoiceButton4"
+                    style="?android:buttonBarButtonStyle"/>
+        </TableRow>
+    </TableLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,5 +16,13 @@
                 android:id="@+id/nav_slideshow"
                 android:icon="@drawable/ic_menu_slideshow"
                 android:title="@string/menu_slideshow"/>
+
+        <item
+                android:id="@+id/nav_quiz_multi_choice"
+                android:title="Multi Choice"/>
+
+        <item
+                android:id="@+id/nav_quiz_answer"
+                android:title="Answer"/>
     </group>
 </menu>

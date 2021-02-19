@@ -10,4 +10,11 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="choose_translation">Choose translation</string>
+    <string name="word">Word</string>
+    <string name="choice1">Choice1</string>
+    <string name="choice2">Choice2</string>
+    <string name="choice3">Choice3</string>
+    <string name="choice4">Choice4</string>
+    <string name="quiz">Quiz</string>
 </resources>
