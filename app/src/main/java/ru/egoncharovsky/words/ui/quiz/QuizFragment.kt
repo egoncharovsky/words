@@ -26,6 +26,8 @@ class QuizFragment : Fragment() {
         } else if (MainActivity.lastQuiz is MultiChoiceFragment) {
             MainActivity.lastQuiz = MeaningFragment()
         } else if (MainActivity.lastQuiz is MeaningFragment) {
+            MainActivity.lastQuiz = RememberFragment()
+        }else if (MainActivity.lastQuiz is RememberFragment) {
             MainActivity.lastQuiz = AnswerFragment()
         }
         childFragmentManager.beginTransaction().add(R.id.quiz_replacement, MainActivity.lastQuiz).commit()

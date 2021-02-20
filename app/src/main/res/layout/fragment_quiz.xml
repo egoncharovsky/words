@@ -10,14 +10,25 @@
     <ProgressBar
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="10dp"
             android:id="@+id/progressBar"
-            app:layout_constraintBottom_toTopOf="@+id/quiz_replacement"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:progress="33"
             android:indeterminate="false"/>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/progressIndicator"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:progress="87"
+            android:scaleX="1.5"
+            android:scaleY="1.5"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
@@ -26,8 +37,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp"
-            android:id="@+id/quiz_replacement">
+            android:layout_marginTop="10dp"
+            android:id="@+id/quiz_replacement"
+            android:layout_marginBottom="16dp">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
