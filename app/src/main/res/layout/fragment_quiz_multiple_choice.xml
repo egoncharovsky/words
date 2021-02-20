@@ -37,60 +37,65 @@
                 android:textSize="36sp"/>
     </LinearLayout>
 
-    <TableLayout
-            android:layout_width="fill_parent"
-            android:layout_height="230dp"
+    <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="350dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:stretchColumns="*"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:id="@+id/tableLayout"
-            style="?android:attr/buttonBarStyle">
+            android:orientation="vertical"
+            android:layout_marginTop="250dp">
 
-        <TableRow
+        <Button
+                android:text="Choice 1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/multiChoiceButton1"
                 android:layout_weight="1"
-                android:gravity="center">
+                style="?android:buttonBarButtonStyle"
+                android:textSize="24sp"/>
 
-            <Button
-                    android:text="@string/choice1"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:id="@+id/multiChoiceButton1"
-                    style="?android:buttonBarButtonStyle"/>
-
-            <Button
-                    android:text="@string/choice2"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:id="@+id/multiChoiceButton2"
-                    style="?android:buttonBarButtonStyle"/>
-
-        </TableRow>
-
-        <TableRow
+        <Button
+                android:text="Choice 2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/multiChoiceButton2"
                 android:layout_weight="1"
-                android:gravity="center">
+                style="?android:buttonBarButtonStyle"
+                android:textSize="24sp"/>
 
-            <Button
-                    android:text="@string/choice3"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:id="@+id/multiChoiceButton3"
-                    style="?android:buttonBarButtonStyle"/>
+        <Button
+                android:text="Choice 3"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/multiChoiceButton3"
+                android:layout_weight="1"
+                style="?android:buttonBarButtonStyle"
+                android:textSize="24sp"/>
 
-            <Button
-                    android:text="@string/choice4"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:id="@+id/multiChoiceButton4"
-                    style="?android:buttonBarButtonStyle"/>
-        </TableRow>
-    </TableLayout>
+        <Button
+                android:text="Choice 4"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/multiChoiceButton4"
+                android:layout_weight="1"
+                style="?android:buttonBarButtonStyle"
+                android:textSize="24sp"/>
 
+        <Button
+                android:text="Choice 5"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/multiChoiceButton5"
+                android:layout_weight="1"
+                style="?android:buttonBarButtonStyle"
+                android:textSize="24sp"/>
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
