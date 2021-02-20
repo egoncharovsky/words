@@ -40,4 +40,10 @@
             android:name="ru.egoncharovsky.words.ui.quiz.QuizFragment"
             android:label="@string/quiz"
             tools:layout="@layout/fragment_quiz"/>
+
+    <fragment
+            android:id="@+id/nav_quiz_meaning"
+            android:name="ru.egoncharovsky.words.ui.quiz.MeaningFragment"
+            android:label="@string/quiz"
+            tools:layout="@layout/fragment_quiz_meaning"/>
 </navigation>
