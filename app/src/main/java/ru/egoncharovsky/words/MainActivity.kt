@@ -5,6 +5,7 @@ import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -13,8 +14,13 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import ru.egoncharovsky.words.ui.quiz.AnswerFragment
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        var lastQuiz: Fragment = AnswerFragment()
+    }
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 

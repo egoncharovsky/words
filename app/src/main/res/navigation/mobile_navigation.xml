@@ -34,4 +34,10 @@
             android:name="ru.egoncharovsky.words.ui.quiz.AnswerFragment"
             android:label="@string/quiz"
             tools:layout="@layout/fragment_quiz_multiple_choice"/>
+
+    <fragment
+            android:id="@+id/nav_quiz"
+            android:name="ru.egoncharovsky.words.ui.quiz.QuizFragment"
+            android:label="@string/quiz"
+            tools:layout="@layout/fragment_quiz"/>
 </navigation>

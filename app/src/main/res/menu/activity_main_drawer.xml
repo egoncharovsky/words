@@ -24,5 +24,9 @@
         <item
                 android:id="@+id/nav_quiz_answer"
                 android:title="Answer"/>
+
+        <item
+                android:id="@+id/nav_quiz"
+                android:title="Quiz"/>
     </group>
 </menu>
