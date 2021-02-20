@@ -32,5 +32,10 @@
         <item
                 android:id="@+id/nav_quiz_meaning"
                 android:title="Meaning"/>
+
+        <item
+                android:id="@+id/nav_quiz_remember"
+                android:title="Remember"/>
+
     </group>
 </menu>

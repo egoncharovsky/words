@@ -46,4 +46,10 @@
             android:name="ru.egoncharovsky.words.ui.quiz.MeaningFragment"
             android:label="@string/quiz"
             tools:layout="@layout/fragment_quiz_meaning"/>
+
+    <fragment
+            android:id="@+id/nav_quiz_remember"
+            android:name="ru.egoncharovsky.words.ui.quiz.RememberFragment"
+            android:label="@string/quiz"
+            tools:layout="@layout/fragment_quiz_remember"/>
 </navigation>
