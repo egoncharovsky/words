@@ -52,4 +52,10 @@
             android:name="ru.egoncharovsky.words.ui.quiz.RememberFragment"
             android:label="@string/quiz"
             tools:layout="@layout/fragment_quiz_remember"/>
+
+    <fragment
+            android:id="@+id/nav_dictionary"
+            android:name="ru.egoncharovsky.words.ui.dictionary.DictionaryFragment"
+            android:label="@string/dictionary"
+            tools:layout="@layout/fragment_dictionary"/>
 </navigation>
