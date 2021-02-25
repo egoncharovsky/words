@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import ru.egoncharovsky.words.MainActivity
 import ru.egoncharovsky.words.R
 
 class QuizFragment : Fragment() {
 
     private lateinit var quizViewModel: QuizViewModel
+
+    private lateinit var nextButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,33 +22,40 @@ class QuizFragment : Fragment() {
     ): View? {
         quizViewModel = ViewModelProvider(this).get(QuizViewModel::class.java)
         val root = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz, container, false)
+        nextButton = root.findViewById(R.id.quiz_next)
 
-        childFragmentManager.beginTransaction().add(R.id.quiz_replacement, MainActivity.lastQuiz).commit()
+        nextButton.setOnClickListener { nextCard() }
 
-        root.findViewById<Button>(R.id.quiz_next).setOnClickListener { nextCard() }
+        lastQuiz = AnswerFragment(nextButton)
+        childFragmentManager.beginTransaction().add(R.id.quiz_replacement, lastQuiz).commit()
 
         return root
     }
 
+    companion object {
+        lateinit var lastQuiz: Fragment
+    }
+
     fun nextCard() {
-        val newQuiz = when (MainActivity.lastQuiz) {
+        nextButton.visibility = View.INVISIBLE
+        val newQuiz = when (lastQuiz) {
             is AnswerFragment -> {
-                MultiChoiceFragment()
+                MultiChoiceFragment(nextButton)
             }
             is MultiChoiceFragment -> {
-                MeaningFragment()
+                MeaningFragment(nextButton)
             }
             is MeaningFragment -> {
-                RememberFragment()
+                RememberFragment(nextButton)
             }
             is RememberFragment -> {
-                AnswerFragment()
+                AnswerFragment(nextButton)
             }
             else -> throw Exception()
         }
 
-        childFragmentManager.beginTransaction().remove(MainActivity.lastQuiz).add(R.id.quiz_replacement, newQuiz).commit()
-        MainActivity.lastQuiz = newQuiz
+        childFragmentManager.beginTransaction().remove(lastQuiz).add(R.id.quiz_replacement, newQuiz).commit()
+        lastQuiz = newQuiz
     }
 
 }
