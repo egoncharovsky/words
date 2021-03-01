@@ -1,6 +1,6 @@
 package ru.egoncharovsky.words.domain
 
 data class Word(
-        val word: String,
+        val value: String,
         val translation: String
 )
