@@ -1,7 +1,7 @@
 package ru.egoncharovsky.words.domain.quiz
 
+import org.junit.jupiter.api.Test
 import ru.egoncharovsky.words.domain.Word
-import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
@@ -18,7 +18,15 @@ class WordShufflerTest {
         Word("TV", "телевизор"),
         Word("shift", "сдвиг"),
         Word("weather", "погода"),
-        Word("translation", "перевод")
+        Word("translation", "перевод"),
+        Word("nice", "приятный"),
+        Word("very", "очень"),
+        Word("Greece", "Греция"),
+        Word("cool", "круто"),
+        Word("cold", "холодно"),
+        Word("hot", "горячо"),
+        Word("hungry", "голодный"),
+        Word("breakfast", "завтра"),
     )
 
     @Test
@@ -52,16 +60,16 @@ class WordShufflerTest {
     }
 
     @Test
-    fun `Words should not be repeated according to min distance`() {
-        val words = dictionary.take(10)
-        val windowSize = 3
-        val minDistance = 2
+    fun `Words should not be repeated according to min distance during window stay full`() {
+        val words = dictionary.take(20)
+        val windowSize = 7
+        val minDistance = 3
 
         val shuffler = WordShuffler(words, windowSize, 3, minDistance)
 
         val shuffled = shuffler.asSequence().toList()
         println(shuffled.joinToString { it.value })
-        val forChecking = shuffled.dropLast(windowSize*minDistance)
+        val forChecking = shuffled.dropLast(windowSize)
         println(forChecking.joinToString { it.value })
 
         forChecking.windowed(size = windowSize, step = 1).forEach {
