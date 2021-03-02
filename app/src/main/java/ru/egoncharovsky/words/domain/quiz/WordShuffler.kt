@@ -4,7 +4,7 @@ import mu.KotlinLogging
 import ru.egoncharovsky.words.domain.Word
 
 class WordShuffler(
-    val words: List<Word>,
+    val words: Set<Word>,
     windowSize: Int,
     private val progressLimit: Int,
     private val minDistance: Int = 0

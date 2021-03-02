@@ -33,7 +33,7 @@ class WordShufflerTest {
     @Test
     fun `Word should be taken exactly as progress limit`() {
         val word = dictionary[1]
-        val shuffler = WordShuffler(listOf(word), 1, 3)
+        val shuffler = WordShuffler(setOf(word), 1, 3)
 
         assertEquals(listOf(word, word, word), shuffler.asSequence().toList())
     }
@@ -42,7 +42,7 @@ class WordShufflerTest {
     fun `All words should be taken`() {
         val words = dictionary.take(3)
         val progressLimit = 1
-        val shuffler = WordShuffler(words, 1, progressLimit)
+        val shuffler = WordShuffler(words.toSet(), 1, progressLimit)
 
         val shuffled = shuffler.asSequence().toList()
         assertTrue(shuffled.containsAll(words))
@@ -52,7 +52,7 @@ class WordShufflerTest {
     fun `Each word should be taken exactly as progress limit`() {
         val words = dictionary.take(3)
         val progressLimit = 3
-        val shuffler = WordShuffler(words, 1, progressLimit)
+        val shuffler = WordShuffler(words.toSet(), 1, progressLimit)
 
         val shuffled = shuffler.asSequence().toList()
 
@@ -66,7 +66,7 @@ class WordShufflerTest {
         val windowSize = 7
         val minDistance = 3
 
-        val shuffler = WordShuffler(words, windowSize, 3, minDistance)
+        val shuffler = WordShuffler(words.toSet(), windowSize, 3, minDistance)
 
         val shuffled = shuffler.asSequence().toList()
         println(shuffled.joinToString { it.value })
@@ -85,7 +85,7 @@ class WordShufflerTest {
     @Test
     fun `On incorrect answer word should be returned again`() {
         val word = dictionary[1]
-        val shuffler = WordShuffler(listOf(word), 1, 3)
+        val shuffler = WordShuffler(setOf(word), 1, 3)
 
         shuffler.next()
         shuffler.next()
@@ -101,7 +101,7 @@ class WordShufflerTest {
     fun `Only words with incorrect answers should be returned again`() {
         val words = dictionary.take(3)
         val progressLimit = 3
-        val shuffler = WordShuffler(words, 1, progressLimit)
+        val shuffler = WordShuffler(words.toSet(), 1, progressLimit)
 
         val incorrectAnswers = 2
         var answered = 0
