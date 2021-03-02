@@ -3,6 +3,7 @@ package ru.egoncharovsky.words.domain.quiz
 import org.junit.jupiter.api.Test
 import ru.egoncharovsky.words.domain.Word
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
@@ -79,5 +80,47 @@ class WordShufflerTest {
                 assertNotEquals(word, neighbour, "$word has neighbour $neighbour in distance $distance")
             }
         }
+    }
+
+    @Test
+    fun `On incorrect answer word should be returned again`() {
+        val word = dictionary[1]
+        val shuffler = WordShuffler(listOf(word), 1, 3)
+
+        shuffler.next()
+        shuffler.next()
+        shuffler.incorrectAnswer(word)
+        shuffler.next()
+
+        assertTrue(shuffler.hasNext())
+        assertEquals(word, shuffler.next())
+        assertFalse(shuffler.hasNext())
+    }
+
+    @Test
+    fun `Only words with incorrect answers should be returned again`() {
+        val words = dictionary.take(3)
+        val progressLimit = 3
+        val shuffler = WordShuffler(words, 1, progressLimit)
+
+        val incorrectAnswers = 2
+        var answered = 0
+
+        val shuffled = mutableListOf<Word>()
+
+        while (shuffler.hasNext()) {
+            val word = shuffler.next()
+            if (word == words[1] && answered < incorrectAnswers) {
+                shuffler.incorrectAnswer(word)
+                answered++
+            }
+            shuffled.add(word)
+        }
+        println(shuffled.joinToString { it.value })
+
+        val counts = shuffled.groupingBy { it }.eachCount()
+        assertEquals(progressLimit, counts[words[0]], "for word ${words[0]}")
+        assertEquals(progressLimit + incorrectAnswers, counts[words[1]], "for word ${words[1]}")
+        assertEquals(progressLimit, counts[words[2]], "for word ${words[2]}")
     }
 }

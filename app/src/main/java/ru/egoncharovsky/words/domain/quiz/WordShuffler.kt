@@ -5,7 +5,7 @@ import ru.egoncharovsky.words.domain.Word
 
 class WordShuffler(
     val words: List<Word>,
-    private val windowSize: Int,
+    windowSize: Int,
     private val progressLimit: Int,
     private val minDistance: Int = 0
 ) : Iterator<Word> {
@@ -31,13 +31,8 @@ class WordShuffler(
     override fun hasNext(): Boolean = window.size != 0
 
     override fun next(): Word {
-        logger.trace(
-            """Getting next word with 
-                |   rest:       $rest
-                |   window:     $window
-                |   last:       $last
-                |   progress:   ${progress.map { it.key.value to it.value }}""".trimMargin()
-        )
+        logger.trace("Getting next word with ${statistic()}")
+        if (window.isEmpty()) throw NoSuchElementException("No words in window")
 
         val word = windowRandom()
 
@@ -60,14 +55,29 @@ class WordShuffler(
         return word
     }
 
+    fun incorrectAnswer(word: Word) {
+        logger.trace("Incorrect answer for $word")
+        if (!window.contains(word)) logger.warn("Word $word is not in window ${statistic()}")
+        if (progress[word]!! > 0) {
+            progress[word] = progress[word]!! - 1
+            logger.trace("New progress for $word is ${progress[word]}")
+        }
+    }
+
+    fun progressOf(word: Word) = progress[word]!!
+
+    fun returned() = last.toSet()
+
     private fun incrementProgress(word: Word) {
         logger.trace("Increment progress of $word from ${progress[word]!!}")
         progress[word] = progress[word]!! + 1
     }
 
     private fun windowRandom(): Word {
-        val tail = if (window.size > last.size) last else last.takeLast(window.size - 1)
-        logger.trace("Tail is $tail")
+        val tailSize = if (window.size > minDistance) minDistance else window.size - 1
+        val tail = last.takeLast(tailSize)
+        logger.trace("Tail size $tailSize and tail is $tail")
+
         val forChoosing = window.minus(tail)
         val word = forChoosing.random()
         logger.trace("Random word is $word from $forChoosing")
@@ -77,10 +87,14 @@ class WordShuffler(
 
     private fun incrementLast(word: Word) {
         if (minDistance > 0) {
-            if (last.size >= minDistance) {
-                last.removeFirst()
-            }
             last.add(word)
         }
     }
+
+    private fun statistic() = """
+        |
+        |   rest:       $rest
+        |   window:     $window
+        |   last:       $last
+        |   progress:   ${progress.map { it.key.value to it.value }}""".trimMargin()
 }
