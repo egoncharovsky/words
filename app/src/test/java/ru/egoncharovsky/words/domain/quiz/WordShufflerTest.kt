@@ -61,7 +61,7 @@ class WordShufflerTest {
 
         val shuffled = shuffler.asSequence().toList()
         println(shuffled.joinToString { it.value })
-        val forChecking = shuffled.dropLast(windowSize)
+        val forChecking = shuffled.dropLast(windowSize*minDistance)
         println(forChecking.joinToString { it.value })
 
         forChecking.windowed(size = windowSize, step = 1).forEach {
@@ -71,7 +71,5 @@ class WordShufflerTest {
                 assertNotEquals(word, neighbour, "$word has neighbour $neighbour in distance $distance")
             }
         }
-
-        println()
     }
 }
