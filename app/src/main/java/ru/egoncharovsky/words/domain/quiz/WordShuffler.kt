@@ -66,7 +66,9 @@ class WordShuffler(
     }
 
     private fun windowRandom(): Word {
-        val forChoosing = if (window.size < windowSize) window else window.minus(last)
+        val tail = if (window.size > last.size) last else last.takeLast(window.size - 1)
+        logger.trace("Tail is $tail")
+        val forChoosing = window.minus(tail)
         val word = forChoosing.random()
         logger.trace("Random word is $word from $forChoosing")
 
