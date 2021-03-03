@@ -9,30 +9,9 @@ import kotlin.test.assertTrue
 
 class WordShufflerTest {
 
-    private val dictionary = listOf(
-        Word("apple", "яблоко"),
-        Word("any", "любой"),
-        Word("you", "ты"),
-        Word("I", "я"),
-        Word("many", "много"),
-        Word("love", "любить"),
-        Word("TV", "телевизор"),
-        Word("shift", "сдвиг"),
-        Word("weather", "погода"),
-        Word("translation", "перевод"),
-        Word("nice", "приятный"),
-        Word("very", "очень"),
-        Word("Greece", "Греция"),
-        Word("cool", "круто"),
-        Word("cold", "холодно"),
-        Word("hot", "горячо"),
-        Word("hungry", "голодный"),
-        Word("breakfast", "завтра"),
-    )
-
     @Test
     fun `Word should be taken exactly as progress limit`() {
-        val word = dictionary[1]
+        val word = QuizTest.dictionary[1]
         val shuffler = WordShuffler(setOf(word), 1, 3)
 
         assertEquals(listOf(word, word, word), shuffler.asSequence().toList())
@@ -40,7 +19,7 @@ class WordShufflerTest {
 
     @Test
     fun `All words should be taken`() {
-        val words = dictionary.take(3)
+        val words = QuizTest.dictionary.take(3)
         val progressLimit = 1
         val shuffler = WordShuffler(words.toSet(), 1, progressLimit)
 
@@ -50,7 +29,7 @@ class WordShufflerTest {
 
     @Test
     fun `Each word should be taken exactly as progress limit`() {
-        val words = dictionary.take(3)
+        val words = QuizTest.dictionary.take(3)
         val progressLimit = 3
         val shuffler = WordShuffler(words.toSet(), 1, progressLimit)
 
@@ -62,7 +41,7 @@ class WordShufflerTest {
 
     @Test
     fun `Words should not be repeated according to min distance during window stay full`() {
-        val words = dictionary.take(20)
+        val words = QuizTest.dictionary.take(20)
         val windowSize = 7
         val minDistance = 3
 
@@ -84,12 +63,12 @@ class WordShufflerTest {
 
     @Test
     fun `On incorrect answer word should be returned again`() {
-        val word = dictionary[1]
+        val word = QuizTest.dictionary[1]
         val shuffler = WordShuffler(setOf(word), 1, 3)
 
         shuffler.next()
         shuffler.next()
-        shuffler.incorrectAnswer(word)
+        shuffler.decrementProgress(word)
         shuffler.next()
 
         assertTrue(shuffler.hasNext())
@@ -99,7 +78,7 @@ class WordShufflerTest {
 
     @Test
     fun `Only words with incorrect answers should be returned again`() {
-        val words = dictionary.take(3)
+        val words = QuizTest.dictionary.take(3)
         val progressLimit = 3
         val shuffler = WordShuffler(words.toSet(), 1, progressLimit)
 
@@ -111,7 +90,7 @@ class WordShufflerTest {
         while (shuffler.hasNext()) {
             val word = shuffler.next()
             if (word == words[1] && answered < incorrectAnswers) {
-                shuffler.incorrectAnswer(word)
+                shuffler.decrementProgress(word)
                 answered++
             }
             shuffled.add(word)

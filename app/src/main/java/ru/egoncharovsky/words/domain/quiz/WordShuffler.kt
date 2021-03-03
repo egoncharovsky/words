@@ -55,11 +55,26 @@ class WordShuffler(
         return word
     }
 
-    fun incorrectAnswer(word: Word) {
-        logger.trace("Incorrect answer for $word")
-        if (!window.contains(word)) logger.warn("Word $word is not in window ${statistic()}")
+    fun decrementProgress(word: Word) {
+        logger.trace("Decrement progress of $word from ${progress[word]!!}")
+        if (!window.contains(word))
+            logger.warn("Word $word is not in window ${statistic()}")
+
         if (progress[word]!! > 0) {
             progress[word] = progress[word]!! - 1
+            logger.trace("New progress for $word is ${progress[word]}")
+        }
+    }
+
+    private fun incrementProgress(word: Word) {
+        logger.trace("Increment progress of $word from ${progress[word]!!}")
+        if (!window.contains(word))
+            logger.warn("Try to increment: $word is not in window ${statistic()}")
+        if (progress[word]!! >= progressLimit)
+            logger.warn("Try to increment: $word ${progress[word]!!} exceeds limit $progressLimit ${statistic()}")
+
+        if (progress[word]!! < progressLimit) {
+            progress[word] = progress[word]!! + 1
             logger.trace("New progress for $word is ${progress[word]}")
         }
     }
@@ -67,11 +82,6 @@ class WordShuffler(
     fun progressOf(word: Word) = progress[word]!!
 
     fun returned() = last.toSet()
-
-    private fun incrementProgress(word: Word) {
-        logger.trace("Increment progress of $word from ${progress[word]!!}")
-        progress[word] = progress[word]!! + 1
-    }
 
     private fun windowRandom(): Word {
         val tailSize = if (window.size > minDistance) minDistance else window.size - 1

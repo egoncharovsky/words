@@ -7,46 +7,60 @@ import kotlin.reflect.KClass
 
 class QuizManager(
     val words: Set<Word>
-) : Iterator<Card> {
-    private val shuffler: WordShuffler = WordShuffler(words, 7, 5, 2)
+) {
+    val windowSize = 7
+    val progressLimit = 6
+    val minDistance = 2
 
-    private val questionDifficulty: Map<KClass<out Question<out Any>>, Question.Difficulty> = mapOf(
+    val questionDifficulty: Map<KClass<out Question<out Any>>, Question.Difficulty> = mapOf(
         Answer::class to Question.Difficulty.HIGH,
         MultiChoice::class to Question.Difficulty.MEDIUM,
         Remember::class to Question.Difficulty.LOW
     )
 
+    private val shuffler: WordShuffler = WordShuffler(words, windowSize, progressLimit, minDistance)
+
     private val cardsHistory: MutableList<Card> = mutableListOf()
-    private var repeatLastWord: Boolean = false
 
-    override fun hasNext(): Boolean = shuffler.hasNext()
-
-    override fun next(): Card {
-        val card = if (repeatLastWord) {
-            repeatLastWord = false
-
-            Meaning(cardsHistory.last().word)
-        } else {
-            val word = shuffler.next()
-            val progress = shuffler.progressOf(word)
-
-            when (progress) {
-                0 -> Meaning(word)
-                in (1..2) -> questionCard(randomQuestion(Question.Difficulty.LOW), word)
-                in (3..4) -> questionCard(randomQuestion(Question.Difficulty.MEDIUM), word)
-                else -> questionCard(randomQuestion(Question.Difficulty.HIGH), word)
-            }
-        }
+    fun start(): Card {
+        val card = next()
 
         cardsHistory.add(card)
-
         return card
     }
 
-    fun answerCheckResult(result: Boolean) {
-        if (!result) {
-            shuffler.incorrectAnswer(cardsHistory.last().word)
-            repeatLastWord = true
+    fun <A> next(question: Question<A>, answer: A): Card {
+        val correct = question.checkAnswer(answer)
+        val card = if (correct) {
+            next()
+            // return new word
+        } else {
+            val word = question.word
+            shuffler.decrementProgress(word)
+
+            Meaning(word)
+        }
+
+        cardsHistory.add(card)
+        return card
+    }
+
+    fun next(meaning: Meaning): Card {
+        val card = next()
+
+        cardsHistory.add(card)
+        return card
+    }
+
+    private fun next(): Card {
+        val word = shuffler.next()
+        val progress = shuffler.progressOf(word)
+
+        return when (progress) {
+            1 -> Meaning(word)
+            in (2..3) -> questionCard(randomQuestion(Question.Difficulty.LOW), word)
+            in (4..5) -> questionCard(randomQuestion(Question.Difficulty.MEDIUM), word)
+            else -> questionCard(randomQuestion(Question.Difficulty.HIGH), word)
         }
     }
 
