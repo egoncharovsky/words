@@ -1,5 +1,6 @@
 package ru.egoncharovsky.words.domain.quiz
 
+import mu.KotlinLogging
 import ru.egoncharovsky.words.domain.Word
 import ru.egoncharovsky.words.domain.quiz.card.*
 import java.lang.IllegalArgumentException
@@ -18,30 +19,40 @@ class QuizManager(
         Remember::class to Question.Difficulty.LOW
     )
 
-    private val shuffler: WordShuffler = WordShuffler(words, windowSize, progressLimit, minDistance)
+    private val logger = KotlinLogging.logger {}
 
+    private val shuffler: WordShuffler = WordShuffler(words, windowSize, progressLimit, minDistance)
     private val cardsHistory: MutableList<Card> = mutableListOf()
+
+    fun hasNext(): Boolean = shuffler.hasNext()
 
     fun start(): Card {
         val card = next()
 
         cardsHistory.add(card)
+        logger.debug("Started with $card")
+
         return card
     }
 
     fun <A> next(question: Question<A>, answer: A): Card {
         val correct = question.checkAnswer(answer)
+
+        logger.trace("Answered correct: $correct to $question")
+
         val card = if (correct) {
             next()
-            // return new word
         } else {
             val word = question.word
             shuffler.decrementProgress(word)
+            logger.trace("Repeat $word")
 
             Meaning(word)
         }
 
         cardsHistory.add(card)
+        logger.debug("Next card is $card")
+
         return card
     }
 
@@ -49,14 +60,16 @@ class QuizManager(
         val card = next()
 
         cardsHistory.add(card)
+        logger.debug("Next card is $card")
+
         return card
     }
 
     private fun next(): Card {
         val word = shuffler.next()
-        val progress = shuffler.progressOf(word)
 
-        return when (progress) {
+        logger.trace("New $word")
+        return when (shuffler.progressOf(word)) {
             1 -> Meaning(word)
             in (2..3) -> questionCard(randomQuestion(Question.Difficulty.LOW), word)
             in (4..5) -> questionCard(randomQuestion(Question.Difficulty.MEDIUM), word)
@@ -68,7 +81,8 @@ class QuizManager(
         return when(type) {
             Answer::class -> Answer(word, word.translation)
             MultiChoice::class -> {
-                val options = shuffler.returned().shuffled().take(4)
+                val options = shuffler
+                    .returned().minus(word).shuffled().take(4)
                     .plus(word).shuffled()
                     .map { it.translation }
                 return MultiChoice(word, options, word.translation)

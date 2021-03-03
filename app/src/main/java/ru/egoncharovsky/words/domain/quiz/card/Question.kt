@@ -6,4 +6,6 @@ interface Question<A> : Card {
     }
 
     fun checkAnswer(value: A): Boolean
+
+    fun correctAnswer(): A
 }
