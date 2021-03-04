@@ -65,6 +65,8 @@ class QuizManager(
         return card
     }
 
+    fun progressPercentage(): Int = shuffler.totalProgressPercentage()
+
     private fun next(): Card {
         val word = shuffler.next()
 

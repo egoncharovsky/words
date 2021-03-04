@@ -81,6 +81,14 @@ class WordShuffler(
 
     fun progressOf(word: Word) = progress[word]!!
 
+    fun totalProgressPercentage(): Int {
+        val wordsCount = progress.keys.size
+        val totalLimit = wordsCount * progressLimit
+
+        val totalProgress = progress.values.sum()
+        return totalProgress * 100 / totalLimit
+    }
+
     fun returned() = last.toSet()
 
     private fun windowRandom(): Word {

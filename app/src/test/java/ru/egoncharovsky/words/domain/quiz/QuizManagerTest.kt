@@ -91,8 +91,8 @@ internal class QuizManagerTest {
             cards.add(card)
         }
 
-        val incorrectAnsweredWord = card.word
-        val incorrectAnswerMock = QuestionWithIncorrectAnswer(incorrectAnsweredWord)
+        val incorrectAnswerMock = QuestionWithIncorrectAnswer(card)
+        val incorrectAnsweredWord = incorrectAnswerMock.word
 
         val meaning = manager.next(incorrectAnswerMock, Any())
 
@@ -110,10 +110,6 @@ internal class QuizManagerTest {
             |cards:     ${cards.joinToString { it::class.simpleName + ":" + it.word.value}}
             |allCards:  ${allCards.joinToString { it::class.simpleName + ":" + it.word.value}}
         """.trimMargin())
-    }
-
-    @Test
-    fun answerCheckResult() {
     }
 
     private fun QuizManager.takeAllWithCorrectAnswers(): List<Card> {
@@ -141,13 +137,15 @@ internal class QuizManagerTest {
     }
 
     class QuestionWithIncorrectAnswer(
-        override val word: Word
+        private val card: Card,
+        override val word: Word = card.word
     ) : Question<Any> {
 
         override fun checkAnswer(value: Any): Boolean = false
 
         override fun correctAnswer(): Any = Any()
 
+        override fun type(): Card.Type = card.type()
     }
 
 }

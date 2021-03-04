@@ -31,14 +31,15 @@ class QuizViewModel : ViewModel() {
         Word("breakfast", "завтра"),
     )
 
-    private val quizManager: QuizManager = QuizManager(dictionary.toSet())
-    private var nextCard: () -> Card? = { quizManager.start() }
+    private val manager: QuizManager = QuizManager(dictionary.take(1).toSet())
+    private var nextCard: () -> Card? = { manager.start() }
 
     private val card = MutableLiveData<Card>().apply {
         value = nextCard()
     }
     private val nextIsVisible = MutableLiveData<Boolean>()
     private val finished = MutableLiveData<Boolean>()
+    private val progress = MutableLiveData<Int>()
 
     fun getCard(): LiveData<Card> = card
 
@@ -49,11 +50,12 @@ class QuizViewModel : ViewModel() {
 
     fun getNextVisibility(): LiveData<Boolean> = nextIsVisible
     fun getFinished(): LiveData<Boolean> = finished
+    fun getProgress(): LiveData<Int> = progress
 
     inner class QuestionWithCallback<Q : Question<A>, A>(val question: Q) {
         fun sendAnswer(value: A) {
             nextCard = {
-                if (quizManager.hasNext()) quizManager.next(question, value) else null
+                if (manager.hasNext()) manager.next(question, value) else null
             }
             nextIsVisible.value = true
         }
@@ -70,7 +72,7 @@ class QuizViewModel : ViewModel() {
 
         private fun meaningShowed() {
             nextCard = {
-                if (quizManager.hasNext()) quizManager.next(meaning) else null
+                if (manager.hasNext()) manager.next(meaning) else null
             }
             nextIsVisible.value = true
         }
@@ -80,6 +82,7 @@ class QuizViewModel : ViewModel() {
         val next = nextCard()
         if (next != null) {
             nextIsVisible.value = false
+            progress.value = manager.progressPercentage()
             card.value = next
         } else {
             finished.value = true

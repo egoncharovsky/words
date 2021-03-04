@@ -51,9 +51,13 @@ class QuizFragment : Fragment() {
             }
             quizViewModel.clickNext()
         }
+        quizViewModel.getProgress().observe(viewLifecycleOwner) {
+            progressBar.progress = it
+        }
         quizViewModel.getFinished().observe(viewLifecycleOwner) {
             Snackbar.make(view, "Test finished!", Snackbar.LENGTH_LONG).show()
         }
+        timeIndicator.visibility = View.INVISIBLE
     }
 
 }

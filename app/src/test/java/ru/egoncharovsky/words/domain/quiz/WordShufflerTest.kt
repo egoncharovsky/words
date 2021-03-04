@@ -102,4 +102,18 @@ class WordShufflerTest {
         assertEquals(progressLimit + incorrectAnswers, counts[words[1]], "for word ${words[1]}")
         assertEquals(progressLimit, counts[words[2]], "for word ${words[2]}")
     }
+
+    @Test
+    fun totalProgressPercentage() {
+        val words = QuizTest.dictionary.take(3)
+        val shuffler = WordShuffler(words.toSet(), 1, 3)
+
+        shuffler.next()
+        assertEquals(11, shuffler.totalProgressPercentage())
+        shuffler.next()
+        assertEquals(22, shuffler.totalProgressPercentage())
+
+        shuffler.asSequence().toList()
+        assertEquals(100, shuffler.totalProgressPercentage())
+    }
 }
