@@ -39,7 +39,9 @@ class QuizViewModel : ViewModel() {
     }
     private val nextIsVisible = MutableLiveData<Boolean>()
     private val finished = MutableLiveData<Boolean>()
-    private val progress = MutableLiveData<Int>()
+    private val progress = MutableLiveData<Int>().apply {
+        value = manager.progressPercentage()
+    }
 
     fun getCard(): LiveData<Card> = card
 
