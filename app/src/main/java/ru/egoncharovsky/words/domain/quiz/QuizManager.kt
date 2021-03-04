@@ -28,7 +28,7 @@ class QuizManager(
 
     fun start(): Card = logCard(next())
 
-    fun <A, Q : Question<A>> next(question: Q, answer: A): Card {
+    fun <A> next(question: Question<A>, answer: A): Card {
         val correct = question.checkAnswer(answer)
 
         logger.trace("Answered: $answer (correct: $correct) to $question")
