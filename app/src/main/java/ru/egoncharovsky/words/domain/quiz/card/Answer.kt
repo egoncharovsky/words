@@ -11,4 +11,6 @@ data class Answer(
     override fun checkAnswer(value: String): Boolean = correctAnswer().trim().equals(value.trim(), ignoreCase = true)
 
     override fun correctAnswer(): String = correct
+
+    override fun type(): Card.Type = Card.Type.ANSWER
 }

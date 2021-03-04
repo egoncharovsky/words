@@ -4,31 +4,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.LiveData
+import kotlinx.android.synthetic.main.fragment_quiz_answer.*
 import ru.egoncharovsky.words.R
+import ru.egoncharovsky.words.domain.quiz.card.Answer
 
 class AnswerFragment(
-    private val nextButton: Button
+    private val answerWithCallback: LiveData<QuizViewModel.QuestionWithCallback<Answer, String>>
 ) : Fragment() {
-
-    private lateinit var answerViewModel: AnswerViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        answerViewModel = ViewModelProvider(this).get(AnswerViewModel::class.java)
-        val root = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_answer, container, false)
+    ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_answer, container, false)
 
-        root.findViewById<Button>(R.id.quiz_answer_send).setOnClickListener { sendAnswer() }
-
-        return root
-    }
-
-    private fun sendAnswer() {
-        nextButton.visibility = View.VISIBLE
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        answerWithCallback.observe(viewLifecycleOwner) {
+            word.text = it.question.word.value
+        }
+        answerText.setOnClickListener {
+            answerWithCallback.value?.sendAnswer(answerText.text.toString())
+        }
     }
 }

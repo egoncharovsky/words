@@ -11,6 +11,8 @@ data class Remember(
 
     override fun checkAnswer(value: Option): Boolean = correctAnswer() == value
     override fun correctAnswer(): Option = Option.YES
+
+    override fun type(): Card.Type = Card.Type.REMEMBER
 }
 
 

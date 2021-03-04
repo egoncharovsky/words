@@ -4,41 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_quiz.*
 import ru.egoncharovsky.words.R
-import ru.egoncharovsky.words.domain.Word
-import ru.egoncharovsky.words.domain.quiz.QuizManager
+import ru.egoncharovsky.words.domain.quiz.card.Card
 
 class QuizFragment : Fragment() {
 
     private lateinit var quizViewModel: QuizViewModel
-
-    private lateinit var nextButton: Button
-
-    private val dictionary = listOf(
-        Word("apple", "яблоко"),
-        Word("any", "любой"),
-        Word("you", "ты"),
-        Word("I", "я"),
-        Word("many", "много"),
-        Word("love", "любить"),
-        Word("TV", "телевизор"),
-        Word("shift", "сдвиг"),
-        Word("weather", "погода"),
-        Word("translation", "перевод"),
-        Word("nice", "приятный"),
-        Word("very", "очень"),
-        Word("Greece", "Греция"),
-        Word("cool", "круто"),
-        Word("cold", "холодно"),
-        Word("hot", "горячо"),
-        Word("hungry", "голодный"),
-        Word("breakfast", "завтра"),
-    )
-
-    private val quizManager = QuizManager(dictionary.toSet())
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,41 +21,39 @@ class QuizFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         quizViewModel = ViewModelProvider(this).get(QuizViewModel::class.java)
-        val root = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz, container, false)
-        nextButton = root.findViewById(R.id.quiz_next)
 
-        nextButton.setOnClickListener { nextCard() }
-
-        lastQuiz = AnswerFragment(nextButton)
-        childFragmentManager.beginTransaction().add(R.id.quiz_replacement, lastQuiz).commit()
-
-        return root
+        return LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz, container, false)
     }
 
-    companion object {
-        lateinit var lastQuiz: Fragment
-    }
-
-    fun nextCard() {
-        nextButton.visibility = View.INVISIBLE
-        val newQuiz = when (lastQuiz) {
-            is AnswerFragment -> {
-                MultiChoiceFragment(nextButton)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        quizViewModel.getCard().observe(viewLifecycleOwner, { card ->
+            childFragmentManager.beginTransaction().add(
+                R.id.quiz_replacement, when (card.type()) {
+                    Card.Type.ANSWER -> AnswerFragment(quizViewModel.getAnswerModel())
+                    Card.Type.MEANING -> MeaningFragment(quizViewModel.getMeaningModel())
+                    Card.Type.MULTI_CHOICE -> MultiChoiceFragment(quizViewModel.getMultiChoiceModel())
+                    Card.Type.REMEMBER -> RememberFragment(quizViewModel.getRememberModel())
+                }
+            ).commit()
+        })
+        quizViewModel.getNextVisibility().observe(viewLifecycleOwner) { visible ->
+            if (visible) {
+                nextButton.visibility = View.VISIBLE
+            } else {
+                nextButton.visibility = View.INVISIBLE
             }
-            is MultiChoiceFragment -> {
-                MeaningFragment(nextButton)
-            }
-            is MeaningFragment -> {
-                RememberFragment(nextButton)
-            }
-            is RememberFragment -> {
-                AnswerFragment(nextButton)
-            }
-            else -> throw Exception()
         }
-
-        childFragmentManager.beginTransaction().remove(lastQuiz).add(R.id.quiz_replacement, newQuiz).commit()
-        lastQuiz = newQuiz
+        nextButton.setOnClickListener {
+            if (childFragmentManager.fragments.isNotEmpty()) {
+                val transaction = childFragmentManager.beginTransaction()
+                childFragmentManager.fragments.forEach { transaction.remove(it) }
+                transaction.commitNow()
+            }
+            quizViewModel.clickNext()
+        }
+        quizViewModel.getFinished().observe(viewLifecycleOwner) {
+            Snackbar.make(view, "Test finished!", Snackbar.LENGTH_LONG).show()
+        }
     }
 
 }

@@ -4,47 +4,37 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.LiveData
+import kotlinx.android.synthetic.main.fragment_quiz_meaning.wordValue
+import kotlinx.android.synthetic.main.fragment_quiz_multiple_choice.*
 import ru.egoncharovsky.words.R
+import ru.egoncharovsky.words.domain.quiz.card.MultiChoice
 
 class MultiChoiceFragment(
-    private val nextButton: Button
+    private val multiChoiceWithCallback: LiveData<QuizViewModel.QuestionWithCallback<MultiChoice, String>>
 ) : Fragment() {
-
-    private lateinit var multiChoiceViewModel: MultiChoiceViewModel
-
-    private lateinit var multiChoiceButton1: Button
-    private lateinit var multiChoiceButton2: Button
-    private lateinit var multiChoiceButton3: Button
-    private lateinit var multiChoiceButton4: Button
-    private lateinit var multiChoiceButton5: Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        multiChoiceViewModel = ViewModelProvider(this).get(MultiChoiceViewModel::class.java)
-        val root = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_multiple_choice, container, false)
+    ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_multiple_choice, container, false)
 
-        multiChoiceButton1 = root.findViewById(R.id.quiz_multiChoiceButton1)
-        multiChoiceButton2 = root.findViewById(R.id.quiz_multiChoiceButton2)
-        multiChoiceButton3 = root.findViewById(R.id.quiz_multiChoiceButton3)
-        multiChoiceButton4 = root.findViewById(R.id.quiz_multiChoiceButton4)
-        multiChoiceButton5 = root.findViewById(R.id.quiz_multiChoiceButton5)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        multiChoiceWithCallback.observe(viewLifecycleOwner) { model ->
+            wordValue.text = model.question.word.value
 
-        multiChoiceButton1.setOnClickListener { sendAnswer() }
-        multiChoiceButton2.setOnClickListener { sendAnswer() }
-        multiChoiceButton3.setOnClickListener { sendAnswer() }
-        multiChoiceButton4.setOnClickListener { sendAnswer() }
-        multiChoiceButton5.setOnClickListener { sendAnswer() }
-
-        return root
-    }
-
-    private fun sendAnswer() {
-        nextButton.visibility = View.VISIBLE
+            listOf(option1, option2, option3, option4, option5).withIndex().forEach { button ->
+                model.question.options.elementAtOrNull(button.index)?.let { value ->
+                    button.value.text = value
+                    button.value.setOnClickListener {
+                        model.sendAnswer(value)
+                    }
+                } ?: run {
+                    button.value.visibility = View.INVISIBLE
+                }
+            }
+        }
     }
 }

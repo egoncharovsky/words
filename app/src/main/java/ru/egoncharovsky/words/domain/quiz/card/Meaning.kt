@@ -4,4 +4,6 @@ import ru.egoncharovsky.words.domain.Word
 
 data class Meaning(
     override val word: Word
-) : Card
+) : Card {
+    override fun type(): Card.Type = Card.Type.MEANING
+}

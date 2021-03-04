@@ -4,41 +4,36 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.LiveData
+import kotlinx.android.synthetic.main.fragment_quiz_meaning.wordValue
+import kotlinx.android.synthetic.main.fragment_quiz_remember.*
 import ru.egoncharovsky.words.R
+import ru.egoncharovsky.words.domain.quiz.card.Remember
 
 class RememberFragment(
-    private val nextButton: Button
+    private val rememberWithCallback: LiveData<QuizViewModel.QuestionWithCallback<Remember, Remember.Option>>
 ) : Fragment() {
-
-    private lateinit var rememberViewModel: RememberViewModel
-
-    private lateinit var yesButton: Button
-    private lateinit var maybeButton: Button
-    private lateinit var noButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        rememberViewModel = ViewModelProvider(this).get(RememberViewModel::class.java)
-        val root = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_remember, container, false)
+    ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_remember, container, false)
 
-        yesButton = root.findViewById(R.id.quiz_remember_yes)
-        maybeButton = root.findViewById(R.id.quiz_remember_maybe)
-        noButton = root.findViewById(R.id.quiz_remember_no)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        rememberWithCallback.observe(viewLifecycleOwner) {
+            wordValue.text = it.question.word.value
+        }
+        no.setOnClickListener {
+            rememberWithCallback.value?.sendAnswer(Remember.Option.NO)
+        }
+        maybe.setOnClickListener {
+            rememberWithCallback.value?.sendAnswer(Remember.Option.MAYBE)
+        }
+        yes.setOnClickListener {
+            rememberWithCallback.value?.sendAnswer(Remember.Option.YES)
+        }
 
-        yesButton.setOnClickListener { sendAnswer() }
-        maybeButton.setOnClickListener { sendAnswer() }
-        noButton.setOnClickListener { sendAnswer() }
-
-        return root
-    }
-
-    private fun sendAnswer() {
-        nextButton.visibility = View.VISIBLE
     }
 }
