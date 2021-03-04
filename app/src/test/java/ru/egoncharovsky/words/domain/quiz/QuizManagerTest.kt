@@ -2,10 +2,8 @@ package ru.egoncharovsky.words.domain.quiz
 
 import org.junit.jupiter.api.Test
 import ru.egoncharovsky.words.domain.Word
-import ru.egoncharovsky.words.domain.quiz.card.Card
-import ru.egoncharovsky.words.domain.quiz.card.Meaning
-import ru.egoncharovsky.words.domain.quiz.card.MultiChoice
-import ru.egoncharovsky.words.domain.quiz.card.Question
+import ru.egoncharovsky.words.domain.quiz.card.*
+import java.util.function.Predicate
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -20,11 +18,12 @@ internal class QuizManagerTest {
 
         val cards = manager.takeAllWithCorrectAnswers()
 
-        assertEquals(words.size * progressLimit, cards.size)
+        // 2 on cards on remember task
+        assertEquals(words.size * (progressLimit + 2), cards.size)
 
         val counts = cards.groupingBy { it.word }.eachCount()
         words.forEach {
-            assertEquals(progressLimit, counts[it])
+            assertEquals(progressLimit + 2, counts[it])
         }
     }
 
@@ -83,15 +82,9 @@ internal class QuizManagerTest {
 
         val progressLimit = manager.progressLimit
 
-        val cards = mutableListOf<Card>()
-        var card = manager.start()
-        cards.add(card)
-        while (manager.hasNext() && card !is Question<*>) {
-            card = manager.next(card)
-            cards.add(card)
-        }
+        val cards = manager.takeAllUpToPredicate { it is Question<*> }
 
-        val incorrectAnswerMock = QuestionWithIncorrectAnswer(card)
+        val incorrectAnswerMock = QuestionWithIncorrectAnswer(cards.last())
         val incorrectAnsweredWord = incorrectAnswerMock.word
 
         val meaning = manager.next(incorrectAnswerMock, Any())
@@ -104,12 +97,28 @@ internal class QuizManagerTest {
         val wordCards = allCards.filter { it.word == incorrectAnsweredWord }
         val questionCount = wordCards.filterIsInstance<Question<*>>().count()
 
-        // progress limit = meaning (1) + questions (5) = 6, here is 5 + 1 = 6 questions
-        assertEquals(progressLimit, questionCount, """
+        // progress limit = meaning (1) + questions (5) + remember/right (2) = 8, here is 7 + 1 = 8 questions
+        assertEquals(progressLimit + 2, questionCount, """
             |wordCards: $wordCards
             |cards:     ${cards.joinToString { it::class.simpleName + ":" + it.word.value}}
             |allCards:  ${allCards.joinToString { it::class.simpleName + ":" + it.word.value}}
         """.trimMargin())
+    }
+
+    @Test
+    fun <A> `After remember should be showed remember right when passed as question`() {
+        val words = QuizTest.dictionary.take(1)
+        val manager = QuizManager(words.toSet())
+
+        val progressLimit = manager.progressLimit
+
+        val cards = manager.takeAllUpToPredicate {it is Remember}
+        @Suppress("UNCHECKED_CAST")
+        val rememberCard = cards.last() as Question<A>
+        val nextCard = manager.next(rememberCard, rememberCard.correctAnswer())
+
+        assertEquals(RememberRight::class, nextCard::class)
+        assertEquals(rememberCard.word, nextCard.word)
     }
 
     private fun QuizManager.takeAllWithCorrectAnswers(): List<Card> {
@@ -118,20 +127,35 @@ internal class QuizManagerTest {
         var card = start()
         cards.add(card)
         while (hasNext()) {
-            card = next(card)
+            card = nextWithRightAnswer(card)
             cards.add(card)
         }
         return cards
     }
 
-    private fun QuizManager.next(card: Card): Card = when (card) {
+
+    private fun QuizManager.takeAllUpToPredicate(predicate: Predicate<Card>): List<Card> {
+        val cards = mutableListOf<Card>()
+        var card = start()
+        cards.add(card)
+        while (hasNext() && !predicate.test(card)) {
+            card = nextWithRightAnswer(card)
+            cards.add(card)
+        }
+        return cards
+    }
+
+    private fun QuizManager.nextWithRightAnswer(card: Card): Card = when (card) {
+        is Meaning -> {
+            next(card)
+        }
+        is Remember -> {
+            next(card, card.correctAnswer())
+        }
         is Question<*> -> {
             @Suppress("UNCHECKED_CAST")
             val question: Question<Any> = card as Question<Any>
             next(question, question.correctAnswer())
-        }
-        is Meaning -> {
-            next(card)
         }
         else -> throw IllegalStateException("Unknown card type ${card::class}")
     }

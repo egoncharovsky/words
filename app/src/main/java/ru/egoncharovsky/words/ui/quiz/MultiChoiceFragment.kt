@@ -25,14 +25,14 @@ class MultiChoiceFragment(
         multiChoiceWithCallback.observe(viewLifecycleOwner) { model ->
             wordValue.text = model.question.word.value
 
-            listOf(option1, option2, option3, option4, option5).withIndex().forEach { button ->
-                model.question.options.elementAtOrNull(button.index)?.let { value ->
-                    button.value.text = value
-                    button.value.setOnClickListener {
+            listOf(option1, option2, option3, option4, option5).forEachIndexed { index, button ->
+                model.question.options.elementAtOrNull(index)?.let { value ->
+                    button.text = value
+                    button.setOnClickListener {
                         model.sendAnswer(value)
                     }
                 } ?: run {
-                    button.value.visibility = View.INVISIBLE
+                    button.visibility = View.INVISIBLE
                 }
             }
         }

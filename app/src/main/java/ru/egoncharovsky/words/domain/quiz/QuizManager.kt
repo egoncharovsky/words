@@ -26,46 +26,41 @@ class QuizManager(
 
     fun hasNext(): Boolean = shuffler.hasNext()
 
-    fun start(): Card {
-        val card = next()
+    fun start(): Card = logCard(next())
 
-        cardsHistory.add(card)
-        logger.debug("Started with $card")
-
-        return card
-    }
-
-    fun <A> next(question: Question<A>, answer: A): Card {
+    fun <A, Q : Question<A>> next(question: Q, answer: A): Card {
         val correct = question.checkAnswer(answer)
 
-        logger.trace("Answered correct: $correct to $question")
+        logger.trace("Answered: $answer (correct: $correct) to $question")
 
         val card = if (correct) {
-            next()
+            when(question) {
+                is Remember -> RememberRight(question.word)
+                else -> next()
+            }
         } else {
-            val word = question.word
-            shuffler.decrementProgress(word)
-            logger.trace("Repeat $word")
-
-            Meaning(word)
+            repeat(question.word)
         }
 
-        cardsHistory.add(card)
-        logger.debug("Next card is $card")
-
-        return card
+        return logCard(card)
     }
 
-    fun next(meaning: Meaning): Card {
-        val card = next()
-
-        cardsHistory.add(card)
-        logger.debug("Next card is $card")
-
-        return card
-    }
+    fun next(meaning: Meaning): Card = logCard(next())
 
     fun progressPercentage(): Int = shuffler.totalProgressPercentage()
+
+    fun logCard(card: Card): Card {
+        cardsHistory.add(card)
+        logger.debug("Next card is $card")
+        return card
+    }
+
+    private fun repeat(word: Word): Meaning {
+        shuffler.decrementProgress(word)
+        logger.trace("Repeat $word")
+
+        return Meaning(word)
+    }
 
     private fun next(): Card {
         val word = shuffler.next()

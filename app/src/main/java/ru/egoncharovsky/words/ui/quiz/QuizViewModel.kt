@@ -49,6 +49,7 @@ class QuizViewModel : ViewModel() {
     fun getMeaningModel(): LiveData<MeaningWithShowedTrigger> = Transformations.map(card) { MeaningWithShowedTrigger(it as Meaning) }
     fun getMultiChoiceModel(): LiveData<QuestionWithCallback<MultiChoice, String>> = Transformations.map(card) { QuestionWithCallback(it as MultiChoice) }
     fun getRememberModel(): LiveData<QuestionWithCallback<Remember, Remember.Option>> = Transformations.map(card) { QuestionWithCallback(it as Remember) }
+    fun getRememberRightModel(): LiveData<QuestionWithCallback<RememberRight, RememberRight.Option>> = Transformations.map(card) { QuestionWithCallback(it as RememberRight) }
 
     fun getNextVisibility(): LiveData<Boolean> = nextIsVisible
     fun getFinished(): LiveData<Boolean> = finished

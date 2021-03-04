@@ -33,6 +33,7 @@ class QuizFragment : Fragment() {
                     Card.Type.MEANING -> MeaningFragment(quizViewModel.getMeaningModel())
                     Card.Type.MULTI_CHOICE -> MultiChoiceFragment(quizViewModel.getMultiChoiceModel())
                     Card.Type.REMEMBER -> RememberFragment(quizViewModel.getRememberModel())
+                    Card.Type.REMEMBER_RIGHT -> RememberRightFragment(quizViewModel.getRememberRightModel())
                 }
             ).commit()
         })
