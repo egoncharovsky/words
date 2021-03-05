@@ -21,7 +21,7 @@
             android:layout_marginBottom="16dp">
 
         <TextView
-                android:text="Write translation"
+                android:text="@string/write_translation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
@@ -55,7 +55,7 @@
                 android:inputType="textShortMessage"
                 android:ems="10"
                 android:id="@+id/answerText"
-                android:hint="Translation..."
+                android:hint="@string/translation_hint"
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:importantForAutofill="no"
@@ -67,7 +67,7 @@
                 app:layout_constraintVertical_bias="0.502"/>
 
         <Button
-                android:text="Answer"
+                android:text="@string/answer"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:id="@+id/sendAnswer"
@@ -95,22 +95,24 @@
             app:layout_constraintTop_toBottomOf="@+id/tableLayout">
 
         <TextView
-                android:text="Right answer"
+                android:text="@string/answer_result_good_job"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/answerResult"
                 android:gravity="center"
                 android:textSize="36sp"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:visibility="invisible"/>
 
         <TextView
-                android:text="Correct!"
+                android:text="@string/answer_correct"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/answerCorrect"
                 android:layout_weight="1"
                 android:textSize="36sp"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:visibility="invisible"/>
     </LinearLayout>
 
 

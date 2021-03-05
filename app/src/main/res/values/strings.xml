@@ -1,4 +1,6 @@
 <resources>
+    <string name="text_placeholder">Text placeholder</string>
+
     <string name="app_name">words</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -10,19 +12,28 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+
     <string name="choose_translation">Choose translation</string>
+    <string name="write_translation">Write translation</string>
+    <string name="answer">Answer</string>
     <string name="word">Word</string>
-    <string name="choice1">Choice1</string>
-    <string name="choice2">Choice2</string>
-    <string name="choice3">Choice3</string>
-    <string name="choice4">Choice4</string>
+    <string name="translation">Translation</string>
+    <string name="translation_hint">Translation…</string>
+    <string name="choice1">Choice 1</string>
+    <string name="choice2">Choice 2</string>
+    <string name="choice3">Choice 3</string>
+    <string name="choice4">Choice 4</string>
+    <string name="choice5">Choice 5</string>
     <string name="quiz">Quiz</string>
     <string name="dictionary">Dictionary</string>
+
 
     <string name="answer_correct">Right!</string>
     <string name="answer_incorrect">Wrong :(</string>
     <string name="answer_result_good_job">Good job!</string>
     <string name="answer_result_lets_try_again">Let\'s try again</string>
+    <string name="quiz">Quiz</string>
+    <string name="dictionary">Dictionary</string>
 
 
 </resources>

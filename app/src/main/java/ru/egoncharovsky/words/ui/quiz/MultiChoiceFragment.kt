@@ -1,6 +1,9 @@
 package ru.egoncharovsky.words.ui.quiz
 
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,14 +32,19 @@ class MultiChoiceFragment(
         observe(multiChoiceWithCallback) { model ->
             wordValue.text = model.question.word.value
 
-            listOf(option1, option2, option3, option4, option5).forEachIndexed { index, button ->
+            buttons().forEachIndexed { index, button ->
                 model.question.options.elementAtOrNull(index)?.let { value ->
                     button.text = value
                     button.setOnClickListener {
                         model.sendAnswer(value)
 
-                        highlightAnswer(model.question, value, button)
+                        if (!model.question.checkAnswer(value)) {
+                            highlightIncorrectAnswer(button)
+                        }
                     }
+                    button.setTag(R.id.button_right_option_tag, model.question.correct == value)
+
+                    button.visibility = View.VISIBLE
                     button.isEnabled = true
                 } ?: run {
                     button.visibility = View.INVISIBLE
@@ -53,17 +61,39 @@ class MultiChoiceFragment(
                     answerResult.setTextColor(getColor(R.color.colorIncorrectLight))
                 }
                 answerResult.visibility = View.VISIBLE
-                listOf(option1, option2, option3, option4, option5).forEach { button ->  button.isEnabled = false }
+
+                highlightButtons()
             }
         }
     }
 
-    private fun highlightAnswer(question: MultiChoice, value: String, clicked: Button) {
-        if (!question.checkAnswer(value)) {
-            clicked.setBackgroundColor(getColor(R.color.colorIncorrectLight))
-        }
+    private fun buttons() = listOf(option1, option2, option3, option4, option5)
 
-        listOf(option1, option2, option3, option4, option5)
-            .find { it.text == question.correct }?.setBackgroundColor(getColor(R.color.colorCorrectLight))
+    private fun highlightButtons() {
+        buttons().forEach { button ->
+            val rightOption = button.getTag(R.id.button_right_option_tag)?.let { it as Boolean } ?: false
+
+            if (rightOption) {
+                highlightCorrectAnswer(button)
+            }
+            button.isEnabled = false
+        }
+    }
+
+    fun highlightCorrectAnswer(button: Button) {
+        button.setBackgroundColor(getColor(R.color.colorCorrectLight))
+        button.setTextColor(getColor(R.color.blackText))
+        boldText(button)
+    }
+
+    fun highlightIncorrectAnswer(button: Button) {
+        button.setBackgroundColor(getColor(R.color.colorIncorrectLight))
+        button.setTextColor(getColor(R.color.blackText))
+        boldText(button)
+    }
+
+    private fun boldText(button: Button) {
+        button.text =
+            SpannableString(button.text).apply { setSpan(StyleSpan(Typeface.BOLD), 0, button.text.length, 0) }
     }
 }

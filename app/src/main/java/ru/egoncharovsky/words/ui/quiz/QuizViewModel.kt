@@ -31,7 +31,7 @@ class QuizViewModel : ViewModel() {
         Word("breakfast", "завтра"),
     )
 
-    private val manager: QuizManager = QuizManager(dictionary.take(10).toSet())
+    private val manager: QuizManager = QuizManager(dictionary.take(2).toSet())
     private var nextCard: () -> Card? = { manager.start() }
 
     private val card = MutableLiveData<Card>().apply {
@@ -87,9 +87,9 @@ class QuizViewModel : ViewModel() {
     fun clickNext() {
         answerIsCorrect.value = null
         val next = nextCard()
+        progress.value = manager.progressPercentage()
         if (next != null) {
             nextIsVisible.value = false
-            progress.value = manager.progressPercentage()
             card.value = next
         } else {
             finished.value = true

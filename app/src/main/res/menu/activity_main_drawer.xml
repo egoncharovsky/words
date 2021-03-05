@@ -4,42 +4,28 @@
       tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item
-                android:id="@+id/nav_home"
-                android:icon="@drawable/ic_menu_camera"
-                android:title="@string/menu_home"/>
-        <item
-                android:id="@+id/nav_gallery"
-                android:icon="@drawable/ic_menu_gallery"
-                android:title="@string/menu_gallery"/>
-        <item
-                android:id="@+id/nav_slideshow"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="@string/menu_slideshow"/>
-
-        <item
-                android:id="@+id/nav_quiz_multi_choice"
-                android:title="Multi Choice"/>
-
-        <item
-                android:id="@+id/nav_quiz_answer"
-                android:title="Answer"/>
+<!--        <item-->
+<!--                android:id="@+id/nav_home"-->
+<!--                android:icon="@drawable/ic_menu_camera"-->
+<!--                android:title="@string/menu_home"/>-->
+<!--        <item-->
+<!--                android:id="@+id/nav_gallery"-->
+<!--                android:icon="@drawable/ic_menu_gallery"-->
+<!--                android:title="@string/menu_gallery"/>-->
+<!--        <item-->
+<!--                android:id="@+id/nav_slideshow"-->
+<!--                android:icon="@drawable/ic_menu_slideshow"-->
+<!--                android:title="@string/menu_slideshow"/>-->
 
         <item
                 android:id="@+id/nav_quiz"
-                android:title="Quiz"/>
-
-        <item
-                android:id="@+id/nav_quiz_meaning"
-                android:title="Meaning"/>
-
-        <item
-                android:id="@+id/nav_quiz_remember"
-                android:title="Remember"/>
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="@string/quiz"/>
 
         <item
                 android:id="@+id/nav_dictionary"
-                android:title="Dictionary"/>
+                android:icon="@drawable/ic_menu_gallery"
+                android:title="@string/dictionary"/>
 
     </group>
 </menu>
