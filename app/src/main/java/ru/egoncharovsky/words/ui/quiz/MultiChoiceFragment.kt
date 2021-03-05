@@ -7,13 +7,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
-import kotlinx.android.synthetic.main.fragment_quiz_answer.*
 import kotlinx.android.synthetic.main.fragment_quiz_meaning.wordValue
 import kotlinx.android.synthetic.main.fragment_quiz_multiple_choice.*
-import kotlinx.android.synthetic.main.fragment_quiz_multiple_choice.answerResult
 import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.domain.quiz.card.MultiChoice
-import ru.egoncharovsky.words.domain.quiz.card.Question
+import ru.egoncharovsky.words.ui.getColor
 import ru.egoncharovsky.words.ui.observe
 
 class MultiChoiceFragment(
@@ -49,10 +47,10 @@ class MultiChoiceFragment(
             it?.let {
                 if (it) {
                     answerResult.text = getString(R.string.answer_result_good_job)
-                    answerResult.setTextColor(R.color.colorCorrect)
+                    answerResult.setTextColor(getColor(R.color.colorCorrect))
                 } else {
                     answerResult.text = getString(R.string.answer_result_lets_try_again)
-                    answerResult.setTextColor(R.color.colorIncorrectLight)
+                    answerResult.setTextColor(getColor(R.color.colorIncorrectLight))
                 }
                 answerResult.visibility = View.VISIBLE
                 listOf(option1, option2, option3, option4, option5).forEach { button ->  button.isEnabled = false }
@@ -62,10 +60,10 @@ class MultiChoiceFragment(
 
     private fun highlightAnswer(question: MultiChoice, value: String, clicked: Button) {
         if (!question.checkAnswer(value)) {
-            clicked.setBackgroundColor(R.color.colorIncorrectLight)
+            clicked.setBackgroundColor(getColor(R.color.colorIncorrectLight))
         }
 
         listOf(option1, option2, option3, option4, option5)
-            .find { it.text == question.correct }?.setBackgroundColor(R.color.colorCorrectLight)
+            .find { it.text == question.correct }?.setBackgroundColor(getColor(R.color.colorCorrectLight))
     }
 }

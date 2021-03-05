@@ -19,11 +19,11 @@ internal class QuizManagerTest {
         val cards = manager.takeAllWithCorrectAnswers()
 
         // 2 on cards on remember task
-        assertEquals(words.size * (progressLimit + 2), cards.size)
+        assertEquals(words.size * (progressLimit + 1), cards.size)
 
         val counts = cards.groupingBy { it.word }.eachCount()
         words.forEach {
-            assertEquals(progressLimit + 2, counts[it])
+            assertEquals(progressLimit + 1, counts[it])
         }
     }
 
@@ -97,8 +97,8 @@ internal class QuizManagerTest {
         val wordCards = allCards.filter { it.word == incorrectAnsweredWord }
         val questionCount = wordCards.filterIsInstance<Question<*>>().count()
 
-        // progress limit = meaning (1) + questions (5) + remember/right (2) = 8, here is 7 + 1 = 8 questions
-        assertEquals(progressLimit + 2, questionCount, """
+        // progress limit = meaning (1) + questions (5) + right (1) = 7, here is 6 + 1 = 7 questions
+        assertEquals(progressLimit + 1, questionCount, """
             |wordCards: $wordCards
             |cards:     ${cards.joinToString { it::class.simpleName + ":" + it.word.value}}
             |allCards:  ${allCards.joinToString { it::class.simpleName + ":" + it.word.value}}

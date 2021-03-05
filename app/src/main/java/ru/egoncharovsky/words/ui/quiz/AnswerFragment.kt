@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData
 import kotlinx.android.synthetic.main.fragment_quiz_answer.*
 import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.domain.quiz.card.Answer
+import ru.egoncharovsky.words.ui.getColor
 import ru.egoncharovsky.words.ui.observe
 
 class AnswerFragment(
@@ -31,14 +32,14 @@ class AnswerFragment(
             it?.let {
                 if (it) {
                     answerCorrect.text = getString(R.string.answer_correct)
-                    answerCorrect.setTextColor(R.color.colorCorrectLight)
+                    answerCorrect.setTextColor(getColor(R.color.colorCorrectLight))
                     answerResult.text = getString(R.string.answer_result_good_job)
-                    answerResult.setTextColor(R.color.colorCorrect)
+                    answerResult.setTextColor(getColor(R.color.colorCorrect))
                 } else {
                     answerCorrect.text = getString(R.string.answer_incorrect)
-                    answerCorrect.setTextColor(R.color.colorIncorrectLight)
+                    answerCorrect.setTextColor(getColor(R.color.colorIncorrectLight))
                     answerResult.text = getString(R.string.answer_result_lets_try_again)
-                    answerResult.setTextColor(R.color.colorIncorrectLight)
+                    answerResult.setTextColor(getColor(R.color.colorIncorrectLight))
                 }
                 answerCorrect.visibility = View.VISIBLE
                 answerResult.visibility = View.VISIBLE
