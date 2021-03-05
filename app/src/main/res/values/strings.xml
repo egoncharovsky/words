@@ -4,14 +4,16 @@
     <string name="app_name">words</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">Words</string>
+    <string name="nav_header_subtitle">egoncharovsky@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="quiz">Quiz</string>
+    <string name="dictionary">Dictionary</string>
 
     <string name="choose_translation">Choose translation</string>
     <string name="write_translation">Write translation</string>
@@ -24,16 +26,11 @@
     <string name="choice3">Choice 3</string>
     <string name="choice4">Choice 4</string>
     <string name="choice5">Choice 5</string>
-    <string name="quiz">Quiz</string>
-    <string name="dictionary">Dictionary</string>
-
 
     <string name="answer_correct">Right!</string>
     <string name="answer_incorrect">Wrong :(</string>
     <string name="answer_result_good_job">Good job!</string>
     <string name="answer_result_lets_try_again">Let\'s try again</string>
-    <string name="quiz">Quiz</string>
-    <string name="dictionary">Dictionary</string>
 
 
 </resources>
