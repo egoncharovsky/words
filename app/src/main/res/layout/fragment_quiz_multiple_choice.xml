@@ -39,7 +39,7 @@
 
     <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="350dp"
+            android:layout_height="300dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
             android:layout_marginEnd="16dp"
             android:id="@+id/tableLayout"
             android:orientation="vertical"
-            android:layout_marginTop="250dp">
+            app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
                 android:text="@string/choice1"
@@ -102,23 +102,30 @@
 
     </LinearLayout>
 
-    <TextView
-            android:text="@string/text_placeholder"
+    <LinearLayout
+            android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:id="@+id/answerResult"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:gravity="center"
-            android:layout_marginBottom="16dp"
-            android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:textSize="36sp"
-            android:textAlignment="center"
-            app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="16dp"
             android:layout_marginTop="16dp"
-            android:visibility="invisible"/>
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout">
+
+        <TextView
+                android:text="@string/answer_result_good_job"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/answerResult"
+                android:gravity="center"
+                android:textSize="36sp"
+                android:layout_weight="1"
+                android:visibility="invisible"/>
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
