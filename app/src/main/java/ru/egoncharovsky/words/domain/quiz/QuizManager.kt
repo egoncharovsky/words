@@ -9,8 +9,8 @@ import kotlin.reflect.KClass
 class QuizManager(
     val words: Set<Word>
 ) {
-    val windowSize = 7
-    val progressLimit = 6
+    val windowSize = 5
+    val progressLimit = 4
     val minDistance = 2
 
     val questionDifficulty: Map<KClass<out Question<out Any>>, Question.Difficulty> = mapOf(
@@ -68,8 +68,8 @@ class QuizManager(
         logger.trace("New $word")
         return when (shuffler.progressOf(word)) {
             1 -> Meaning(word)
-            in (2..3) -> questionCard(randomQuestion(Question.Difficulty.LOW), word)
-            in (4..5) -> questionCard(randomQuestion(Question.Difficulty.MEDIUM), word)
+            2 -> questionCard(randomQuestion(Question.Difficulty.LOW), word)
+            3 -> questionCard(randomQuestion(Question.Difficulty.MEDIUM), word)
             else -> questionCard(randomQuestion(Question.Difficulty.HIGH), word)
         }
     }

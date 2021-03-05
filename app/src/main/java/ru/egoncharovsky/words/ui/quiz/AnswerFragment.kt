@@ -24,7 +24,7 @@ class AnswerFragment(
         answerWithCallback.observe(viewLifecycleOwner) {
             word.text = it.question.word.value
         }
-        answerText.setOnClickListener {
+        sendAnswer.setOnClickListener {
             answerWithCallback.value?.sendAnswer(answerText.text.toString())
         }
     }
