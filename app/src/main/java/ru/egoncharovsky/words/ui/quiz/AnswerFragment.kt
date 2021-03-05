@@ -32,14 +32,14 @@ class AnswerFragment(
             it?.let {
                 if (it) {
                     answerCorrect.text = getString(R.string.answer_correct)
-                    answerCorrect.setTextColor(getColor(R.color.colorCorrectLight))
+                    answerCorrect.setTextColor(getColor(R.color.correctLight))
                     answerResult.text = getString(R.string.answer_result_good_job)
-                    answerResult.setTextColor(getColor(R.color.colorCorrect))
+                    answerResult.setTextColor(getColor(R.color.correct))
                 } else {
                     answerCorrect.text = getString(R.string.answer_incorrect)
-                    answerCorrect.setTextColor(getColor(R.color.colorIncorrectLight))
+                    answerCorrect.setTextColor(getColor(R.color.incorrectLight))
                     answerResult.text = getString(R.string.answer_result_lets_try_again)
-                    answerResult.setTextColor(getColor(R.color.colorIncorrectLight))
+                    answerResult.setTextColor(getColor(R.color.incorrectLight))
                 }
                 answerCorrect.visibility = View.VISIBLE
                 answerResult.visibility = View.VISIBLE

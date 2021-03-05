@@ -55,10 +55,10 @@ class MultiChoiceFragment(
             it?.let {
                 if (it) {
                     answerResult.text = getString(R.string.answer_result_good_job)
-                    answerResult.setTextColor(getColor(R.color.colorCorrect))
+                    answerResult.setTextColor(getColor(R.color.correct))
                 } else {
                     answerResult.text = getString(R.string.answer_result_lets_try_again)
-                    answerResult.setTextColor(getColor(R.color.colorIncorrectLight))
+                    answerResult.setTextColor(getColor(R.color.incorrectLight))
                 }
                 answerResult.visibility = View.VISIBLE
 
@@ -81,13 +81,13 @@ class MultiChoiceFragment(
     }
 
     fun highlightCorrectAnswer(button: Button) {
-        button.setBackgroundColor(getColor(R.color.colorCorrectLight))
+        button.setBackgroundColor(getColor(R.color.correctLight))
         button.setTextColor(getColor(R.color.blackText))
         boldText(button)
     }
 
     fun highlightIncorrectAnswer(button: Button) {
-        button.setBackgroundColor(getColor(R.color.colorIncorrectLight))
+        button.setBackgroundColor(getColor(R.color.incorrectLight))
         button.setTextColor(getColor(R.color.blackText))
         boldText(button)
     }

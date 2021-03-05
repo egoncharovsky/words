@@ -32,6 +32,11 @@
     <string name="answer_result_good_job">Good job!</string>
     <string name="answer_result_lets_try_again">Let\'s try again</string>
     <string name="next">Next</string>
+    <string name="do_you_remember">Do you remember?</string>
+    <string name="no">No</string>
+    <string name="maybe">Maybe</string>
+    <string name="yes">Yes</string>
+    <string name="is_it_right">Is it right?</string>
 
 
 </resources>

@@ -17,11 +17,10 @@
             android:layout_marginTop="250dp"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/tableLayout"
             android:layout_marginBottom="16dp">
 
         <TextView
-                android:text="Is it right?"
+                android:text="@string/is_it_right"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView4"
@@ -38,7 +37,7 @@
                 android:layout_marginVertical="30dp"/>
 
         <TextView
-                android:text="Translation"
+                android:text="@string/translation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/wordTranslation"
@@ -59,22 +58,26 @@
             android:layout_marginBottom="16dp">
 
         <Button
-                android:text="No"
+                android:text="@string/no"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/no"
                 android:layout_weight="0.8"
                 android:textSize="30sp"
-                android:enabled="false"/>
+                android:enabled="false"
+                android:textColor="@color/no"
+                style="?android:buttonBarButtonStyle"/>
 
         <Button
-                android:text="Yes"
+                android:text="@string/yes"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/yes"
                 android:layout_weight="0.8"
                 android:textSize="30sp"
-                android:enabled="false"/>
+                android:enabled="false"
+                android:textColor="@color/yes"
+                style="?android:buttonBarButtonStyle"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

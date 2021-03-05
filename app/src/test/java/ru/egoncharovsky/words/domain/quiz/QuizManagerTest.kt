@@ -101,7 +101,7 @@ internal class QuizManagerTest {
         assertEquals(progressLimit + 1, questionCount, """
             |wordCards: $wordCards
             |cards:     ${cards.joinToString { it::class.simpleName + ":" + it.word.value}}
-            |allCards:  ${allCards.joinToString { it!!::class.simpleName + ":" + it.word.value}}
+            |allCards:  ${allCards.joinToString { it::class.simpleName + ":" + it.word.value}}
         """.trimMargin())
     }
 
@@ -109,8 +109,6 @@ internal class QuizManagerTest {
     fun <A> `After remember should be showed remember right when passed as question`() {
         val words = QuizTest.dictionary.take(1)
         val manager = QuizManager(words.toSet())
-
-        val progressLimit = manager.progressLimit
 
         val cards = manager.takeAllUpToPredicate {it is Remember}
         @Suppress("UNCHECKED_CAST")

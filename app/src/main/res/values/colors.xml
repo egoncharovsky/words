@@ -6,7 +6,13 @@
 
     <color name="blackText">#BE000000</color>
 
-    <color name="colorCorrectLight">#BE4CAF50</color>
-    <color name="colorCorrect">#4CAF50</color>
-    <color name="colorIncorrectLight">#8BE91E1E</color>
+    <color name="correctLight">#BE4CAF50</color>
+    <color name="correct">#4CAF50</color>
+    <color name="incorrectLight">#8BE91E1E</color>
+
+    <color name="no">#A6DA1001</color>
+    <color name="maybe">#A6FFC107</color>
+    <color name="yes">#A64CAF50</color>
+
+
 </resources>
