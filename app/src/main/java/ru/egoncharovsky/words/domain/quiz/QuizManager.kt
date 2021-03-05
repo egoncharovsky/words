@@ -3,7 +3,6 @@ package ru.egoncharovsky.words.domain.quiz
 import mu.KotlinLogging
 import ru.egoncharovsky.words.domain.Word
 import ru.egoncharovsky.words.domain.quiz.card.*
-import java.lang.IllegalArgumentException
 import kotlin.reflect.KClass
 
 class QuizManager(
@@ -24,11 +23,9 @@ class QuizManager(
     private val shuffler: WordShuffler = WordShuffler(words, windowSize, progressLimit, minDistance)
     private val cardsHistory: MutableList<Card> = mutableListOf()
 
-    fun hasNext(): Boolean = shuffler.hasNext()
+    fun start(): Card? = logCard(next())
 
-    fun start(): Card = logCard(next())
-
-    fun <A> next(question: Question<A>, answer: A): Card {
+    fun <A> next(question: Question<A>, answer: A): Card? {
         val correct = question.checkAnswer(answer)
 
         logger.trace("Answered: $answer (correct: $correct) to $question")
@@ -45,13 +42,18 @@ class QuizManager(
         return logCard(card)
     }
 
-    fun next(meaning: Meaning): Card = logCard(next())
+    fun next(meaning: Meaning): Card? = logCard(next())
 
     fun progressPercentage(): Int = shuffler.totalProgressPercentage()
 
-    fun logCard(card: Card): Card {
-        cardsHistory.add(card)
-        logger.debug("Next card is $card")
+    private fun logCard(card: Card?): Card? {
+        card?.let {
+            cardsHistory.add(card)
+            logger.debug("Progress ${progressPercentage()} next card is $card")
+        } ?: run {
+            logger.debug("Quiz finished")
+        }
+
         return card
     }
 
@@ -62,16 +64,18 @@ class QuizManager(
         return Meaning(word)
     }
 
-    private fun next(): Card {
-        val word = shuffler.next()
+    private fun next(): Card? {
+        return if (shuffler.hasNext()) {
+            val word = shuffler.next()
 
-        logger.trace("New $word")
-        return when (shuffler.progressOf(word)) {
-            1 -> Meaning(word)
-            2 -> questionCard(randomQuestion(Question.Difficulty.LOW), word)
-            3 -> questionCard(randomQuestion(Question.Difficulty.MEDIUM), word)
-            else -> questionCard(randomQuestion(Question.Difficulty.HIGH), word)
-        }
+            logger.trace("New $word")
+            when (shuffler.progressOf(word)) {
+                1 -> Meaning(word)
+                2 -> questionCard(randomQuestion(Question.Difficulty.LOW), word)
+                3 -> questionCard(randomQuestion(Question.Difficulty.MEDIUM), word)
+                else -> questionCard(randomQuestion(Question.Difficulty.HIGH), word)
+            }
+        } else null
     }
 
     private fun questionCard(type: KClass<out Question<out Any>>, word: Word): Card {

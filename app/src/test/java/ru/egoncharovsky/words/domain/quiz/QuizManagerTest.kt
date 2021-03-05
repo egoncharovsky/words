@@ -89,7 +89,7 @@ internal class QuizManagerTest {
 
         val meaning = manager.next(incorrectAnswerMock, Any())
 
-        assertEquals(Meaning::class, meaning::class)
+        assertEquals(Meaning::class, meaning!!::class)
         assertEquals(incorrectAnsweredWord, meaning.word)
 
         val allCards = cards.plus(meaning).plus(manager.takeAllWithCorrectAnswers())
@@ -101,7 +101,7 @@ internal class QuizManagerTest {
         assertEquals(progressLimit + 1, questionCount, """
             |wordCards: $wordCards
             |cards:     ${cards.joinToString { it::class.simpleName + ":" + it.word.value}}
-            |allCards:  ${allCards.joinToString { it::class.simpleName + ":" + it.word.value}}
+            |allCards:  ${allCards.joinToString { it!!::class.simpleName + ":" + it.word.value}}
         """.trimMargin())
     }
 
@@ -117,7 +117,7 @@ internal class QuizManagerTest {
         val rememberCard = cards.last() as Question<A>
         val nextCard = manager.next(rememberCard, rememberCard.correctAnswer())
 
-        assertEquals(RememberRight::class, nextCard::class)
+        assertEquals(RememberRight::class, nextCard!!::class)
         assertEquals(rememberCard.word, nextCard.word)
     }
 
@@ -125,10 +125,10 @@ internal class QuizManagerTest {
         val cards = mutableListOf<Card>()
 
         var card = start()
-        cards.add(card)
-        while (hasNext()) {
+        cards.add(card!!)
+        while (card != null) {
             card = nextWithRightAnswer(card)
-            cards.add(card)
+            card?.let {  cards.add(card)}
         }
         return cards
     }
@@ -137,15 +137,15 @@ internal class QuizManagerTest {
     private fun QuizManager.takeAllUpToPredicate(predicate: Predicate<Card>): List<Card> {
         val cards = mutableListOf<Card>()
         var card = start()
-        cards.add(card)
-        while (hasNext() && !predicate.test(card)) {
+        cards.add(card!!)
+        while (card != null && !predicate.test(card)) {
             card = nextWithRightAnswer(card)
-            cards.add(card)
+            cards.add(card!!)
         }
         return cards
     }
 
-    private fun QuizManager.nextWithRightAnswer(card: Card): Card = when (card) {
+    private fun QuizManager.nextWithRightAnswer(card: Card): Card? = when (card) {
         is Meaning -> {
             next(card)
         }

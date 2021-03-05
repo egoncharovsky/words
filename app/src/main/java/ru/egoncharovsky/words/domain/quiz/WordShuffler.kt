@@ -57,11 +57,13 @@ class WordShuffler(
 
     fun decrementProgress(word: Word) {
         logger.trace("Decrement progress of $word from ${progress[word]!!}")
-        if (!window.contains(word))
-            logger.warn("Word $word is not in window ${statistic()}")
 
         if (progress[word]!! > 0) {
             progress[word] = progress[word]!! - 1
+            if (!window.contains(word)) {
+                logger.debug("Return $word to window")
+                window.add(word)
+            }
             logger.trace("New progress for $word is ${progress[word]}")
         }
     }
@@ -86,6 +88,13 @@ class WordShuffler(
         val totalLimit = wordsCount * progressLimit
 
         val totalProgress = progress.values.sum()
+
+        logger.trace("""Calculate total progress percentage
+            | wordsCount:    $wordsCount
+            | totalLimit:    $totalLimit
+            | totalProgress: $totalProgress
+            | progress:      ${progressStatistic()}
+        """.trimIndent())
         return totalProgress * 100 / totalLimit
     }
 
@@ -114,5 +123,7 @@ class WordShuffler(
         |   rest:       $rest
         |   window:     $window
         |   last:       $last
-        |   progress:   ${progress.map { it.key.value to it.value }}""".trimMargin()
+        |   progress:   ${progressStatistic()}""".trimMargin()
+
+    private fun progressStatistic() = progress.map { it.key.value to it.value }
 }

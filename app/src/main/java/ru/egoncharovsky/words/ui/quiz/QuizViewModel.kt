@@ -59,9 +59,7 @@ class QuizViewModel : ViewModel() {
 
     inner class QuestionWithCallback<Q : Question<A>, A>(val question: Q) {
         fun sendAnswer(value: A) {
-            nextCard = {
-                if (manager.hasNext()) manager.next(question, value) else null
-            }
+            nextCard = { manager.next(question, value) }
             answerIsCorrect.value = question.checkAnswer(value)
             nextIsVisible.value = true
         }
@@ -77,9 +75,7 @@ class QuizViewModel : ViewModel() {
             }
 
         private fun meaningShowed() {
-            nextCard = {
-                if (manager.hasNext()) manager.next(meaning) else null
-            }
+            nextCard = { manager.next(meaning) }
             nextIsVisible.value = true
         }
     }
