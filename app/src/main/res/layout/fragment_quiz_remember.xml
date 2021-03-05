@@ -41,7 +41,7 @@
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="65dp"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="16dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +52,7 @@
         <Button
                 android:text="No"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/no"
                 android:layout_weight="0.8"
                 android:textSize="30sp"
@@ -61,7 +61,7 @@
         <Button
                 android:text="Maybe"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/maybe"
                 android:layout_weight="1"
                 android:textSize="30sp"
@@ -70,7 +70,7 @@
         <Button
                 android:text="Yes"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/yes"
                 android:layout_weight="0.8"
                 android:textSize="30sp"

@@ -23,20 +23,23 @@ class RememberFragment(
     ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_remember, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        observe(rememberWithCallback) {
-            wordValue.text = it.question.word.value
-            no.isEnabled = true
-            maybe.isEnabled = true
-            yes.isEnabled = true
+        observe(rememberWithCallback) { model ->
+            wordValue.text = model.question.word.value
+            buttons().forEach { it.isEnabled = true }
         }
         no.setOnClickListener {
             rememberWithCallback.value?.sendAnswer(Remember.Option.NO)
+            buttons().forEach { it.visibility = View.GONE }
         }
         maybe.setOnClickListener {
             rememberWithCallback.value?.sendAnswer(Remember.Option.MAYBE)
+            buttons().forEach { it.visibility = View.GONE }
         }
         yes.setOnClickListener {
             rememberWithCallback.value?.sendAnswer(Remember.Option.YES)
+            buttons().forEach { it.visibility = View.GONE }
         }
     }
+
+    private fun buttons() = listOf(no, maybe, yes)
 }

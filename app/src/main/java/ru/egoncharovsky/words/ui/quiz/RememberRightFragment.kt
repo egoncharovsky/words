@@ -24,17 +24,20 @@ class RememberRightFragment(
     ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_remember_right, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        observe(rememberRightWithCallback) {
-            wordValue.text = it.question.word.value
-            wordTranslation.text = it.question.word.translation
-            no.isEnabled = true
-            yes.isEnabled = true
+        observe(rememberRightWithCallback) { model ->
+            wordValue.text = model.question.word.value
+            wordTranslation.text = model.question.word.translation
+            buttons().forEach { it.isEnabled = true }
         }
         no.setOnClickListener {
             rememberRightWithCallback.value?.sendAnswer(RememberRight.Option.NO)
+            buttons().forEach { it.visibility = View.GONE }
         }
         yes.setOnClickListener {
             rememberRightWithCallback.value?.sendAnswer(RememberRight.Option.YES)
+            buttons().forEach { it.visibility = View.GONE }
         }
     }
+
+    private fun buttons() = listOf(no, yes)
 }

@@ -31,6 +31,7 @@
     <string name="answer_incorrect">Wrong :(</string>
     <string name="answer_result_good_job">Good job!</string>
     <string name="answer_result_lets_try_again">Let\'s try again</string>
+    <string name="next">Next</string>
 
 
 </resources>

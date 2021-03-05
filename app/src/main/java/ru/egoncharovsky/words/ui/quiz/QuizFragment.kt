@@ -47,7 +47,7 @@ class QuizFragment : Fragment() {
             if (visible) {
                 nextButton.visibility = View.VISIBLE
             } else {
-                nextButton.visibility = View.INVISIBLE
+                nextButton.visibility = View.GONE
             }
         }
         nextButton.setOnClickListener {
