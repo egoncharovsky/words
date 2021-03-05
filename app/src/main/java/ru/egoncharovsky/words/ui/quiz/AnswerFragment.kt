@@ -9,9 +9,11 @@ import androidx.lifecycle.LiveData
 import kotlinx.android.synthetic.main.fragment_quiz_answer.*
 import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.domain.quiz.card.Answer
+import ru.egoncharovsky.words.ui.observe
 
 class AnswerFragment(
-    private val answerWithCallback: LiveData<QuizViewModel.QuestionWithCallback<Answer, String>>
+    private val answerWithCallback: LiveData<QuizViewModel.QuestionWithCallback<Answer, String>>,
+    private val answerCorrectness: LiveData<Boolean?>
 ) : Fragment() {
 
     override fun onCreateView(
@@ -21,8 +23,27 @@ class AnswerFragment(
     ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_answer, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        answerWithCallback.observe(viewLifecycleOwner) {
+        observe(answerWithCallback) {
             word.text = it.question.word.value
+            sendAnswer.isEnabled = true
+        }
+        observe(answerCorrectness) {
+            it?.let {
+                if (it) {
+                    answerCorrect.text = getString(R.string.answer_correct)
+                    answerCorrect.setTextColor(R.color.colorCorrectLight)
+                    answerResult.text = getString(R.string.answer_result_good_job)
+                    answerResult.setTextColor(R.color.colorCorrect)
+                } else {
+                    answerCorrect.text = getString(R.string.answer_incorrect)
+                    answerCorrect.setTextColor(R.color.colorIncorrectLight)
+                    answerResult.text = getString(R.string.answer_result_lets_try_again)
+                    answerResult.setTextColor(R.color.colorIncorrectLight)
+                }
+                answerCorrect.visibility = View.VISIBLE
+                answerResult.visibility = View.VISIBLE
+                sendAnswer.isEnabled = false
+            }
         }
         sendAnswer.setOnClickListener {
             answerWithCallback.value?.sendAnswer(answerText.text.toString())

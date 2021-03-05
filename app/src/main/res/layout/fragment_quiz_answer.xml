@@ -77,7 +77,8 @@
                 app:layout_constraintEnd_toEndOf="@+id/answerText"
                 app:layout_constraintHorizontal_bias="0.494"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                android:enabled="false"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -97,7 +98,7 @@
                 android:text="Right answer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/textView3"
+                android:id="@+id/answerResult"
                 android:gravity="center"
                 android:textSize="36sp"
                 android:layout_weight="1"/>
@@ -106,7 +107,7 @@
                 android:text="Correct!"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/textView6"
+                android:id="@+id/answerCorrect"
                 android:layout_weight="1"
                 android:textSize="36sp"
                 android:textAlignment="center"/>

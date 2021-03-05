@@ -10,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.domain.quiz.card.Card
+import ru.egoncharovsky.words.ui.observe
 
 class QuizFragment : Fragment() {
 
@@ -26,18 +27,23 @@ class QuizFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        quizViewModel.getCard().observe(viewLifecycleOwner, { card ->
+        observe(quizViewModel.getCard()) { card ->
             childFragmentManager.beginTransaction().add(
                 R.id.quiz_replacement, when (card.type()) {
-                    Card.Type.ANSWER -> AnswerFragment(quizViewModel.getAnswerModel())
-                    Card.Type.MEANING -> MeaningFragment(quizViewModel.getMeaningModel())
-                    Card.Type.MULTI_CHOICE -> MultiChoiceFragment(quizViewModel.getMultiChoiceModel())
-                    Card.Type.REMEMBER -> RememberFragment(quizViewModel.getRememberModel())
-                    Card.Type.REMEMBER_RIGHT -> RememberRightFragment(quizViewModel.getRememberRightModel())
+                    Card.Type.ANSWER ->
+                        AnswerFragment(quizViewModel.getAnswerModel(), quizViewModel.getAnswerCorrectness())
+                    Card.Type.MEANING ->
+                        MeaningFragment(quizViewModel.getMeaningModel())
+                    Card.Type.MULTI_CHOICE ->
+                        MultiChoiceFragment(quizViewModel.getMultiChoiceModel(), quizViewModel.getAnswerCorrectness())
+                    Card.Type.REMEMBER ->
+                        RememberFragment(quizViewModel.getRememberModel())
+                    Card.Type.REMEMBER_RIGHT ->
+                        RememberRightFragment(quizViewModel.getRememberRightModel())
                 }
             ).commit()
-        })
-        quizViewModel.getNextVisibility().observe(viewLifecycleOwner) { visible ->
+        }
+        observe(quizViewModel.getNextVisibility()) { visible ->
             if (visible) {
                 nextButton.visibility = View.VISIBLE
             } else {
@@ -52,11 +58,14 @@ class QuizFragment : Fragment() {
             }
             quizViewModel.clickNext()
         }
-        quizViewModel.getProgress().observe(viewLifecycleOwner) {
+        observe(quizViewModel.getProgress()) {
             progressBar.progress = it
         }
-        quizViewModel.getFinished().observe(viewLifecycleOwner) {
-            Snackbar.make(view, "Test finished!", Snackbar.LENGTH_LONG).show()
+        observe(quizViewModel.getFinished()) {
+            if (it) {
+                Snackbar.make(view, "Test finished!", Snackbar.LENGTH_LONG).show()
+                nextButton.visibility = View.INVISIBLE
+            }
         }
         timeIndicator.visibility = View.INVISIBLE
     }

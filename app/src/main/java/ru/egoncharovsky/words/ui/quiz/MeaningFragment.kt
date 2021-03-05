@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import kotlinx.android.synthetic.main.fragment_quiz_meaning.*
 import ru.egoncharovsky.words.R
+import ru.egoncharovsky.words.ui.observe
 
 class MeaningFragment(
     private val meaningWithShowedTrigger: LiveData<QuizViewModel.MeaningWithShowedTrigger>
@@ -20,8 +21,9 @@ class MeaningFragment(
     ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_meaning, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        meaningWithShowedTrigger.observe(viewLifecycleOwner) {
+        observe(meaningWithShowedTrigger) {
             wordValue.text = it.meaning.word.value
+            wordTranslation.text = it.meaning.word.translation
         }
     }
 }

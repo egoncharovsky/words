@@ -18,4 +18,11 @@
     <string name="choice4">Choice4</string>
     <string name="quiz">Quiz</string>
     <string name="dictionary">Dictionary</string>
+
+    <string name="answer_correct">Right!</string>
+    <string name="answer_incorrect">Wrong :(</string>
+    <string name="answer_result_good_job">Good job!</string>
+    <string name="answer_result_lets_try_again">Let\'s try again</string>
+
+
 </resources>

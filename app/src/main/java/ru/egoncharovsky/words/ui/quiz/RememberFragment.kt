@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.fragment_quiz_meaning.wordValue
 import kotlinx.android.synthetic.main.fragment_quiz_remember.*
 import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.domain.quiz.card.Remember
+import ru.egoncharovsky.words.ui.observe
 
 class RememberFragment(
     private val rememberWithCallback: LiveData<QuizViewModel.QuestionWithCallback<Remember, Remember.Option>>
@@ -22,8 +23,11 @@ class RememberFragment(
     ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_remember, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        rememberWithCallback.observe(viewLifecycleOwner) {
+        observe(rememberWithCallback) {
             wordValue.text = it.question.word.value
+            no.isEnabled = true
+            maybe.isEnabled = true
+            yes.isEnabled = true
         }
         no.setOnClickListener {
             rememberWithCallback.value?.sendAnswer(Remember.Option.NO)
@@ -34,6 +38,5 @@ class RememberFragment(
         yes.setOnClickListener {
             rememberWithCallback.value?.sendAnswer(Remember.Option.YES)
         }
-
     }
 }

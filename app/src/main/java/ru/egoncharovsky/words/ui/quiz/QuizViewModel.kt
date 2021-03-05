@@ -37,6 +37,7 @@ class QuizViewModel : ViewModel() {
     private val card = MutableLiveData<Card>().apply {
         value = nextCard()
     }
+    private val answerIsCorrect = MutableLiveData<Boolean?>()
     private val nextIsVisible = MutableLiveData<Boolean>()
     private val finished = MutableLiveData<Boolean>()
     private val progress = MutableLiveData<Int>().apply {
@@ -51,6 +52,7 @@ class QuizViewModel : ViewModel() {
     fun getRememberModel(): LiveData<QuestionWithCallback<Remember, Remember.Option>> = Transformations.map(card) { QuestionWithCallback(it as Remember) }
     fun getRememberRightModel(): LiveData<QuestionWithCallback<RememberRight, RememberRight.Option>> = Transformations.map(card) { QuestionWithCallback(it as RememberRight) }
 
+    fun getAnswerCorrectness(): LiveData<Boolean?> = answerIsCorrect
     fun getNextVisibility(): LiveData<Boolean> = nextIsVisible
     fun getFinished(): LiveData<Boolean> = finished
     fun getProgress(): LiveData<Int> = progress
@@ -60,6 +62,7 @@ class QuizViewModel : ViewModel() {
             nextCard = {
                 if (manager.hasNext()) manager.next(question, value) else null
             }
+            answerIsCorrect.value = question.checkAnswer(value)
             nextIsVisible.value = true
         }
     }
@@ -82,6 +85,7 @@ class QuizViewModel : ViewModel() {
     }
 
     fun clickNext() {
+        answerIsCorrect.value = null
         val next = nextCard()
         if (next != null) {
             nextIsVisible.value = false
