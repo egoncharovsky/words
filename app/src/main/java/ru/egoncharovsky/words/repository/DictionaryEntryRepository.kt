@@ -10,7 +10,7 @@ object DictionaryEntryRepository : InMemoryRepository<Long, DictionaryEntry>(Lon
 
     fun searchWord(value: String) = entities.values.filter {
         logger.debug("Search $value")
-        it.word.value.contains(value, ignoreCase = true) || it.word.translation.equals(value, ignoreCase = true)
+        it.word.value.contains(value, ignoreCase = true) || it.word.translation.contains(value, ignoreCase = true)
     }
 
     init {
