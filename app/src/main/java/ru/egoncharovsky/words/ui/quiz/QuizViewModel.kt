@@ -31,7 +31,7 @@ class QuizViewModel : ViewModel() {
         Word("breakfast", "завтра"),
     )
 
-    private val manager: QuizManager = QuizManager(dictionary.take(2).toSet())
+    private val manager: QuizManager = QuizManager(dictionary.shuffled().take(10).toSet())
     private var nextCard: () -> Card? = { manager.start() }
 
     private val card = MutableLiveData<Card>().apply {
