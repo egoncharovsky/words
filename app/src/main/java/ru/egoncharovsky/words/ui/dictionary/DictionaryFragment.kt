@@ -6,7 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_dictionary.*
+import kotlinx.android.synthetic.main.fragment_dictionary_item.view.*
 import ru.egoncharovsky.words.R
+import ru.egoncharovsky.words.domain.DictionaryEntry
+import ru.egoncharovsky.words.ui.RecyclerViewAdapter
+import ru.egoncharovsky.words.ui.observe
 
 class DictionaryFragment : Fragment() {
 
@@ -18,37 +24,23 @@ class DictionaryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         dictionaryViewModel = ViewModelProvider(this).get(DictionaryViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_dictionary, container, false)
 
-        childFragmentManager.beginTransaction()
-            .add(R.id.dictionary_list, DictionaryItem(), "1")
-            .add(R.id.dictionary_list, DictionaryItem(), "2")
-            .add(R.id.dictionary_list, DictionaryItem(), "3")
-            .add(R.id.dictionary_list, DictionaryItem(), "4")
-            .add(R.id.dictionary_list, DictionaryItem(), "5")
-            .add(R.id.dictionary_list, DictionaryItem(), "6")
-            .add(R.id.dictionary_list, DictionaryItem(), "7")
-            .add(R.id.dictionary_list, DictionaryItem(), "8")
-            .add(R.id.dictionary_list, DictionaryItem(), "9")
-            .add(R.id.dictionary_list, DictionaryItem(), "10")
-            .add(R.id.dictionary_list, DictionaryItem(), "11")
-            .add(R.id.dictionary_list, DictionaryItem(), "12")
-            .add(R.id.dictionary_list, DictionaryItem(), "13")
-            .add(R.id.dictionary_list, DictionaryItem(), "14")
-            .add(R.id.dictionary_list, DictionaryItem(), "15")
-            .add(R.id.dictionary_list, DictionaryItem(), "16")
-            .add(R.id.dictionary_list, DictionaryItem(), "17")
-            .add(R.id.dictionary_list, DictionaryItem(), "18")
-            .add(R.id.dictionary_list, DictionaryItem(), "19")
-            .add(R.id.dictionary_list, DictionaryItem(), "20")
-            .add(R.id.dictionary_list, DictionaryItem(), "21")
-            .add(R.id.dictionary_list, DictionaryItem(), "22")
-            .add(R.id.dictionary_list, DictionaryItem(), "23")
-            .add(R.id.dictionary_list, DictionaryItem(), "24")
-            .add(R.id.dictionary_list, DictionaryItem(), "25")
-            .commit()
+        return inflater.inflate(R.layout.fragment_dictionary, container, false)
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        observe(dictionaryViewModel.getDictionaryEntries()) {
+            dictionaryList.layoutManager = LinearLayoutManager(view.context)
+            dictionaryList.adapter = DictionaryEntryAdapter(it)
+        }
+    }
 
-        return root
+    class DictionaryEntryAdapter(values: List<DictionaryEntry>) : RecyclerViewAdapter<DictionaryEntry>(values) {
+        override val itemLayoutId: Int = R.layout.fragment_dictionary_item
+
+        override fun bind(itemView: View, item: DictionaryEntry) {
+            itemView.wordValue.text = item.word.value
+            itemView.wordTranslation.text = item.word.translation
+        }
     }
 }

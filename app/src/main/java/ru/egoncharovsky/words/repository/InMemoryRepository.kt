@@ -11,26 +11,26 @@ open class InMemoryRepository<ID, E : Entity<ID>>(
     }
 
     class LongIdGenerator : IdGenerator<Long> {
-        private val sequence = generateSequence(0L) { it + 1 }
+        private val iterator = generateSequence(1L) { it + 1 }.iterator()
 
-        override fun generate(): Long = sequence.iterator().next()
+        override fun generate(): Long = iterator.next()
     }
 
-    private val entities = mutableMapOf<ID, Entity<ID>>()
+    protected val entities = mutableMapOf<ID, E>()
 
-    override fun getAll(): List<Entity<ID>> = entities.values.toList()
+    override fun getAll(): List<E> = entities.values.toList()
 
-    override fun get(id: ID): Entity<ID> = entities[id]!!
+    override fun get(id: ID): E = entities[id]!!
 
-    override fun find(id: ID): Entity<ID>? = entities[id]
+    override fun find(id: ID): E? = entities[id]
 
-    override fun add(entity: Entity<ID>): Entity<ID> = entity.apply {
+    override fun add(entity: E): E = entity.apply {
         val id = idGenerator.generate()
         this.id = id
         entities[id] = this
     }
 
-    override fun delete(entity: Entity<ID>) { entity.id?.let { entities.remove(it) } }
+    override fun delete(entity: E) { entity.id?.let { entities.remove(it) } }
 
     override fun deleteAll() { entities.clear() }
 }

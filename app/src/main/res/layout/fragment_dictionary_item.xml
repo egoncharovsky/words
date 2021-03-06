@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/dictionary_list_item"
-        tools:context=".ui.dictionary.DictionaryFragment">
+        android:layout_height="wrap_content"
+        android:id="@+id/dictionary_list_item">
 
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
         <TextView
-                android:text="Word asdasdsdsdsd sdsdsd sdsdsd"
+                android:text="@string/word"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView13"
-                android:layout_weight="1"/>
+                android:id="@+id/wordValue"
+                android:layout_weight="1"
+                android:textSize="18sp"/>
 
         <TextView
-                android:text="TextView aaaaa ffffff zzzzzzzzzzzzzzzzzzzzzz aaaaa"
+                android:text="@string/translation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView12"
-                android:layout_weight="1"/>
+                android:id="@+id/wordTranslation"
+                android:layout_weight="1"
+                android:textSize="18sp"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

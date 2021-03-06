@@ -4,15 +4,15 @@ import ru.egoncharovsky.words.domain.Entity
 
 interface Repository<ID, E : Entity<ID>> {
 
-    fun getAll(): List<Entity<ID>>
+    fun getAll(): List<E>
 
-    fun get(id: ID): Entity<ID>
+    fun get(id: ID): E
 
-    fun find(id: ID): Entity<ID>?
+    fun find(id: ID): E?
 
-    fun add(entity: Entity<ID>): Entity<ID>
+    fun add(entity: E): E
 
-    fun delete(entity: Entity<ID>)
+    fun delete(entity: E)
 
     fun deleteAll()
 }
