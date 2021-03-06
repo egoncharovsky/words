@@ -1,12 +1,16 @@
 package ru.egoncharovsky.words.repository
 
+import mu.KotlinLogging
 import ru.egoncharovsky.words.domain.DictionaryEntry
 import ru.egoncharovsky.words.domain.Word
 
 object DictionaryEntryRepository : InMemoryRepository<Long, DictionaryEntry>(LongIdGenerator()) {
 
+    private val logger = KotlinLogging.logger {}
+
     fun searchWord(value: String) = entities.values.filter {
-        it.word.value.equals(value, ignoreCase = true) || it.word.translation.equals(value, ignoreCase = true)
+        logger.debug("Search $value")
+        it.word.value.contains(value, ignoreCase = true) || it.word.translation.equals(value, ignoreCase = true)
     }
 
     init {

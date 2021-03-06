@@ -38,6 +38,11 @@
     <string name="yes">Yes</string>
     <string name="is_it_right">Is it right?</string>
     <string name="sort">sort</string>
+    <string name="direction">direction</string>
+
+    <string name="default_value">default</string>
+    <string name="word_value_ask">word 🔻</string>
+    <string name="word_value_desc">word 🔺</string>
 
 
 </resources>

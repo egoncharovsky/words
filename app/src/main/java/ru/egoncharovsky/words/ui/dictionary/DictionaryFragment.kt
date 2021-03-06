@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,10 +31,48 @@ class DictionaryFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        sortButton.setOnClickListener {
+            val popup = PopupMenu(view.context, sortButton)
+
+            DictionaryViewModel.SortType.values().map { sortTypeTitle(it) }.forEach { popup.menu.add(it) }
+
+            popup.setOnMenuItemClickListener { item ->
+                val sortType = DictionaryViewModel.SortType.values().find {
+                    sortTypeTitle(it) == item.title
+                } ?: throw EnumConstantNotPresentException(
+                    DictionaryViewModel.SortType::class.java,
+                    "for title ${item.title}"
+                )
+                dictionaryViewModel.sort(sortType)
+                true
+            }
+
+            popup.show()
+        }
+        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean = true
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                dictionaryViewModel.search(newText)
+                return true
+            }
+        })
+        search.setOnCloseListener {
+            dictionaryViewModel.cancelSearch()
+            true
+        }
+
         observe(dictionaryViewModel.getDictionaryEntries()) {
             dictionaryList.layoutManager = LinearLayoutManager(view.context)
             dictionaryList.adapter = DictionaryEntryAdapter(it)
         }
+
+    }
+
+    private fun sortTypeTitle(sortType: DictionaryViewModel.SortType): String = when (sortType) {
+        DictionaryViewModel.SortType.DEFAULT -> getString(R.string.default_value)
+        DictionaryViewModel.SortType.WORD_VALUE_ASK -> getString(R.string.word_value_ask)
+        DictionaryViewModel.SortType.WORD_VALUE_DESC -> getString(R.string.word_value_desc)
     }
 
     class DictionaryEntryAdapter(values: List<DictionaryEntry>) : RecyclerViewAdapter<DictionaryEntry>(values) {

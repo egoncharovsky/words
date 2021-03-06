@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.egoncharovsky.words.domain.DictionaryEntry
 import ru.egoncharovsky.words.repository.DictionaryEntryRepository
+import java.util.*
 
 class DictionaryViewModel : ViewModel() {
 
@@ -13,11 +14,12 @@ class DictionaryViewModel : ViewModel() {
             override fun apply(list: List<DictionaryEntry>) = list.sortedBy { it.id }
         },
         WORD_VALUE_ASK {
-            override fun apply(list: List<DictionaryEntry>): List<DictionaryEntry> = list.sortedBy { it.word.value }
+            override fun apply(list: List<DictionaryEntry>): List<DictionaryEntry> = list
+                .sortedBy { it.word.value.toLowerCase(Locale.ROOT) }
         },
         WORD_VALUE_DESC {
             override fun apply(list: List<DictionaryEntry>): List<DictionaryEntry> =
-                list.sortedByDescending { it.word.value }
+                list.sortedByDescending { it.word.value.toLowerCase(Locale.ROOT) }
         };
 
         abstract fun apply(list: List<DictionaryEntry>): List<DictionaryEntry>
@@ -36,9 +38,13 @@ class DictionaryViewModel : ViewModel() {
         dictionaryEntries.value = sort.value!!.apply(DictionaryEntryRepository.getAll())
     }
 
-    fun search(value: String) {
-        value.trim().takeIf { it.isNotBlank() }?.let {
-            dictionaryEntries.value = sort.value!!.apply(DictionaryEntryRepository.searchWord(it))
+    fun search(value: String?) {
+        value?.trim()?.let {
+            if (it.isNotBlank()) {
+                dictionaryEntries.value = sort.value!!.apply(DictionaryEntryRepository.searchWord(it))
+            } else {
+                cancelSearch()
+            }
         }
     }
 
