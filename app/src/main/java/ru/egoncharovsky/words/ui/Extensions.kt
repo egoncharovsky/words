@@ -1,5 +1,7 @@
 package ru.egoncharovsky.words.ui
 
+import android.view.Menu
+import android.view.MenuItem
 import androidx.annotation.ColorRes
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
@@ -14,3 +16,5 @@ fun <D> Fragment.observe(@NonNull data: LiveData<D>, observer: Observer<in D>) {
 fun Fragment.getColor(@ColorRes resId: Int): Int {
     return ContextCompat.getColor(context!!, resId)
 }
+
+fun Menu.items(): List<MenuItem> = (0 until size()).map { i -> getItem(i) }.toList()

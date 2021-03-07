@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.fragment_dictionary_item.view.*
 import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.domain.DictionaryEntry
 import ru.egoncharovsky.words.ui.RecyclerViewAdapter
+import ru.egoncharovsky.words.ui.items
 import ru.egoncharovsky.words.ui.observe
 
 class DictionaryFragment : Fragment() {
@@ -31,12 +32,15 @@ class DictionaryFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        sortButton.setOnClickListener {
-            val popup = PopupMenu(view.context, sortButton)
+        val popup = PopupMenu(view.context, sortButton).apply {
 
-            DictionaryViewModel.SortType.values().map { sortTypeTitle(it) }.forEach { popup.menu.add(it) }
+            DictionaryViewModel.SortType.values().map { sortTypeTitle(it) }.forEach {
+                val item = menu.add(it)
+                item.isCheckable = true
+            }
+            menu.setGroupCheckable(0, true, true)
 
-            popup.setOnMenuItemClickListener { item ->
+            setOnMenuItemClickListener { item ->
                 val sortType = DictionaryViewModel.SortType.values().find {
                     sortTypeTitle(it) == item.title
                 } ?: throw EnumConstantNotPresentException(
@@ -46,7 +50,8 @@ class DictionaryFragment : Fragment() {
                 dictionaryViewModel.setSort(sortType)
                 true
             }
-
+        }
+        sortButton.setOnClickListener {
             popup.show()
         }
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -66,8 +71,10 @@ class DictionaryFragment : Fragment() {
             dictionaryList.layoutManager = LinearLayoutManager(view.context)
             dictionaryList.adapter = DictionaryEntryAdapter(it)
         }
-        observe(dictionaryViewModel.getSort()) {
+        observe(dictionaryViewModel.getSort()) { sort ->
             dictionaryViewModel.onSortChanged()
+            val sortTypeTitle = sortTypeTitle(sort)
+            popup.menu.items().find { it.title == sortTypeTitle }?.isChecked = true
         }
     }
 
