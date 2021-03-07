@@ -34,9 +34,8 @@ class DictionaryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val popup = PopupMenu(view.context, sortButton).apply {
 
-            DictionaryViewModel.SortType.values().map { sortTypeTitle(it) }.forEach {
-                val item = menu.add(it)
-                item.isCheckable = true
+            DictionaryViewModel.SortType.values().forEach { sort ->
+                menu.add(sortTypeTitle(sort)).apply { isCheckable = true }
             }
             menu.setGroupCheckable(0, true, true)
 
