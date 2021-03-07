@@ -33,6 +33,7 @@ class DictionaryViewModel : ViewModel() {
     }
 
     fun getDictionaryEntries(): LiveData<List<DictionaryEntry>> = dictionaryEntries
+    fun getSort(): LiveData<SortType> = sort
 
     fun cancelSearch() {
         dictionaryEntries.value = sort.value!!.apply(DictionaryEntryRepository.getAll())
@@ -48,10 +49,13 @@ class DictionaryViewModel : ViewModel() {
         }
     }
 
-    fun sort(sort: SortType) {
-        dictionaryEntries.value?.let {
-            dictionaryEntries.value = sort.apply(it)
-        }
+    fun setSort(sort: SortType) {
+        this.sort.value = sort
     }
 
+    fun onSortChanged() {
+        dictionaryEntries.value?.let {
+             dictionaryEntries.value = sort.value!!.apply(it)
+        }
+    }
 }

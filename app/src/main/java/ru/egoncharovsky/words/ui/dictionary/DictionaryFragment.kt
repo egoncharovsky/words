@@ -43,7 +43,7 @@ class DictionaryFragment : Fragment() {
                     DictionaryViewModel.SortType::class.java,
                     "for title ${item.title}"
                 )
-                dictionaryViewModel.sort(sortType)
+                dictionaryViewModel.setSort(sortType)
                 true
             }
 
@@ -66,7 +66,9 @@ class DictionaryFragment : Fragment() {
             dictionaryList.layoutManager = LinearLayoutManager(view.context)
             dictionaryList.adapter = DictionaryEntryAdapter(it)
         }
-
+        observe(dictionaryViewModel.getSort()) {
+            dictionaryViewModel.onSortChanged()
+        }
     }
 
     private fun sortTypeTitle(sortType: DictionaryViewModel.SortType): String = when (sortType) {
