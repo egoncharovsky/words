@@ -12,46 +12,10 @@
             tools:layout="@layout/fragment_home"/>
 
     <fragment
-            android:id="@+id/nav_gallery"
-            android:name="ru.egoncharovsky.words.ui.gallery.GalleryFragment"
-            android:label="@string/menu_gallery"
-            tools:layout="@layout/fragment_gallery"/>
-
-    <fragment
-            android:id="@+id/nav_slideshow"
-            android:name="ru.egoncharovsky.words.ui.slideshow.SlideshowFragment"
-            android:label="@string/menu_slideshow"
-            tools:layout="@layout/fragment_slideshow"/>
-
-    <fragment
-            android:id="@+id/nav_quiz_multi_choice"
-            android:name="ru.egoncharovsky.words.ui.quiz.MultiChoiceFragment"
-            android:label="@string/quiz"
-            tools:layout="@layout/fragment_quiz_multiple_choice"/>
-
-    <fragment
-            android:id="@+id/nav_quiz_answer"
-            android:name="ru.egoncharovsky.words.ui.quiz.AnswerFragment"
-            android:label="@string/quiz"
-            tools:layout="@layout/fragment_quiz_multiple_choice"/>
-
-    <fragment
             android:id="@+id/nav_quiz"
             android:name="ru.egoncharovsky.words.ui.quiz.QuizFragment"
             android:label="@string/quiz"
             tools:layout="@layout/fragment_quiz"/>
-
-    <fragment
-            android:id="@+id/nav_quiz_meaning"
-            android:name="ru.egoncharovsky.words.ui.quiz.MeaningFragment"
-            android:label="@string/quiz"
-            tools:layout="@layout/fragment_quiz_meaning"/>
-
-    <fragment
-            android:id="@+id/nav_quiz_remember"
-            android:name="ru.egoncharovsky.words.ui.quiz.RememberFragment"
-            android:label="@string/quiz"
-            tools:layout="@layout/fragment_quiz_remember"/>
 
     <fragment
             android:id="@+id/nav_dictionary"
