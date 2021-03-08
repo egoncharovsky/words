@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_word_lists.*
 import kotlinx.android.synthetic.main.fragment_word_lists_item.view.*
@@ -29,7 +30,11 @@ class WordListsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         wordLists.layoutManager = LinearLayoutManager(view.context)
-        wordLists.adapter = WordListAdapter((1..20).map {(WordList(null, "Name $it", setOf()))}.toList())
+        wordLists.adapter = WordListAdapter((1..20).map { (WordList(null, "Name $it", setOf())) }.toList())
+
+        addList.setOnClickListener {
+            findNavController().navigate(WordListsFragmentDirections.actionNavWordListsToWordListEditFragment())
+        }
     }
 
     inner class WordListAdapter(values: List<WordList>) : RecyclerViewAdapter<WordList>(values) {

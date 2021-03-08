@@ -27,5 +27,20 @@
             android:id="@+id/nav_word_lists"
             android:name="ru.egoncharovsky.words.ui.wordlist.WordListsFragment"
             android:label="@string/my_word_lists"
-            tools:layout="@layout/fragment_word_lists"/>
+            tools:layout="@layout/fragment_word_lists">
+        <action
+                android:id="@+id/action_nav_word_lists_to_wordListEditFragment"
+                app:destination="@id/wordListEditFragment"/>
+    </fragment>
+    <fragment
+            android:id="@+id/wordListEditFragment"
+            android:name="ru.egoncharovsky.words.ui.wordlist.WordListEditFragment"
+            android:label="@string/word_list"
+            tools:layout="@layout/fragment_word_list_edit">
+        <argument
+                android:name="wordListId"
+                app:argType="string"
+                app:nullable="true"
+                android:defaultValue="null"/>
+    </fragment>
 </navigation>
