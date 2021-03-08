@@ -14,6 +14,7 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="quiz">Quiz</string>
     <string name="my_dictionary">My dictionary</string>
+    <string name="my_word_lists">My lists</string>
 
     <string name="choose_translation">Choose translation</string>
     <string name="write_translation">Write translation</string>
@@ -43,6 +44,7 @@
     <string name="default_value">default</string>
     <string name="word_value_ask">word 🔻</string>
     <string name="word_value_desc">word 🔺</string>
+    <string name="words_count">Words: %d</string>
 
 
 </resources>

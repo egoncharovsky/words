@@ -11,8 +11,13 @@
 
         <item
                 android:id="@+id/nav_dictionary"
-                android:icon="@drawable/ic_menu_gallery"
+                android:icon="@drawable/ic_dictionary"
                 android:title="@string/my_dictionary"/>
+
+        <item
+                android:id="@+id/nav_word_lists"
+                android:icon="@drawable/ic_word_lists"
+                android:title="@string/my_word_lists"/>
 
     </group>
 </menu>
