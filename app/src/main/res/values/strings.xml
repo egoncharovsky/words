@@ -49,5 +49,6 @@
     <string name="name_hint">Name…</string>
     <string name="choose_hint">Choose…</string>
     <string name="word_list">List</string>
+    <string name="edit">Edit</string>
 
 </resources>

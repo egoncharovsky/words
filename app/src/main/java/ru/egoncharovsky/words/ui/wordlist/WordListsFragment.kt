@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.fragment_word_lists_item.view.*
 import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.domain.WordList
 import ru.egoncharovsky.words.ui.RecyclerViewAdapter
+import ru.egoncharovsky.words.ui.observe
 
 class WordListsFragment : Fragment() {
 
@@ -29,11 +30,15 @@ class WordListsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        wordLists.layoutManager = LinearLayoutManager(view.context)
-        wordLists.adapter = WordListAdapter((1..20).map { (WordList(null, "Name $it", setOf())) }.toList())
+        observe(wordListsViewModel.getWordLists()) {
+            wordLists.layoutManager = LinearLayoutManager(view.context)
+            wordLists.adapter = WordListAdapter(it)
+        }
 
         addList.setOnClickListener {
-            findNavController().navigate(WordListsFragmentDirections.actionNavWordListsToWordListEditFragment())
+            findNavController().navigate(
+                WordListsFragmentDirections.actionNavWordListsToWordListEditFragment()
+            )
         }
     }
 
@@ -43,6 +48,11 @@ class WordListsFragment : Fragment() {
         override fun bind(itemView: View, item: WordList) {
             itemView.name.text = item.name
             itemView.count.text = String.format(getString(R.string.words_count), item.words.size)
+            itemView.editList.setOnClickListener {
+                findNavController().navigate(
+                    WordListsFragmentDirections.actionNavWordListsToWordListEditFragment(item.id.toString())
+                )
+            }
         }
 
     }

@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_dictionary_item.view.*
 import kotlinx.android.synthetic.main.fragment_word_list_edit.*
 import ru.egoncharovsky.words.R
@@ -16,6 +18,7 @@ import ru.egoncharovsky.words.ui.observe
 class WordListEditFragment : Fragment() {
 
     private lateinit var wordListEditViewModel: WordListEditViewModel
+    private val args: WordListEditFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,8 +31,15 @@ class WordListEditFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        args.wordListId?.let {
+            wordListEditViewModel.load(it.toLong())
+        }
+
         observe(wordListEditViewModel.getWords()) {
             count.text = String.format(getString(R.string.words_count), it.size)
+
+            words.layoutManager = LinearLayoutManager(view.context)
+            words.adapter = WordAdapter(it)
         }
     }
 

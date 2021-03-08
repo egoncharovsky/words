@@ -20,7 +20,9 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="8dp"
-                android:textSize="24sp"/>
+                android:textSize="24sp"
+                app:layout_constraintEnd_toStartOf="@+id/editList"
+                android:layout_marginEnd="171dp"/>
 
         <TextView
                 android:text="@string/words_count"
@@ -31,5 +33,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"/>
+
+        <ImageButton
+                android:src="@android:drawable/ic_menu_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/editList"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/edit"
+                android:layout_marginEnd="8dp"
+                />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

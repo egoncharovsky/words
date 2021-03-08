@@ -12,4 +12,8 @@ class WordListEditViewModel : ViewModel() {
     }
 
     fun getWords(): LiveData<List<Word>> = words
+
+    fun load(id: Long) {
+
+    }
 }
