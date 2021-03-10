@@ -29,7 +29,7 @@
             android:label="@string/my_word_lists"
             tools:layout="@layout/fragment_word_lists">
         <action
-                android:id="@+id/action_nav_word_lists_to_wordListEditFragment"
+                android:id="@+id/edit_word_list"
                 app:destination="@id/wordListEditFragment"/>
     </fragment>
     <fragment
@@ -39,8 +39,16 @@
             tools:layout="@layout/fragment_word_list_edit">
         <argument
                 android:name="wordListId"
-                app:argType="string"
+                app:argType="ru.egoncharovsky.words.ui.NavArgLongNullable"
                 app:nullable="true"
-                android:defaultValue="null"/>
+                android:defaultValue="@null"/>
+        <action
+                android:id="@+id/chooseWords"
+                app:destination="@id/chooseWordsFragment"/>
     </fragment>
+    <fragment
+            android:id="@+id/chooseWordsFragment"
+            android:name="ru.egoncharovsky.words.ui.wordlist.ChooseWordsFragment"
+            android:label="ChooseWordsFragment"
+            tools:layout="@layout/fragment_dictionary"/>
 </navigation>

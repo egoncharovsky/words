@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_word_lists.*
 import kotlinx.android.synthetic.main.fragment_word_lists_item.view.*
 import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.domain.WordList
+import ru.egoncharovsky.words.ui.NavArgLongNullable
 import ru.egoncharovsky.words.ui.RecyclerViewAdapter
 import ru.egoncharovsky.words.ui.observe
 
@@ -37,7 +38,7 @@ class WordListsFragment : Fragment() {
 
         addList.setOnClickListener {
             findNavController().navigate(
-                WordListsFragmentDirections.actionNavWordListsToWordListEditFragment()
+                WordListsFragmentDirections.editWordList()
             )
         }
     }
@@ -50,7 +51,7 @@ class WordListsFragment : Fragment() {
             itemView.count.text = String.format(getString(R.string.words_count), item.words.size)
             itemView.editList.setOnClickListener {
                 findNavController().navigate(
-                    WordListsFragmentDirections.actionNavWordListsToWordListEditFragment(item.id.toString())
+                    WordListsFragmentDirections.editWordList(NavArgLongNullable(item.id!!))
                 )
             }
         }

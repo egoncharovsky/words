@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/dictionary_list_item"
-        >
+        android:id="@+id/choose_words_item">
 
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp">
+            android:layout_marginHorizontal="8dp"
+            android:background="@drawable/item_background">
 
         <TextView
                 android:text="@string/word"
@@ -18,7 +19,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/wordValue"
                 android:layout_weight="1"
-                android:textSize="18sp"/>
+                android:textSize="24sp"/>
 
         <TextView
                 android:text="@string/translation"
@@ -26,6 +27,19 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/wordTranslation"
                 android:layout_weight="1"
-                android:textSize="18sp"/>
+                android:textSize="24sp"/>
+
+        <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/selectedCheckBox"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
     </LinearLayout>
+
+
+
+
 </androidx.cardview.widget.CardView>

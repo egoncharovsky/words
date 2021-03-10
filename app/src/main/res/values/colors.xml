@@ -14,5 +14,6 @@
     <color name="maybe">#A6FFC107</color>
     <color name="yes">#A64CAF50</color>
 
+    <color name="itemSelected">#80C8C8C8</color>
 
 </resources>

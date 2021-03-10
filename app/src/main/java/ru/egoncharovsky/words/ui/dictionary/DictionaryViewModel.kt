@@ -7,7 +7,7 @@ import ru.egoncharovsky.words.domain.DictionaryEntry
 import ru.egoncharovsky.words.repository.DictionaryEntryRepository
 import java.util.*
 
-class DictionaryViewModel : ViewModel() {
+open class DictionaryViewModel : ViewModel() {
 
     enum class SortType {
         DEFAULT {
@@ -25,7 +25,7 @@ class DictionaryViewModel : ViewModel() {
         abstract fun apply(list: List<DictionaryEntry>): List<DictionaryEntry>
     }
 
-    private val dictionaryEntries = MutableLiveData<List<DictionaryEntry>>().apply {
+    protected val dictionaryEntries = MutableLiveData<List<DictionaryEntry>>().apply {
         value = SortType.DEFAULT.apply(DictionaryEntryRepository.getAll())
     }
     private val sort = MutableLiveData<SortType>().apply {

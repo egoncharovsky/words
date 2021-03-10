@@ -17,9 +17,10 @@ import ru.egoncharovsky.words.ui.RecyclerViewAdapter
 import ru.egoncharovsky.words.ui.items
 import ru.egoncharovsky.words.ui.observe
 
-class DictionaryFragment : Fragment() {
+open class DictionaryFragment : Fragment() {
 
-    private lateinit var dictionaryViewModel: DictionaryViewModel
+    protected lateinit var dictionaryViewModel: DictionaryViewModel
+    protected lateinit var adapter: RecyclerViewAdapter<DictionaryEntry>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,11 +28,15 @@ class DictionaryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         dictionaryViewModel = ViewModelProvider(this).get(DictionaryViewModel::class.java)
+        adapter = DictionaryEntryAdapter()
 
         return inflater.inflate(R.layout.fragment_dictionary, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        dictionaryList.layoutManager = LinearLayoutManager(view.context)
+        dictionaryList.adapter = adapter
+
         val popup = PopupMenu(view.context, sortButton).apply {
 
             DictionaryViewModel.SortType.values().forEach { sort ->
@@ -67,8 +72,7 @@ class DictionaryFragment : Fragment() {
         }
 
         observe(dictionaryViewModel.getDictionaryEntries()) {
-            dictionaryList.layoutManager = LinearLayoutManager(view.context)
-            dictionaryList.adapter = DictionaryEntryAdapter(it)
+            adapter.update(it)
         }
         observe(dictionaryViewModel.getSort()) { sort ->
             dictionaryViewModel.onSortChanged()
@@ -83,7 +87,7 @@ class DictionaryFragment : Fragment() {
         DictionaryViewModel.SortType.WORD_VALUE_DESC -> getString(R.string.word_value_desc)
     }
 
-    class DictionaryEntryAdapter(values: List<DictionaryEntry>) : RecyclerViewAdapter<DictionaryEntry>(values) {
+    class DictionaryEntryAdapter : RecyclerViewAdapter<DictionaryEntry>() {
         override val itemLayoutId: Int = R.layout.fragment_dictionary_item
 
         override fun bind(itemView: View, item: DictionaryEntry) {
