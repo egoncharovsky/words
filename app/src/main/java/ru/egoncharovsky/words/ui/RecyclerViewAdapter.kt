@@ -15,7 +15,7 @@ abstract class RecyclerViewAdapter<T>(
 
     abstract fun bind(itemView: View, item: T)
 
-    fun update(values: List<T>) {
+    open fun update(values: List<T>) {
         this.values = values
         notifyDataSetChanged()
     }

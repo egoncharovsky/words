@@ -35,7 +35,12 @@ class ChooseWordsFragment : DictionaryFragment() {
         selectableAdapter.observe(dictionaryList) {
             System.err.println(it)
         }
+        selectableAdapter.tracker?.onRestoreInstanceState(savedInstanceState)
+    }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        selectableAdapter.tracker?.onSaveInstanceState(outState)
     }
 
     class ChooseWordsAdapter : SelectableRecyclerViewAdapter<DictionaryEntry>() {
@@ -46,6 +51,8 @@ class ChooseWordsFragment : DictionaryFragment() {
             itemView.wordTranslation.text = item.word.translation
             itemView.selectedCheckBox.isChecked = isActivated
         }
+
+        override fun getIdentifier(item: DictionaryEntry): Long = item.id!!
 
     }
 }
