@@ -9,30 +9,31 @@ import androidx.recyclerview.selection.*
 import androidx.recyclerview.widget.RecyclerView
 import ru.egoncharovsky.words.R
 
-abstract class SelectableRecyclerViewAdapter<T>(
+abstract class SelectableRecyclerViewAdapter<T, K>(
+    private val storageStrategy: StorageStrategy<K>,
     val selectionByShortPress: Boolean = true,
     val multiSelection: Boolean = true,
-    val persistenceSelection: Boolean = true
+    val persistenceSelection: Boolean = true,
 ) : RecyclerViewAdapter<T>() {
 
-    var tracker: SelectionTracker<Long>? = null
+    var tracker: SelectionTracker<K>? = null
         private set
 
     abstract fun bind(itemView: View, item: T, isActivated: Boolean)
 
-    abstract fun getIdentifier(item: T): Long
+    abstract fun getIdentifier(item: T): K
 
     final override fun bind(itemView: View, item: T) = bind(itemView, item, false)
 
-    fun observe(recyclerView: RecyclerView, observer: Observer<List<Long>>) {
+    fun observe(recyclerView: RecyclerView, observer: Observer<List<K>>) {
         if (tracker == null) {
-            val keyProvider = ItemKeyProviderLong()
+            val keyProvider = ItemKeyProviderImpl()
             tracker = SelectionTracker.Builder(
                 "selection",
                 recyclerView,
                 keyProvider,
-                ItemDetailsLookupLong(recyclerView),
-                StorageStrategy.createLongStorage()
+                ItemDetailsLookupImpl(recyclerView),
+                storageStrategy
             ).withSelectionPredicate(
                 if (multiSelection) {
                     SelectionPredicates.createSelectAnything()
@@ -42,8 +43,8 @@ abstract class SelectableRecyclerViewAdapter<T>(
             ).build()
         }
 
-        tracker!!.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
-            override fun onItemStateChanged(key: Long, selected: Boolean) {
+        tracker!!.addObserver(object : SelectionTracker.SelectionObserver<K>() {
+            override fun onItemStateChanged(key: K, selected: Boolean) {
                 if (values.indexOfFirst { getIdentifier(it) == key } != RecyclerView.NO_POSITION) {
                     observer.onChanged(tracker!!.selection.toList())
                 }
@@ -66,10 +67,12 @@ abstract class SelectableRecyclerViewAdapter<T>(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val entry = values[position]
+        @Suppress("UNCHECKED_CAST")
+        val selectableViewHolder = holder as SelectableRecyclerViewAdapter<T, K>.SelectableViewHolder
 
-        val selected = tracker?.run { isSelected(getIdentifier(entry)) } ?: false
-        (holder as SelectableViewHolder).bind(entry, selected)
+        val value = values[position]
+        val selected = tracker?.run { isSelected(getIdentifier(value)) } ?: false
+        selectableViewHolder.bind(value, selected)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SelectableViewHolder {
@@ -90,26 +93,28 @@ abstract class SelectableRecyclerViewAdapter<T>(
             bind(itemView, value, isActivated)
         }
 
-        fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =
-            object : ItemDetailsLookup.ItemDetails<Long>() {
+        fun getItemDetails(): ItemDetailsLookup.ItemDetails<K> =
+            object : ItemDetailsLookup.ItemDetails<K>() {
                 override fun getPosition(): Int = absoluteAdapterPosition
-                override fun getSelectionKey(): Long = getIdentifier(values[position])
+                override fun getSelectionKey(): K = getIdentifier(values[position])
                 override fun inSelectionHotspot(e: MotionEvent): Boolean = selectionByShortPress
             }
     }
 
-    inner class ItemDetailsLookupLong(private val recyclerView: RecyclerView) : ItemDetailsLookup<Long>() {
-        override fun getItemDetails(event: MotionEvent): ItemDetails<Long>? {
+    inner class ItemDetailsLookupImpl(private val recyclerView: RecyclerView) : ItemDetailsLookup<K>() {
+
+        @Suppress("UNCHECKED_CAST")
+        override fun getItemDetails(event: MotionEvent): ItemDetails<K>? {
             return recyclerView.findChildViewUnder(event.x, event.y)?.let {
-                (recyclerView.getChildViewHolder(it) as SelectableRecyclerViewAdapter<*>.SelectableViewHolder)
+                (recyclerView.getChildViewHolder(it) as SelectableRecyclerViewAdapter<*, *>.SelectableViewHolder)
                     .getItemDetails()
-            }
+            } as ItemDetails<K>?
         }
     }
 
-    inner class ItemKeyProviderLong : ItemKeyProvider<Long>(SCOPE_MAPPED) {
-        override fun getKey(position: Int): Long = getIdentifier(values[position])
+    inner class ItemKeyProviderImpl : ItemKeyProvider<K>(SCOPE_MAPPED) {
+        override fun getKey(position: Int): K = getIdentifier(values[position])
 
-        override fun getPosition(key: Long): Int = values.indexOfFirst { getIdentifier(it) == key }
+        override fun getPosition(key: K): Int = values.indexOfFirst { getIdentifier(it) == key }
     }
 }

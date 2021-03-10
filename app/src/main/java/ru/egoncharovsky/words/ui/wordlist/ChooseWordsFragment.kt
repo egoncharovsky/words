@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.selection.StorageStrategy
 import kotlinx.android.synthetic.main.fragment_choose_words_item.view.*
 import kotlinx.android.synthetic.main.fragment_dictionary.*
 import kotlinx.android.synthetic.main.fragment_dictionary_item.view.wordTranslation
@@ -17,7 +18,7 @@ import ru.egoncharovsky.words.ui.dictionary.DictionaryFragment
 class ChooseWordsFragment : DictionaryFragment() {
 
     private lateinit var chooseWordsViewModel: ChooseWordsViewModel
-    private lateinit var selectableAdapter: SelectableRecyclerViewAdapter<DictionaryEntry>
+    private lateinit var selectableAdapter: SelectableRecyclerViewAdapter<DictionaryEntry, Long>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         chooseWordsViewModel = ViewModelProvider(this).get(ChooseWordsViewModel::class.java).also {
@@ -43,7 +44,7 @@ class ChooseWordsFragment : DictionaryFragment() {
         selectableAdapter.tracker?.onSaveInstanceState(outState)
     }
 
-    class ChooseWordsAdapter : SelectableRecyclerViewAdapter<DictionaryEntry>() {
+    class ChooseWordsAdapter : SelectableRecyclerViewAdapter<DictionaryEntry, Long>(StorageStrategy.createLongStorage()) {
         override val itemLayoutId: Int = R.layout.fragment_choose_words_item
 
         override fun bind(itemView: View, item: DictionaryEntry, isActivated: Boolean) {
