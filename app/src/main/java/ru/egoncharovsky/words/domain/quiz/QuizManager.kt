@@ -42,6 +42,7 @@ class QuizManager(
         return logCard(card)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun next(meaning: Meaning): Card? = logCard(next())
 
     fun progressPercentage(): Int = shuffler.totalProgressPercentage()

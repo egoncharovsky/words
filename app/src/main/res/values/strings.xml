@@ -50,5 +50,6 @@
     <string name="choose_hint">Choose…</string>
     <string name="word_list">List</string>
     <string name="edit">Edit</string>
+    <string name="choose_words">Choose words</string>
 
 </resources>

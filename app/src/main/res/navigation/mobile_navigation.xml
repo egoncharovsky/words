@@ -25,18 +25,18 @@
 
     <fragment
             android:id="@+id/nav_word_lists"
-            android:name="ru.egoncharovsky.words.ui.wordlist.WordListsFragment"
+            android:name="ru.egoncharovsky.words.ui.wordlist.StudyListsFragment"
             android:label="@string/my_word_lists"
-            tools:layout="@layout/fragment_word_lists">
+            tools:layout="@layout/fragment_study_lists">
         <action
                 android:id="@+id/edit_word_list"
                 app:destination="@id/wordListEditFragment"/>
     </fragment>
     <fragment
             android:id="@+id/wordListEditFragment"
-            android:name="ru.egoncharovsky.words.ui.wordlist.WordListEditFragment"
+            android:name="ru.egoncharovsky.words.ui.wordlist.StudyListEditFragment"
             android:label="@string/word_list"
-            tools:layout="@layout/fragment_word_list_edit">
+            tools:layout="@layout/fragment_study_list_edit">
         <argument
                 android:name="wordListId"
                 app:argType="ru.egoncharovsky.words.ui.NavArgLongNullable"
@@ -49,7 +49,7 @@
     <fragment
             android:id="@+id/chooseWordsFragment"
             android:name="ru.egoncharovsky.words.ui.wordlist.ChooseWordsFragment"
-            android:label="ChooseWordsFragment"
+            android:label="@string/choose_words"
             tools:layout="@layout/fragment_dictionary">
         <argument
                 android:name="chosen"

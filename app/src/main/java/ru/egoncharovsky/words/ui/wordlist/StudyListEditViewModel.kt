@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import ru.egoncharovsky.words.domain.Word
 import ru.egoncharovsky.words.repository.DictionaryEntryRepository
 
-class WordListEditViewModel : ViewModel() {
+class StudyListEditViewModel : ViewModel() {
 
     private val dictionaryEntryIds: MutableLiveData<LongArray> = MutableLiveData<LongArray>()
     private val words: MutableLiveData<List<Word>> = MutableLiveData<List<Word>>().apply {
