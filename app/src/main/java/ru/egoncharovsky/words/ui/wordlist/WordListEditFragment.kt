@@ -15,6 +15,7 @@ import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.domain.Word
 import ru.egoncharovsky.words.ui.RecyclerViewAdapter
 import ru.egoncharovsky.words.ui.observe
+import ru.egoncharovsky.words.ui.observeNavigationResult
 
 class WordListEditFragment : Fragment() {
 
@@ -36,6 +37,10 @@ class WordListEditFragment : Fragment() {
             wordListEditViewModel.load(it.value)
         }
 
+        observeNavigationResult<LongArray> {
+            wordListEditViewModel.wordsSelected(it)
+        }
+
         observe(wordListEditViewModel.getWords()) {
             count.text = String.format(getString(R.string.words_count), it.size)
 
@@ -44,7 +49,7 @@ class WordListEditFragment : Fragment() {
         }
         choose.setOnClickListener {
             findNavController().navigate(
-                WordListEditFragmentDirections.chooseWords()
+                WordListEditFragmentDirections.chooseWords(wordListEditViewModel.getDictionaryEntryIds().value)
             )
         }
     }

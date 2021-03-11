@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.egoncharovsky.words.R
 
 abstract class SelectableRecyclerViewAdapter<T, K>(
-    private val storageStrategy: StorageStrategy<K>,
+    private val keyStorageStrategy: StorageStrategy<K>,
     val selectionByShortPress: Boolean = true,
     val multiSelection: Boolean = true,
     val persistenceSelection: Boolean = true,
@@ -33,7 +33,7 @@ abstract class SelectableRecyclerViewAdapter<T, K>(
                 recyclerView,
                 keyProvider,
                 ItemDetailsLookupImpl(recyclerView),
-                storageStrategy
+                keyStorageStrategy
             ).withSelectionPredicate(
                 if (multiSelection) {
                     SelectionPredicates.createSelectAnything()

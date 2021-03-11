@@ -50,5 +50,10 @@
             android:id="@+id/chooseWordsFragment"
             android:name="ru.egoncharovsky.words.ui.wordlist.ChooseWordsFragment"
             android:label="ChooseWordsFragment"
-            tools:layout="@layout/fragment_dictionary"/>
+            tools:layout="@layout/fragment_dictionary">
+        <argument
+                android:name="chosen"
+                app:argType="long[]"
+                app:nullable="true"/>
+    </fragment>
 </navigation>
