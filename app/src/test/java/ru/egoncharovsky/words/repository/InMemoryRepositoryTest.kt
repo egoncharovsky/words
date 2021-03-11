@@ -26,7 +26,7 @@ internal class InMemoryRepositoryTest {
 
     @Test
     fun add() {
-        (1..3).map { MyEntity(null) }.forEach { repository.add(it) }
+        (1..3).map { MyEntity(null) }.forEach { repository.save(it) }
 
         val all = repository.getAll()
 

@@ -3,6 +3,6 @@ package ru.egoncharovsky.words.domain
 data class StudyList(
     override var id: Long?,
 
-    val name: String,
-    val words: Set<DictionaryEntry>
+    var name: String,
+    var dictionaryEntries: Set<DictionaryEntry>
 ) : Entity<Long>

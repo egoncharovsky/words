@@ -24,10 +24,11 @@ open class InMemoryRepository<ID, E : Entity<ID>>(
 
     override fun find(id: ID): E? = entities[id]
 
-    override fun add(entity: E): E = entity.apply {
-        val id = idGenerator.generate()
-        this.id = id
-        entities[id] = this
+    override fun save(entity: E): E = entity.apply {
+        if (id == null) {
+            id = idGenerator.generate()
+        }
+        entities[id!!] = this
     }
 
     override fun delete(entity: E) { entity.id?.let { entities.remove(it) } }

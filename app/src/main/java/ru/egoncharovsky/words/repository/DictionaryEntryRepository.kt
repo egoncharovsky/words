@@ -61,6 +61,6 @@ object DictionaryEntryRepository : InMemoryRepository<Long, DictionaryEntry>(Lon
             Word("spacious", "просторный"),
             Word("milk", "молоко"),
             Word("sour cream", "сметана"),
-        ).map { DictionaryEntry(null, it) }.forEach { add(it) }
+        ).map { DictionaryEntry(null, it) }.forEach { save(it) }
     }
 }

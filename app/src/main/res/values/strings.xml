@@ -52,4 +52,7 @@
     <string name="edit">Edit</string>
     <string name="choose_words">Choose words</string>
 
+    <string name="should_have_at_least_3_letters">Should have at least 3 letters</string>
+    <string name="should_have_at_least_1">Should have at least 1</string>
+
 </resources>

@@ -10,7 +10,7 @@ interface Repository<ID, E : Entity<ID>> {
 
     fun find(id: ID): E?
 
-    fun add(entity: E): E
+    fun save(entity: E): E
 
     fun delete(entity: E)
 

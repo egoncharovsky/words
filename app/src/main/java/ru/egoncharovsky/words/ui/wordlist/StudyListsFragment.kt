@@ -41,6 +41,8 @@ class StudyListsFragment : Fragment() {
                 StudyListsFragmentDirections.editWordList()
             )
         }
+
+        studyListsViewModel.load()
     }
 
     inner class WordListAdapter(values: List<StudyList>) : RecyclerViewAdapter<StudyList>(values) {
@@ -48,7 +50,7 @@ class StudyListsFragment : Fragment() {
 
         override fun bind(itemView: View, item: StudyList) {
             itemView.name.text = item.name
-            itemView.count.text = String.format(getString(R.string.words_count), item.words.size)
+            itemView.count.text = String.format(getString(R.string.words_count), item.dictionaryEntries.size)
             itemView.editList.setOnClickListener {
                 findNavController().navigate(
                     StudyListsFragmentDirections.editWordList(NavArgLongNullable(item.id!!))
