@@ -21,7 +21,7 @@
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="@dimen/fab_margin"
             android:layout_marginBottom="@dimen/fab_margin"
-            app:srcCompat="@drawable/ic_checkmark_holo_light"
+            app:srcCompat="@drawable/ic_baseline_check"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 

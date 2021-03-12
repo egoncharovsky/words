@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/ic_checkmark_holo_light"
+            app:srcCompat="@drawable/ic_baseline_check"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

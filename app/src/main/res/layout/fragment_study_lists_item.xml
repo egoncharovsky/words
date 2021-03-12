@@ -32,7 +32,7 @@
                 />
 
         <ImageButton
-                android:src="@android:drawable/ic_menu_edit"
+                android:src="@drawable/ic_baseline_edit"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:id="@+id/editList"
