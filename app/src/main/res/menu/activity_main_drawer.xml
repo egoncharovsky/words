@@ -14,5 +14,10 @@
                 android:icon="@drawable/ic_baseline_format_list_bulleted"
                 android:title="@string/my_word_lists"/>
 
+        <item
+                android:id="@+id/importWordsFragment"
+                android:icon="@drawable/ic_baseline_import_export"
+                android:title="@string/import_words"/>
+
     </group>
 </menu>

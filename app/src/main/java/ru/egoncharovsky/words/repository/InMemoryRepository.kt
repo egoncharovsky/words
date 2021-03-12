@@ -31,7 +31,13 @@ open class InMemoryRepository<ID, E : Entity<ID>>(
         entities[id!!] = this
     }
 
-    override fun delete(entity: E) { entity.id?.let { entities.remove(it) } }
+    override fun saveAll(entities: Iterable<E>): List<E> = entities.map { save(it) }
 
-    override fun deleteAll() { entities.clear() }
+    override fun delete(entity: E) {
+        entity.id?.let { entities.remove(it) }
+    }
+
+    override fun deleteAll() {
+        entities.clear()
+    }
 }

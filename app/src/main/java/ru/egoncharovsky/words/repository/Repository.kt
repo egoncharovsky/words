@@ -12,6 +12,8 @@ interface Repository<ID, E : Entity<ID>> {
 
     fun save(entity: E): E
 
+    fun saveAll(entities: Iterable<E>): List<E>
+
     fun delete(entity: E)
 
     fun deleteAll()

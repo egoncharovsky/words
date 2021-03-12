@@ -63,4 +63,8 @@
                 app:argType="long[]"
                 app:nullable="true"/>
     </fragment>
+    <fragment
+            android:id="@+id/importWordsFragment"
+            android:name="ru.egoncharovsky.words.ui.import.ImportWordsFragment"
+            android:label="@string/import_words"/>
 </navigation>
