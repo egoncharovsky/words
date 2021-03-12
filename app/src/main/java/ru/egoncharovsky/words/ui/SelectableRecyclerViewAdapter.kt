@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.selection.*
 import androidx.recyclerview.widget.RecyclerView
+import mu.KotlinLogging
 import ru.egoncharovsky.words.R
 
 abstract class SelectableRecyclerViewAdapter<T, K>(
@@ -15,6 +16,8 @@ abstract class SelectableRecyclerViewAdapter<T, K>(
     val multiSelection: Boolean = true,
     val persistenceSelection: Boolean = true,
 ) : RecyclerViewAdapter<T>() {
+
+    private val logger = KotlinLogging.logger {}
 
     var tracker: SelectionTracker<K>? = null
         private set
@@ -45,8 +48,10 @@ abstract class SelectableRecyclerViewAdapter<T, K>(
 
         tracker!!.addObserver(object : SelectionTracker.SelectionObserver<K>() {
             override fun onItemStateChanged(key: K, selected: Boolean) {
+                val selection = tracker!!.selection.toList()
+                logger.trace("Changed item $key to $selected selection is $selection")
                 if (values.indexOfFirst { getIdentifier(it) == key } != RecyclerView.NO_POSITION) {
-                    observer.onChanged(tracker!!.selection.toList())
+                    observer.onChanged(selection)
                 }
             }
         })
@@ -55,9 +60,12 @@ abstract class SelectableRecyclerViewAdapter<T, K>(
     override fun update(values: List<T>) {
         if (persistenceSelection) {
             val selected = tracker?.selection?.toSet()
+            logger.trace("Save $selected")
+
             super.update(values)
             tracker?.run {
                 if (selected != null && selected.isNotEmpty()) {
+                    logger.trace("Restore $selected")
                     setItemsSelected(selected, true)
                 }
             }
