@@ -1,26 +1,29 @@
 package ru.egoncharovsky.words.domain.quiz
 
+import ru.egoncharovsky.words.domain.Language
 import ru.egoncharovsky.words.domain.Word
 
 object QuizTest {
     val dictionary = listOf(
-        Word("apple", "яблоко"),
-        Word("any", "любой"),
-        Word("you", "ты"),
-        Word("I", "я"),
-        Word("many", "много"),
-        Word("love", "любить"),
-        Word("TV", "телевизор"),
-        Word("shift", "сдвиг"),
-        Word("weather", "погода"),
-        Word("translation", "перевод"),
-        Word("nice", "приятный"),
-        Word("very", "очень"),
-        Word("Greece", "Греция"),
-        Word("cool", "круто"),
-        Word("cold", "холодно"),
-        Word("hot", "горячо"),
-        Word("hungry", "голодный"),
-        Word("breakfast", "завтра"),
+        wordEnRu("apple", "яблоко"),
+        wordEnRu("any", "любой"),
+        wordEnRu("you", "ты"),
+        wordEnRu("I", "я"),
+        wordEnRu("many", "много"),
+        wordEnRu("love", "любить"),
+        wordEnRu("TV", "телевизор"),
+        wordEnRu("shift", "сдвиг"),
+        wordEnRu("weather", "погода"),
+        wordEnRu("translation", "перевод"),
+        wordEnRu("nice", "приятный"),
+        wordEnRu("very", "очень"),
+        wordEnRu("Greece", "Греция"),
+        wordEnRu("cool", "круто"),
+        wordEnRu("cold", "холодно"),
+        wordEnRu("hot", "горячо"),
+        wordEnRu("hungry", "голодный"),
+        wordEnRu("breakfast", "завтра"),
     )
+
+    private fun wordEnRu(value: String, translation: String) = Word(value, translation, Language.EN, Language.RU)
 }
