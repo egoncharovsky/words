@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import ru.egoncharovsky.words.R
@@ -15,6 +16,7 @@ import ru.egoncharovsky.words.ui.observe
 class QuizFragment : Fragment() {
 
     private lateinit var quizViewModel: QuizViewModel
+    private val args: QuizFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,6 +29,8 @@ class QuizFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        quizViewModel.startQuiz(args.studyListId)
+
         observe(quizViewModel.getCard()) { card ->
             childFragmentManager.beginTransaction().add(
                 R.id.quiz_replacement, when (card.type()) {

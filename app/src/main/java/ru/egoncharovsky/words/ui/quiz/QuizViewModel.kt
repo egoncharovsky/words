@@ -4,53 +4,40 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import ru.egoncharovsky.words.domain.Word
+import mu.KotlinLogging
 import ru.egoncharovsky.words.domain.quiz.QuizManager
 import ru.egoncharovsky.words.domain.quiz.card.*
+import ru.egoncharovsky.words.repository.StudyListRepository
 
 class QuizViewModel : ViewModel() {
 
-    private val dictionary = listOf(
-        Word("apple", "яблоко"),
-        Word("any", "любой"),
-        Word("you", "ты"),
-        Word("I", "я"),
-        Word("many", "много"),
-        Word("love", "любить"),
-        Word("TV", "телевизор"),
-        Word("shift", "сдвиг"),
-        Word("weather", "погода"),
-        Word("translation", "перевод"),
-        Word("nice", "приятный"),
-        Word("very", "очень"),
-        Word("Greece", "Греция"),
-        Word("cool", "круто"),
-        Word("cold", "холодно"),
-        Word("hot", "горячо"),
-        Word("hungry", "голодный"),
-        Word("breakfast", "завтра"),
-    )
+    private val logger = KotlinLogging.logger {}
 
-    private val manager: QuizManager = QuizManager(dictionary.shuffled().take(10).toSet())
-    private var nextCard: () -> Card? = { manager.start() }
+    private lateinit var manager: QuizManager
+    private lateinit var nextCard: () -> Card?
 
-    private val card = MutableLiveData<Card>().apply {
-        value = nextCard()
-    }
+    private val card = MutableLiveData<Card>()
     private val answerIsCorrect = MutableLiveData<Boolean?>()
     private val nextIsVisible = MutableLiveData<Boolean>()
     private val finished = MutableLiveData<Boolean>()
-    private val progress = MutableLiveData<Int>().apply {
-        value = manager.progressPercentage()
-    }
+    private val progress = MutableLiveData<Int>()
 
     fun getCard(): LiveData<Card> = card
 
-    fun getAnswerModel(): LiveData<QuestionWithCallback<Answer, String>> = Transformations.map(card) { QuestionWithCallback(it as Answer) }
-    fun getMeaningModel(): LiveData<MeaningWithShowedTrigger> = Transformations.map(card) { MeaningWithShowedTrigger(it as Meaning) }
-    fun getMultiChoiceModel(): LiveData<QuestionWithCallback<MultiChoice, String>> = Transformations.map(card) { QuestionWithCallback(it as MultiChoice) }
-    fun getRememberModel(): LiveData<QuestionWithCallback<Remember, Remember.Option>> = Transformations.map(card) { QuestionWithCallback(it as Remember) }
-    fun getRememberRightModel(): LiveData<QuestionWithCallback<RememberRight, RememberRight.Option>> = Transformations.map(card) { QuestionWithCallback(it as RememberRight) }
+    fun getAnswerModel(): LiveData<QuestionWithCallback<Answer, String>> =
+        Transformations.map(card) { QuestionWithCallback(it as Answer) }
+
+    fun getMeaningModel(): LiveData<MeaningWithShowedTrigger> =
+        Transformations.map(card) { MeaningWithShowedTrigger(it as Meaning) }
+
+    fun getMultiChoiceModel(): LiveData<QuestionWithCallback<MultiChoice, String>> =
+        Transformations.map(card) { QuestionWithCallback(it as MultiChoice) }
+
+    fun getRememberModel(): LiveData<QuestionWithCallback<Remember, Remember.Option>> =
+        Transformations.map(card) { QuestionWithCallback(it as Remember) }
+
+    fun getRememberRightModel(): LiveData<QuestionWithCallback<RememberRight, RememberRight.Option>> =
+        Transformations.map(card) { QuestionWithCallback(it as RememberRight) }
 
     fun getAnswerCorrectness(): LiveData<Boolean?> = answerIsCorrect
     fun getNextVisibility(): LiveData<Boolean> = nextIsVisible
@@ -90,5 +77,19 @@ class QuizViewModel : ViewModel() {
         } else {
             finished.value = true
         }
+    }
+
+    fun startQuiz(studyListId: Long) {
+        logger.debug("Starting quiz for study list $studyListId")
+
+        val studyList = StudyListRepository.get(studyListId)
+        logger.trace("Study list loaded: $studyList")
+
+        val words = studyList.dictionaryEntries.map { it.word }.toSet()
+        logger.trace("Total:${words.size} words:$words")
+
+        manager = QuizManager(words)
+        card.value = manager.start()
+        progress.value = manager.progressPercentage()
     }
 }

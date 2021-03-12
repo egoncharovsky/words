@@ -36,6 +36,17 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:id="@+id/editList"
+                app:layout_constraintEnd_toStartOf="@id/study"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/edit"
+                android:scaleType="center"/>
+
+        <ImageButton
+                android:src="@drawable/ic_baseline_school"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/study"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

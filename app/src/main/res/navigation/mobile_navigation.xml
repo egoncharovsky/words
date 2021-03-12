@@ -15,7 +15,11 @@
             android:id="@+id/nav_quiz"
             android:name="ru.egoncharovsky.words.ui.quiz.QuizFragment"
             android:label="@string/quiz"
-            tools:layout="@layout/fragment_quiz"/>
+            tools:layout="@layout/fragment_quiz">
+        <argument
+                android:name="studyListId"
+                app:argType="long"/>
+    </fragment>
 
     <fragment
             android:id="@+id/nav_dictionary"
@@ -31,6 +35,9 @@
         <action
                 android:id="@+id/edit_word_list"
                 app:destination="@id/wordListEditFragment"/>
+        <action
+                android:id="@+id/startQuiz"
+                app:destination="@id/nav_quiz"/>
     </fragment>
     <fragment
             android:id="@+id/wordListEditFragment"

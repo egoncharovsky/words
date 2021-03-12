@@ -56,6 +56,11 @@ class StudyListsFragment : Fragment() {
                     StudyListsFragmentDirections.editWordList(NavArgLongNullable(item.id!!))
                 )
             }
+            itemView.study.setOnClickListener {
+                findNavController().navigate(
+                    StudyListsFragmentDirections.startQuiz(item.id!!)
+                )
+            }
         }
 
     }

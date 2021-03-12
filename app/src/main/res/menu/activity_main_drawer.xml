@@ -5,11 +5,6 @@
 
     <group android:checkableBehavior="single">
         <item
-                android:id="@+id/nav_quiz"
-                android:icon="@drawable/ic_baseline_school"
-                android:title="@string/quiz"/>
-
-        <item
                 android:id="@+id/nav_dictionary"
                 android:icon="@drawable/ic_baseline_book"
                 android:title="@string/my_dictionary"/>
