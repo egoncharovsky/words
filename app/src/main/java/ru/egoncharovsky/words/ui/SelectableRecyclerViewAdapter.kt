@@ -113,11 +113,58 @@ abstract class SelectableRecyclerViewAdapter<T, K>(
 
         @Suppress("UNCHECKED_CAST")
         override fun getItemDetails(event: MotionEvent): ItemDetails<K>? {
-            return recyclerView.findChildViewUnder(event.x, event.y)?.let {
+            return recyclerView.findNearestChildViewUnder(event.x, event.y)?.let {
                 (recyclerView.getChildViewHolder(it) as SelectableRecyclerViewAdapter<*, *>.SelectableViewHolder)
                     .getItemDetails()
             } as ItemDetails<K>?
         }
+    }
+
+    /**
+     * remove it after fixing bug: selection tracker clears all selection if user clicked between child views:
+     * if RecyclerView.findChildViewUnder returns null
+     */
+    private fun RecyclerView.findNearestChildViewUnder(x: Float, y: Float): View? {
+        var view = findChildViewUnder(x, y)
+        if (view != null) return view
+
+        logger.debug("No view found at $x $y")
+
+        val shift = 10
+
+        fun movePlus(c: Float): Float = c + shift
+        fun moveMinus(c: Float): Float = c - shift
+
+        fun findMoved(xM: Float, yM: Float): View? {
+            logger.trace("Trying $xM $yM")
+            val v = findChildViewUnder(xM, yM)
+
+            if (v != null) {
+                logger.warn("Not found child view at $x $y but found at $xM $yM")
+            }
+            return v
+        }
+
+        view = findMoved(x, movePlus(y))
+
+        if (view == null) {
+            view = findMoved(movePlus(x), y)
+        }
+        if (view == null) {
+            view = findMoved(movePlus(x), movePlus(y))
+        }
+
+        if (view == null) {
+            view = findMoved(x, moveMinus(y))
+        }
+        if (view == null) {
+            view = findMoved(moveMinus(x), y)
+        }
+        if (view == null) {
+            view = findMoved(moveMinus(x), moveMinus(y))
+        }
+
+        return view
     }
 
     inner class ItemKeyProviderImpl : ItemKeyProvider<K>(SCOPE_MAPPED) {
