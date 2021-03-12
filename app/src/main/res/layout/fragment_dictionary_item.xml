@@ -4,13 +4,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dictionary_list_item"
-        >
+        android:layout_margin="@dimen/item_margin">
 
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp">
+            android:layout_height="wrap_content">
 
         <TextView
                 android:text="@string/word"

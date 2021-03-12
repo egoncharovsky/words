@@ -14,17 +14,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="8dp"
             app:layout_constraintHorizontal_bias="1.0"
-            android:layout_marginBottom="8dp"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp">
+            >
 
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/wordLists"
-                tools:listitem="@layout/fragment_study_lists_item"/>
+                tools:listitem="@layout/fragment_study_lists_item"
+                android:layout_margin="@dimen/content_margin"/>
 
     </ScrollView>
 
@@ -33,7 +32,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/fab_margin"
             app:srcCompat="@android:drawable/ic_menu_save"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
