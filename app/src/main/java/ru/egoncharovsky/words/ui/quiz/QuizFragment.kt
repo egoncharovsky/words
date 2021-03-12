@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_quiz.*
@@ -15,18 +15,14 @@ import ru.egoncharovsky.words.ui.observe
 
 class QuizFragment : Fragment() {
 
-    private lateinit var quizViewModel: QuizViewModel
+    private val quizViewModel: QuizViewModel by activityViewModels()
     private val args: QuizFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        quizViewModel = ViewModelProvider(this).get(QuizViewModel::class.java)
-
-        return LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz, container, false)
-    }
+    ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         quizViewModel.startQuiz(args.studyListId)
@@ -34,16 +30,11 @@ class QuizFragment : Fragment() {
         observe(quizViewModel.getCard()) { card ->
             childFragmentManager.beginTransaction().add(
                 R.id.quiz_replacement, when (card.type()) {
-                    Card.Type.ANSWER ->
-                        AnswerFragment(quizViewModel.getAnswerModel(), quizViewModel.getAnswerCorrectness())
-                    Card.Type.MEANING ->
-                        MeaningFragment(quizViewModel.getMeaningModel())
-                    Card.Type.MULTI_CHOICE ->
-                        MultiChoiceFragment(quizViewModel.getMultiChoiceModel(), quizViewModel.getAnswerCorrectness())
-                    Card.Type.REMEMBER ->
-                        RememberFragment(quizViewModel.getRememberModel())
-                    Card.Type.REMEMBER_RIGHT ->
-                        RememberRightFragment(quizViewModel.getRememberRightModel())
+                    Card.Type.ANSWER -> AnswerFragment()
+                    Card.Type.MEANING -> MeaningFragment()
+                    Card.Type.MULTI_CHOICE -> MultiChoiceFragment()
+                    Card.Type.REMEMBER -> RememberFragment()
+                    Card.Type.REMEMBER_RIGHT -> RememberRightFragment()
                 }
             ).commit()
         }

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import kotlinx.android.synthetic.main.fragment_quiz_meaning.wordValue
 import kotlinx.android.synthetic.main.fragment_quiz_multiple_choice.*
@@ -17,16 +18,23 @@ import ru.egoncharovsky.words.domain.quiz.card.MultiChoice
 import ru.egoncharovsky.words.ui.getColor
 import ru.egoncharovsky.words.ui.observe
 
-class MultiChoiceFragment(
-    private val multiChoiceWithCallback: LiveData<QuizViewModel.QuestionWithCallback<MultiChoice, String>>,
-    private val answerCorrectness: LiveData<Boolean?>
-) : Fragment() {
+class MultiChoiceFragment : Fragment() {
+
+    private val quizViewModel: QuizViewModel by activityViewModels()
+
+    private lateinit var multiChoiceWithCallback: LiveData<QuizViewModel.QuestionWithCallback<MultiChoice, String>>
+    private lateinit var answerCorrectness: LiveData<Boolean?>
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_multiple_choice, container, false)
+    ): View? {
+        multiChoiceWithCallback = quizViewModel.getMultiChoiceModel()
+        answerCorrectness = quizViewModel.getAnswerCorrectness()
+
+        return LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_multiple_choice, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         observe(multiChoiceWithCallback) { model ->

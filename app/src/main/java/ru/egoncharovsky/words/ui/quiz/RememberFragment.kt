@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import kotlinx.android.synthetic.main.fragment_quiz_meaning.wordValue
 import kotlinx.android.synthetic.main.fragment_quiz_remember.*
@@ -12,15 +13,21 @@ import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.domain.quiz.card.Remember
 import ru.egoncharovsky.words.ui.observe
 
-class RememberFragment(
-    private val rememberWithCallback: LiveData<QuizViewModel.QuestionWithCallback<Remember, Remember.Option>>
-) : Fragment() {
+class RememberFragment : Fragment() {
+
+    private val quizViewModel: QuizViewModel by activityViewModels()
+
+    private lateinit var rememberWithCallback: LiveData<QuizViewModel.QuestionWithCallback<Remember, Remember.Option>>
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_remember, container, false)
+    ): View? {
+        rememberWithCallback = quizViewModel.getRememberModel()
+
+        return LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_remember, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         observe(rememberWithCallback) { model ->
