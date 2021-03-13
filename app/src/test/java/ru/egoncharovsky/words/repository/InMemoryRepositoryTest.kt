@@ -3,7 +3,7 @@ package ru.egoncharovsky.words.repository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
-import ru.egoncharovsky.words.domain.Entity
+import ru.egoncharovsky.words.domain.entity.Entity
 
 internal class InMemoryRepositoryTest {
 

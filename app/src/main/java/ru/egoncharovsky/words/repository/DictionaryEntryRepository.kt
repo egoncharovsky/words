@@ -1,9 +1,9 @@
 package ru.egoncharovsky.words.repository
 
 import mu.KotlinLogging
-import ru.egoncharovsky.words.domain.DictionaryEntry
 import ru.egoncharovsky.words.domain.Language
 import ru.egoncharovsky.words.domain.Word
+import ru.egoncharovsky.words.domain.entity.DictionaryEntry
 
 object DictionaryEntryRepository : InMemoryRepository<Long, DictionaryEntry>(LongIdGenerator()) {
 

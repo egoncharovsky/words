@@ -1,6 +1,6 @@
 package ru.egoncharovsky.words.repository
 
-import ru.egoncharovsky.words.domain.StudyList
+import ru.egoncharovsky.words.domain.entity.StudyList
 
 object StudyListRepository : InMemoryRepository<Long, StudyList>(LongIdGenerator()) {
 

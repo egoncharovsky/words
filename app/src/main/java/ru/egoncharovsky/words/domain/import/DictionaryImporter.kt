@@ -1,9 +1,9 @@
 package ru.egoncharovsky.words.domain.import
 
 import mu.KotlinLogging
-import ru.egoncharovsky.words.domain.DictionaryEntry
 import ru.egoncharovsky.words.domain.Language
 import ru.egoncharovsky.words.domain.Word
+import ru.egoncharovsky.words.domain.entity.DictionaryEntry
 import ru.egoncharovsky.words.repository.DictionaryEntryRepository
 import java.io.InputStream
 import java.io.InputStreamReader

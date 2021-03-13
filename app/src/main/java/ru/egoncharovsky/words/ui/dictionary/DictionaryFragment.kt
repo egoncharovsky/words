@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_dictionary.*
 import kotlinx.android.synthetic.main.fragment_dictionary_item.view.*
 import ru.egoncharovsky.words.R
-import ru.egoncharovsky.words.domain.DictionaryEntry
+import ru.egoncharovsky.words.domain.entity.DictionaryEntry
 import ru.egoncharovsky.words.ui.RecyclerViewAdapter
 import ru.egoncharovsky.words.ui.items
 import ru.egoncharovsky.words.ui.observe

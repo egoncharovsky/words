@@ -1,6 +1,6 @@
 package ru.egoncharovsky.words.repository
 
-import ru.egoncharovsky.words.domain.Entity
+import ru.egoncharovsky.words.domain.entity.Entity
 
 open class InMemoryRepository<ID, E : Entity<ID>>(
     private val idGenerator: IdGenerator<ID>

@@ -3,7 +3,7 @@ package ru.egoncharovsky.words.ui.dictionary
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.egoncharovsky.words.domain.DictionaryEntry
+import ru.egoncharovsky.words.domain.entity.DictionaryEntry
 import ru.egoncharovsky.words.repository.DictionaryEntryRepository
 import java.util.*
 

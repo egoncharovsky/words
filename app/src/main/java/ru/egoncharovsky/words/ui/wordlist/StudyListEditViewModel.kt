@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import mu.KotlinLogging
-import ru.egoncharovsky.words.domain.StudyList
 import ru.egoncharovsky.words.domain.Word
+import ru.egoncharovsky.words.domain.entity.StudyList
 import ru.egoncharovsky.words.repository.DictionaryEntryRepository
 import ru.egoncharovsky.words.repository.StudyListRepository
 

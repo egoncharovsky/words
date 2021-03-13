@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_study_lists.*
 import kotlinx.android.synthetic.main.fragment_study_lists_item.view.*
 import ru.egoncharovsky.words.R
-import ru.egoncharovsky.words.domain.StudyList
+import ru.egoncharovsky.words.domain.entity.StudyList
 import ru.egoncharovsky.words.ui.NavArgLongNullable
 import ru.egoncharovsky.words.ui.RecyclerViewAdapter
 import ru.egoncharovsky.words.ui.observe

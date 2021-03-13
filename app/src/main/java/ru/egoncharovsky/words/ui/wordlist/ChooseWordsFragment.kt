@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_dictionary.*
 import kotlinx.android.synthetic.main.fragment_dictionary_item.view.wordTranslation
 import kotlinx.android.synthetic.main.fragment_dictionary_item.view.wordValue
 import ru.egoncharovsky.words.R
-import ru.egoncharovsky.words.domain.DictionaryEntry
+import ru.egoncharovsky.words.domain.entity.DictionaryEntry
 import ru.egoncharovsky.words.ui.SelectableRecyclerViewAdapter
 import ru.egoncharovsky.words.ui.dictionary.DictionaryFragment
 import ru.egoncharovsky.words.ui.setNavigationResult
