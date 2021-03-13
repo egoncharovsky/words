@@ -1,8 +1,8 @@
 package ru.egoncharovsky.words.repository
 
-import ru.egoncharovsky.words.domain.entity.Entity
+import ru.egoncharovsky.words.domain.entity.Identifiable
 
-interface Repository<ID, E : Entity<E, ID>> {
+interface Repository<ID, E : Identifiable<E, ID>> {
 
     fun getAll(): List<E>
 

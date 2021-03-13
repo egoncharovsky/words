@@ -7,7 +7,7 @@ data class Word(
         val translation: String,
         val language: Language,
         val translationLanguage: Language
-) : Entity<Word, Long> {
+) : Identifiable<Word, Long> {
         override fun copy(newId: Long): Word = copy(id = id)
 
         fun invert(): Word = Word(
