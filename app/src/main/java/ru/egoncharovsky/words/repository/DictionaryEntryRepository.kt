@@ -14,6 +14,10 @@ object DictionaryEntryRepository : InMemoryRepository<Long, DictionaryEntry>(Lon
         it.word.value.contains(value, ignoreCase = true) || it.word.translation.contains(value, ignoreCase = true)
     }
 
+    fun getByWord(word: Word) = entities.values.find {
+        it.word == word
+    }
+
     init {
         listOf(
             wordEnRu("apple", "яблоко"),

@@ -85,7 +85,7 @@ class QuizViewModel : ViewModel() {
         val studyList = StudyListRepository.get(studyListId)
         logger.trace("Study list loaded: $studyList")
 
-        val words = studyList.dictionaryEntries.map { it.word }.toSet()
+        val words = studyList.words.toSet()
         logger.trace("Total:${words.size} words:$words")
 
         manager = QuizManager(words)

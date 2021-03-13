@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_dictionary_item.view.*
 import kotlinx.android.synthetic.main.fragment_study_list_edit.*
 import ru.egoncharovsky.words.R
-import ru.egoncharovsky.words.domain.DictionaryEntry
+import ru.egoncharovsky.words.domain.Word
 import ru.egoncharovsky.words.ui.RecyclerViewAdapter
 import ru.egoncharovsky.words.ui.observe
 import ru.egoncharovsky.words.ui.observeNavigationResult
@@ -22,7 +22,7 @@ import ru.egoncharovsky.words.ui.observeNavigationResult
 class StudyListEditFragment : Fragment() {
 
     private lateinit var studyListEditViewModel: StudyListEditViewModel
-    private lateinit var adapter: RecyclerViewAdapter<DictionaryEntry>
+    private lateinit var adapter: RecyclerViewAdapter<Word>
     private val args: StudyListEditFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -53,7 +53,7 @@ class StudyListEditFragment : Fragment() {
             studyListEditViewModel.dictionaryEntriesSelected(it)
         }
 
-        observe(studyListEditViewModel.getDictionaryEntries()) {
+        observe(studyListEditViewModel.getWords()) {
             count.text = String.format(getString(R.string.words_count), it.size)
             adapter.update(it.toList())
         }
@@ -63,7 +63,7 @@ class StudyListEditFragment : Fragment() {
                 true -> null
             }
         }
-        observe(studyListEditViewModel.areDictionaryEntriesValid()) {
+        observe(studyListEditViewModel.areWordsValid()) {
             count.error = when (it) {
                 false -> getString(R.string.should_have_at_least_1)
                 true -> null
@@ -71,9 +71,8 @@ class StudyListEditFragment : Fragment() {
         }
 
         choose.setOnClickListener {
-            val ids = studyListEditViewModel.getDictionaryEntries().value?.map { it.id!! }?.toLongArray()
             findNavController().navigate(
-                StudyListEditFragmentDirections.chooseWords(ids)
+                StudyListEditFragmentDirections.chooseWords(studyListEditViewModel.getDictionaryEntryIds())
             )
         }
         name.addTextChangedListener {
@@ -87,12 +86,12 @@ class StudyListEditFragment : Fragment() {
         }
     }
 
-    inner class StudyListWordsAdapter : RecyclerViewAdapter<DictionaryEntry>() {
+    inner class StudyListWordsAdapter : RecyclerViewAdapter<Word>() {
         override val itemLayoutId: Int = R.layout.fragment_study_list_item
 
-        override fun bind(itemView: View, item: DictionaryEntry) {
-            itemView.wordValue.text = item.word.value
-            itemView.wordTranslation.text = item.word.translation
+        override fun bind(itemView: View, item: Word) {
+            itemView.wordValue.text = item.value
+            itemView.wordTranslation.text = item.translation
         }
 
     }

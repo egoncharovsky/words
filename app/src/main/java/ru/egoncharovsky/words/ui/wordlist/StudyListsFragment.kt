@@ -50,7 +50,7 @@ class StudyListsFragment : Fragment() {
 
         override fun bind(itemView: View, item: StudyList) {
             itemView.name.text = item.name
-            itemView.count.text = String.format(getString(R.string.words_count), item.dictionaryEntries.size)
+            itemView.count.text = String.format(getString(R.string.words_count), item.words.size)
             itemView.editList.setOnClickListener {
                 findNavController().navigate(
                     StudyListsFragmentDirections.editWordList(NavArgLongNullable(item.id!!))
