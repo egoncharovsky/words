@@ -1,7 +1,7 @@
 package ru.egoncharovsky.words.domain.quiz
 
 import org.junit.jupiter.api.Test
-import ru.egoncharovsky.words.domain.Word
+import ru.egoncharovsky.words.domain.entity.Word
 import ru.egoncharovsky.words.domain.quiz.card.*
 import java.util.function.Predicate
 import kotlin.test.assertEquals

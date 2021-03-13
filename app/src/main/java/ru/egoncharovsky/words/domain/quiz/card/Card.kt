@@ -1,6 +1,6 @@
 package ru.egoncharovsky.words.domain.quiz.card
 
-import ru.egoncharovsky.words.domain.Word
+import ru.egoncharovsky.words.domain.entity.Word
 
 interface Card {
     enum class Type {

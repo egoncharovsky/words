@@ -1,9 +1,9 @@
 package ru.egoncharovsky.words.domain.import
 
 import mu.KotlinLogging
-import ru.egoncharovsky.words.domain.Language
-import ru.egoncharovsky.words.domain.Word
 import ru.egoncharovsky.words.domain.entity.DictionaryEntry
+import ru.egoncharovsky.words.domain.entity.Language
+import ru.egoncharovsky.words.domain.entity.Word
 import ru.egoncharovsky.words.repository.DictionaryEntryRepository
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -28,9 +28,19 @@ class DictionaryImporter {
             val translation = line[3]
 
             if (languageFrom == "английский" && languageTo == "русский") {
-                Word(value, translation, Language.EN, Language.RU)
+                Word(
+                    value = value,
+                    translation = translation,
+                    language = Language.EN,
+                    translationLanguage = Language.RU
+                )
             } else if (languageFrom == "русский" && languageTo == "английский") {
-                Word(value, translation, Language.EN, Language.RU).invert()
+                Word(
+                    value = value,
+                    translation = translation,
+                    language = Language.EN,
+                    translationLanguage = Language.RU
+                ).invert()
             } else {
                 logger.error("Ignore unsupported languages pair $languageFrom -> $languageTo for line $line")
                 null

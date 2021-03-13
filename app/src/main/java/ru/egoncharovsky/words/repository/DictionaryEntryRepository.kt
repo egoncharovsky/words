@@ -1,9 +1,9 @@
 package ru.egoncharovsky.words.repository
 
 import mu.KotlinLogging
-import ru.egoncharovsky.words.domain.Language
-import ru.egoncharovsky.words.domain.Word
 import ru.egoncharovsky.words.domain.entity.DictionaryEntry
+import ru.egoncharovsky.words.domain.entity.Language
+import ru.egoncharovsky.words.domain.entity.Word
 
 object DictionaryEntryRepository : InMemoryRepository<Long, DictionaryEntry>(LongIdGenerator()) {
 
@@ -69,5 +69,10 @@ object DictionaryEntryRepository : InMemoryRepository<Long, DictionaryEntry>(Lon
         ).map { DictionaryEntry(null, it) }.forEach { save(it) }
     }
 
-    private fun wordEnRu(value: String, translation: String) = Word(value, translation, Language.EN, Language.RU)
+    private fun wordEnRu(value: String, translation: String) = Word(
+        value = value,
+        translation = translation,
+        language = Language.EN,
+        translationLanguage = Language.RU
+    )
 }

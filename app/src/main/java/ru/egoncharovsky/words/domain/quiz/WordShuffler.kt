@@ -1,7 +1,7 @@
 package ru.egoncharovsky.words.domain.quiz
 
 import mu.KotlinLogging
-import ru.egoncharovsky.words.domain.Word
+import ru.egoncharovsky.words.domain.entity.Word
 
 class WordShuffler(
     val words: Set<Word>,

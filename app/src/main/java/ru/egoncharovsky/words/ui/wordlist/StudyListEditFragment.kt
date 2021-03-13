@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_dictionary_item.view.*
 import kotlinx.android.synthetic.main.fragment_study_list_edit.*
 import ru.egoncharovsky.words.R
-import ru.egoncharovsky.words.domain.Word
+import ru.egoncharovsky.words.domain.entity.Word
 import ru.egoncharovsky.words.ui.RecyclerViewAdapter
 import ru.egoncharovsky.words.ui.observe
 import ru.egoncharovsky.words.ui.observeNavigationResult
