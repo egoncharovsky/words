@@ -1,13 +1,15 @@
 package ru.egoncharovsky.words.domain.entity
 
 data class Word(
-        override var id: Long? = null,
+        override val id: Long? = null,
 
         val value: String,
         val translation: String,
         val language: Language,
         val translationLanguage: Language
-) : Entity<Long> {
+) : Entity<Word, Long> {
+        override fun copy(newId: Long): Word = copy(id = id)
+
         fun invert(): Word = Word(
                 value = translation,
                 translation = value,

@@ -2,7 +2,7 @@ package ru.egoncharovsky.words.repository
 
 import ru.egoncharovsky.words.domain.entity.Entity
 
-open class InMemoryRepository<ID, E : Entity<ID>>(
+open class InMemoryRepository<ID, E : Entity<E, ID>>(
     private val idGenerator: IdGenerator<ID>
 ) : Repository<ID, E> {
 
@@ -24,11 +24,12 @@ open class InMemoryRepository<ID, E : Entity<ID>>(
 
     override fun find(id: ID): E? = entities[id]
 
-    override fun save(entity: E): E = entity.apply {
-        if (id == null) {
-            id = idGenerator.generate()
-        }
-        entities[id!!] = this
+    override fun save(entity: E): E {
+        return if (entity.id == null) {
+            entity.copy(idGenerator.generate())
+        } else {
+            entity
+        }.also { entities[it.id!!] = it }
     }
 
     override fun saveAll(entities: Iterable<E>): List<E> = entities.map { save(it) }

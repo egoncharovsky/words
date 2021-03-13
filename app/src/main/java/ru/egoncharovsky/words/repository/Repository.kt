@@ -2,7 +2,7 @@ package ru.egoncharovsky.words.repository
 
 import ru.egoncharovsky.words.domain.entity.Entity
 
-interface Repository<ID, E : Entity<ID>> {
+interface Repository<ID, E : Entity<E, ID>> {
 
     fun getAll(): List<E>
 

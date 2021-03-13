@@ -1,6 +1,8 @@
 package ru.egoncharovsky.words.domain.entity
 
 data class DictionaryEntry(
-    override var id: Long?,
+    override val id: Long?,
     val word: Word
-) : Entity<Long>
+) : Entity<DictionaryEntry, Long> {
+    override fun copy(newId: Long): DictionaryEntry = copy(id = newId)
+}

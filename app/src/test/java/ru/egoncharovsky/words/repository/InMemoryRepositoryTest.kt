@@ -8,21 +8,12 @@ import ru.egoncharovsky.words.domain.entity.Entity
 internal class InMemoryRepositoryTest {
 
     data class MyEntity(
-        override var id: Long?
-    ): Entity<Long>
-    val repository = InMemoryRepository<Long, MyEntity>(InMemoryRepository.LongIdGenerator())
-
-    @Test
-    fun getAll() {
+        override val id: Long?
+    ): Entity<MyEntity, Long> {
+        override fun copy(newId: Long): MyEntity = copy(id = newId)
     }
 
-    @Test
-    fun get() {
-    }
-
-    @Test
-    fun find() {
-    }
+    private val repository = InMemoryRepository<Long, MyEntity>(InMemoryRepository.LongIdGenerator())
 
     @Test
     fun add() {
@@ -35,11 +26,4 @@ internal class InMemoryRepositoryTest {
         assertEquals(3, all.map { it.id }.toSet().size)
     }
 
-    @Test
-    fun delete() {
-    }
-
-    @Test
-    fun deleteAll() {
-    }
 }

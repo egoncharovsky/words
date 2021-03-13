@@ -1,8 +1,10 @@
 package ru.egoncharovsky.words.domain.entity
 
 data class StudyList(
-    override var id: Long? = null,
+    override val id: Long? = null,
 
     val name: String,
     val words: Set<Word>
-) : Entity<Long>
+) : Entity<StudyList, Long> {
+    override fun copy(newId: Long): StudyList = copy(id = newId)
+}
