@@ -1,23 +1,26 @@
-package ru.egoncharovsky.words.domain.import
+package ru.egoncharovsky.words.domain.importing
 
 import mu.KotlinLogging
 import ru.egoncharovsky.words.domain.entity.DictionaryEntry
 import ru.egoncharovsky.words.domain.entity.Language
 import ru.egoncharovsky.words.domain.entity.Word
-import ru.egoncharovsky.words.repository.DictionaryEntryRepository
+import ru.egoncharovsky.words.repository.persistent.DictionaryEntryRepository
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.nio.charset.Charset
 
-class DictionaryImporter {
+
+class DictionaryImporter(
+    private val dictionaryEntryRepository: DictionaryEntryRepository
+) {
 
     private val logger = KotlinLogging.logger {}
 
-    fun import(csvIS: InputStream) {
+    suspend fun import(csvIS: InputStream) {
         val words = readWords(csvIS.reader(Charset.defaultCharset()))
         val dictionaryEntries = words.map { DictionaryEntry(null, it) }
 
-        DictionaryEntryRepository.saveAll(dictionaryEntries)
+        dictionaryEntryRepository.saveAll(dictionaryEntries)
     }
 
     fun readWords(reader: InputStreamReader): List<Word> = reader.useLines { lines ->

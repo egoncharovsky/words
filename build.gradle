@@ -4,6 +4,7 @@ buildscript {
         kotlinVersion = '1.4.31'
         roomVersion = '2.2.6'
         hiltVersion = '2.31.2-alpha'
+        lifecycleVersion = '2.3.0'
     }
 
     repositories {

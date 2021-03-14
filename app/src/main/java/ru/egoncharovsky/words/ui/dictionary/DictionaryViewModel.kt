@@ -3,11 +3,21 @@ package ru.egoncharovsky.words.ui.dictionary
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import ru.egoncharovsky.words.domain.entity.DictionaryEntry
-import ru.egoncharovsky.words.repository.DictionaryEntryRepository
+import ru.egoncharovsky.words.repository.persistent.DictionaryEntryRepository
 import java.util.*
+import javax.inject.Inject
 
-open class DictionaryViewModel : ViewModel() {
+@HiltViewModel
+open class DictionaryViewModel @Inject constructor(
+    private val repository: DictionaryEntryRepository
+) : ViewModel() {
 
     enum class SortType {
         DEFAULT {
@@ -25,24 +35,27 @@ open class DictionaryViewModel : ViewModel() {
         abstract fun apply(list: List<DictionaryEntry>): List<DictionaryEntry>
     }
 
-    protected val dictionaryEntries = MutableLiveData<List<DictionaryEntry>>().apply {
-        value = SortType.DEFAULT.apply(DictionaryEntryRepository.getAll())
-    }
     private val sort = MutableLiveData<SortType>().apply {
         value = SortType.DEFAULT
     }
+    val dictionaryEntries: MutableLiveData<List<DictionaryEntry>> = MutableLiveData()
 
-    fun getDictionaryEntries(): LiveData<List<DictionaryEntry>> = dictionaryEntries
-    fun getSort(): LiveData<SortType> = sort
-
-    fun cancelSearch() {
-        dictionaryEntries.value = sort.value!!.apply(DictionaryEntryRepository.getAll())
+    init {
+        request(repository.getAll())
     }
 
-    fun search(value: String?) {
-        value?.trim()?.let {
-            if (it.isNotBlank()) {
-                dictionaryEntries.value = sort.value!!.apply(DictionaryEntryRepository.searchWord(it))
+    fun getSort(): LiveData<SortType> = sort
+
+    private fun sorted(list: List<DictionaryEntry>) = sort.value!!.apply(list)
+
+    fun cancelSearch() {
+        request(repository.getAll())
+    }
+
+    fun search(input: String?) {
+        input?.trim()?.let { value ->
+            if (value.isNotBlank()) {
+                request(repository.searchWord(value))
             } else {
                 cancelSearch()
             }
@@ -55,7 +68,13 @@ open class DictionaryViewModel : ViewModel() {
 
     fun onSortChanged() {
         dictionaryEntries.value?.let {
-             dictionaryEntries.value = sort.value!!.apply(it)
+             dictionaryEntries.value = sorted(it)
+        }
+    }
+
+    private fun request(flow: Flow<List<DictionaryEntry>>) = viewModelScope.launch {
+        flow.map { sorted(it) }.collect {
+            dictionaryEntries.postValue(it)
         }
     }
 }

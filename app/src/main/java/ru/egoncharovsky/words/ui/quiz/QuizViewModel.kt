@@ -73,7 +73,7 @@ class QuizViewModel : ViewModel() {
         progress.value = manager.progressPercentage()
         if (next != null) {
             nextIsVisible.value = false
-            card.value = next
+            next.let { card.value = it }
         } else {
             finished.value = true
         }

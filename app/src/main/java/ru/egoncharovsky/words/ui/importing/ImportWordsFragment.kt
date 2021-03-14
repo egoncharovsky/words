@@ -1,18 +1,20 @@
-package ru.egoncharovsky.words.ui.import
+package ru.egoncharovsky.words.ui.importing
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.egoncharovsky.words.ui.RequestCode
 
 
-class ImportWordsFragment : Fragment() {
+@AndroidEntryPoint
+open class ImportWordsFragment : Fragment() {
 
-    private val importWordsViewModel: ImportWordsViewModel by activityViewModels()
+    private val importWordsViewModel: ImportWordsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

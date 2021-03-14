@@ -32,7 +32,7 @@ open class InMemoryRepository<ID, E : Identifiable<E, ID>>(
         }.also { entities[it.id!!] = it }
     }
 
-    override fun saveAll(entities: Iterable<E>): List<E> = entities.map { save(it) }
+    override fun saveAll(entities: Collection<E>): List<E> = entities.map { save(it) }
 
     override fun delete(entity: E) {
         entity.id?.let { entities.remove(it) }

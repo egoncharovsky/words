@@ -9,6 +9,7 @@ import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_dictionary.*
 import kotlinx.android.synthetic.main.fragment_dictionary_item.view.*
 import ru.egoncharovsky.words.R
@@ -17,6 +18,7 @@ import ru.egoncharovsky.words.ui.RecyclerViewAdapter
 import ru.egoncharovsky.words.ui.items
 import ru.egoncharovsky.words.ui.observe
 
+@AndroidEntryPoint
 open class DictionaryFragment : Fragment() {
 
     protected lateinit var dictionaryViewModel: DictionaryViewModel
@@ -71,7 +73,7 @@ open class DictionaryFragment : Fragment() {
             true
         }
 
-        observe(dictionaryViewModel.getDictionaryEntries()) {
+        observe(dictionaryViewModel.dictionaryEntries) {
             adapter.update(it)
         }
         observe(dictionaryViewModel.getSort()) { sort ->

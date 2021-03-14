@@ -65,6 +65,6 @@
     </fragment>
     <fragment
             android:id="@+id/importWordsFragment"
-            android:name="ru.egoncharovsky.words.ui.import.ImportWordsFragment"
+            android:name="ru.egoncharovsky.words.ui.importing.ImportWordsFragment"
             android:label="@string/import_words"/>
 </navigation>
