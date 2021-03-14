@@ -1,10 +1,11 @@
 package ru.egoncharovsky.words.repository
 
+import ru.egoncharovsky.words.domain.entity.Copyable
 import ru.egoncharovsky.words.domain.entity.Identifiable
 
-open class InMemoryRepository<ID, E : Identifiable<E, ID>>(
+open class InMemoryRepository<ID, E>(
     private val idGenerator: IdGenerator<ID>
-) : Repository<ID, E> {
+) : Repository<ID, E> where E : Identifiable<E, ID>, E : Copyable<E, ID>  {
 
     interface IdGenerator<ID> {
         fun generate(): ID

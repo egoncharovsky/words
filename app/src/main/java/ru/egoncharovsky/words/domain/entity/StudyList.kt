@@ -5,6 +5,6 @@ data class StudyList(
 
     val name: String,
     val words: Set<Word>
-) : Identifiable<StudyList, Long> {
+) : Copyable<StudyList, Long>, Identifiable<StudyList, Long> {
     override fun copy(newId: Long): StudyList = copy(id = newId)
 }
