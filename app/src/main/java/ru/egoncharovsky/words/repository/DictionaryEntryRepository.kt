@@ -5,6 +5,7 @@ import ru.egoncharovsky.words.domain.entity.DictionaryEntry
 import ru.egoncharovsky.words.domain.entity.Language
 import ru.egoncharovsky.words.domain.entity.Word
 
+@Deprecated(message = "use persistent")
 object DictionaryEntryRepository : InMemoryRepository<Long, DictionaryEntry>(LongIdGenerator()) {
 
     private val logger = KotlinLogging.logger {}

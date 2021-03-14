@@ -3,13 +3,14 @@ package ru.egoncharovsky.words.repository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
+import ru.egoncharovsky.words.domain.entity.Copyable
 import ru.egoncharovsky.words.domain.entity.Identifiable
 
 internal class InMemoryRepositoryTest {
 
     data class MyEntity(
         override val id: Long?
-    ): Identifiable<MyEntity, Long> {
+    ): Identifiable<MyEntity, Long>, Copyable<MyEntity, Long> {
         override fun copy(newId: Long): MyEntity = copy(id = newId)
     }
 
