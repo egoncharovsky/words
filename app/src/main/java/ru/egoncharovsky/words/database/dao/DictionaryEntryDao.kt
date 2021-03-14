@@ -2,7 +2,6 @@ package ru.egoncharovsky.words.database.dao
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
-import ru.egoncharovsky.words.database.tables.DictionaryEntryTable
 import ru.egoncharovsky.words.database.tables.DictionaryEntryWord
 
 @Dao
@@ -14,23 +13,23 @@ interface DictionaryEntryDao {
 
     @Transaction
     @Query("SELECT * FROM DictionaryEntryTable WHERE id = :id")
-    fun find(id: Long): Flow<DictionaryEntryTable?>
+    fun find(id: Long): Flow<DictionaryEntryWord?>
 
     @Transaction
     @Update
-    suspend fun update(entity: DictionaryEntryTable): Int
+    suspend fun update(entity: DictionaryEntryWord): Int
 
     @Transaction
     @Insert
-    suspend fun insert(entity: DictionaryEntryTable): Long
+    suspend fun insert(entity: DictionaryEntryWord): Long
 
     @Transaction
     @Insert
-    suspend fun insertAll(entity: Collection<DictionaryEntryTable>): List<Long>
+    suspend fun insertAll(entity: Collection<DictionaryEntryWord>): List<Long>
 
     @Transaction
     @Delete
-    suspend fun delete(entity: DictionaryEntryTable)
+    suspend fun delete(entity: DictionaryEntryWord)
 
     @Transaction
     @Query("DELETE FROM DictionaryEntryTable")

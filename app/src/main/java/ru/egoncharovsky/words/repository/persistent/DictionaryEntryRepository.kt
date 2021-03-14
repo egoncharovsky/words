@@ -3,8 +3,8 @@ package ru.egoncharovsky.words.repository.persistent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import ru.egoncharovsky.words.database.dao.DictionaryEntryDao
+import ru.egoncharovsky.words.database.tables.DictionaryEntryWord
 import ru.egoncharovsky.words.domain.entity.DictionaryEntry
-import ru.egoncharovsky.words.domain.entity.Word
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,21 +14,14 @@ class DictionaryEntryRepository @Inject constructor(
 ) : BaseRepository<Long, DictionaryEntry>() {
 
     override fun getAll(): Flow<List<DictionaryEntry>> = dao.getAll().map { list ->
-        list.map { DictionaryEntry(
-            it.dictionaryEntry.id,
-            Word(
-                it.word.id,
-                it.word.value,
-                it.word.translation,
-                it.word.language,
-                it.word.translationLanguage
-            )
-        ) }
+        list.map { it.toEntity() }
     }
 
-    override fun find(id: Long): Flow<DictionaryEntry?> = TODO()
+    override fun find(id: Long): Flow<DictionaryEntry?> = dao.find(id).map { it?.toEntity() }
 
-    override suspend fun saveAll(entities: Collection<DictionaryEntry>): List<Long> = TODO()
+    override suspend fun saveAll(entities: Collection<DictionaryEntry>): List<Long> {
+        return dao.insertAll(entities.map { DictionaryEntryWord.fromEntity(it) })
+    }
 
     override suspend fun delete(entity: DictionaryEntry) = TODO()
 
