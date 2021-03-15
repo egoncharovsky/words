@@ -72,6 +72,9 @@ open class DictionaryFragment : Fragment() {
             dictionaryViewModel.cancelSearch()
             true
         }
+        search.setOnClickListener {
+            search.setIconified(false);
+        }
 
         observe(dictionaryViewModel.dictionaryEntries) {
             adapter.update(it)

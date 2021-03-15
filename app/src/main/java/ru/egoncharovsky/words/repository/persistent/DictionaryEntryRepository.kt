@@ -56,8 +56,8 @@ class DictionaryEntryRepository @Inject constructor(
     }
 
     fun searchWord(value: String): Flow<List<DictionaryEntry>> {
-        TODO()
-        //        return dao.searchWord("%$value%")
+        logger.trace("Search $value")
+        return dao.searchWord("%$value%").map { list -> list.map { toEntity(it) } }
     }
 
     private fun toEntity(join: DictionaryEntryWordJoin) = DictionaryEntry(
@@ -69,10 +69,5 @@ class DictionaryEntryRepository @Inject constructor(
             join.word.language,
             join.word.translationLanguage
         )
-    )
-
-    private fun fromEntity(entity: DictionaryEntry) = DictionaryEntryTable(
-        entity.id,
-        entity.word.id!!
     )
 }

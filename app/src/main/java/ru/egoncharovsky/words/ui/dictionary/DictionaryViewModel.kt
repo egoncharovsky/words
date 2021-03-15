@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
@@ -72,9 +73,11 @@ open class DictionaryViewModel @Inject constructor(
         }
     }
 
-    private fun request(flow: Flow<List<DictionaryEntry>>) = viewModelScope.launch {
-        flow.map { sorted(it) }.collect {
-            dictionaryEntries.postValue(it)
+    private fun request(flow: Flow<List<DictionaryEntry>>): Job {
+        return viewModelScope.launch {
+            flow.map { sorted(it) }.collect {
+                dictionaryEntries.postValue(it)
+            }
         }
     }
 }

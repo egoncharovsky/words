@@ -39,7 +39,14 @@ interface DictionaryEntryDao {
     @Query("DELETE FROM DictionaryEntryTable")
     suspend fun deleteAll()
 
-//    @Transaction
-//    @Query("""SELECT * FROM DictionaryEntry WHERE word = 1""")
-//    fun searchWord(pattern: String): Flow<List<DictionaryEntry>>
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM DictionaryEntryTable 
+        WHERE wordId IN (
+            SELECT id FROM WordTable WHERE value LIKE :pattern OR translation LIKE :pattern 
+        )
+        """
+    )
+    fun searchWord(pattern: String): Flow<List<DictionaryEntryWordJoin>>
 }
