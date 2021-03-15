@@ -8,7 +8,6 @@ import mu.KotlinLogging
 import ru.egoncharovsky.words.database.AppDatabase
 import ru.egoncharovsky.words.database.dao.DictionaryEntryDao
 import ru.egoncharovsky.words.database.tables.DictionaryEntryTable
-import ru.egoncharovsky.words.database.tables.DictionaryEntryWordJoin
 import ru.egoncharovsky.words.domain.entity.DictionaryEntry
 import ru.egoncharovsky.words.domain.entity.Word
 import javax.inject.Inject
@@ -25,7 +24,7 @@ class DictionaryEntryRepository @Inject constructor(
 
     @Transaction
     fun getAll(): Flow<List<DictionaryEntry>> = dao.getAll().map { list ->
-        list.map { toEntity(it) }
+        list.map { it.toEntity() }
     }
 
     suspend fun saveImportedWords(words: Set<Word>): List<Long> {
@@ -57,17 +56,7 @@ class DictionaryEntryRepository @Inject constructor(
 
     fun searchWord(value: String): Flow<List<DictionaryEntry>> {
         logger.trace("Search $value")
-        return dao.searchWord("%$value%").map { list -> list.map { toEntity(it) } }
+        return dao.searchWord("%$value%").map { list -> list.map { it.toEntity() } }
     }
 
-    private fun toEntity(join: DictionaryEntryWordJoin) = DictionaryEntry(
-        join.dictionaryEntry.id,
-        Word(
-            join.word.id,
-            join.word.value,
-            join.word.translation,
-            join.word.language,
-            join.word.translationLanguage
-        )
-    )
 }

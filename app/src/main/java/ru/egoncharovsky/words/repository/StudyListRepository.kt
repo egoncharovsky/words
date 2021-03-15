@@ -2,6 +2,7 @@ package ru.egoncharovsky.words.repository
 
 import ru.egoncharovsky.words.domain.entity.StudyList
 
+@Deprecated(message = "Use persistent.StudyListRepository")
 object StudyListRepository : InMemoryRepository<Long, StudyList>(LongIdGenerator()) {
 
     init {

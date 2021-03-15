@@ -13,7 +13,7 @@ interface DictionaryEntryDao {
     fun getAll(): Flow<List<DictionaryEntryWordJoin>>
 
     @Transaction
-    @Query("SELECT * FROM DictionaryEntryTable WHERE id = :id")
+    @Query("SELECT * FROM DictionaryEntryTable WHERE dictionaryEntryId = :id")
     fun find(id: Long): Flow<DictionaryEntryWordJoin?>
 
     @Query("SELECT EXISTS(SELECT * FROM DictionaryEntryTable WHERE wordId = :wordId)")
@@ -44,7 +44,7 @@ interface DictionaryEntryDao {
         """
         SELECT * FROM DictionaryEntryTable 
         WHERE wordId IN (
-            SELECT id FROM WordTable WHERE value LIKE :pattern OR translation LIKE :pattern 
+            SELECT wordId FROM WordTable WHERE value LIKE :pattern OR translation LIKE :pattern 
         )
         """
     )
