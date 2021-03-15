@@ -4,36 +4,19 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
-import ru.egoncharovsky.words.domain.entity.DictionaryEntry
 
 @Entity
 data class DictionaryEntryTable(
-    @PrimaryKey val id: Long?,
+    @PrimaryKey val id: Long? = null,
     val wordId: Long
-) {
-}
+)
 
-data class DictionaryEntryWord(
+data class DictionaryEntryWordJoin(
     @Embedded val dictionaryEntry: DictionaryEntryTable,
     @Relation(
         parentColumn = "wordId",
         entityColumn = "id"
     ) val word: WordTable
-) {
-    fun toEntity() = DictionaryEntry(
-        dictionaryEntry.id,
-        word.toEntity()
-    )
-
-    companion object {
-        fun fromEntity(dictionaryEntry: DictionaryEntry) = DictionaryEntryWord(
-            DictionaryEntryTable(
-                dictionaryEntry.id,
-                dictionaryEntry.word.id!!
-            ),
-            WordTable.fromEntity(dictionaryEntry.word)
-        )
-    }
-}
+)
 
 

@@ -1,7 +1,6 @@
 package ru.egoncharovsky.words.domain.importing
 
 import mu.KotlinLogging
-import ru.egoncharovsky.words.domain.entity.DictionaryEntry
 import ru.egoncharovsky.words.domain.entity.Language
 import ru.egoncharovsky.words.domain.entity.Word
 import ru.egoncharovsky.words.repository.persistent.DictionaryEntryRepository
@@ -17,37 +16,35 @@ class DictionaryImporter(
     private val logger = KotlinLogging.logger {}
 
     suspend fun import(csvIS: InputStream) {
+        logger.debug("Import started")
         val words = readWords(csvIS.reader(Charset.defaultCharset()))
-        val dictionaryEntries = words.map { DictionaryEntry(null, it) }
 
-        dictionaryEntryRepository.saveAll(dictionaryEntries)
+        logger.debug("Saving ${words.size} words")
+        val saved = dictionaryEntryRepository.saveImportedWords(words)
+        logger.debug("Saved ${saved.size} new dictionary entries")
     }
 
-    fun readWords(reader: InputStreamReader): List<Word> = reader.useLines { lines ->
+    fun readWords(reader: InputStreamReader): Set<Word> = reader.useLines { lines ->
         lines.map { it.split(',') }.mapNotNull { line ->
             val languageFrom = line[0]
             val languageTo = line[1]
             val value = line[2]
             val translation = line[3]
 
+            val word = Word(
+                value = value,
+                translation = translation,
+                language = Language.EN,
+                translationLanguage = Language.RU
+            )
             if (languageFrom == "английский" && languageTo == "русский") {
-                Word(
-                    value = value,
-                    translation = translation,
-                    language = Language.EN,
-                    translationLanguage = Language.RU
-                )
+                word
             } else if (languageFrom == "русский" && languageTo == "английский") {
-                Word(
-                    value = value,
-                    translation = translation,
-                    language = Language.EN,
-                    translationLanguage = Language.RU
-                ).invert()
+                word.invert()
             } else {
                 logger.error("Ignore unsupported languages pair $languageFrom -> $languageTo for line $line")
                 null
             }
-        }.toList()
+        }.toSet()
     }
 }

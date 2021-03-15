@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import ru.egoncharovsky.words.database.converters.LanguageConverter
 import ru.egoncharovsky.words.database.dao.DictionaryEntryDao
+import ru.egoncharovsky.words.database.dao.WordDao
 import ru.egoncharovsky.words.database.tables.DictionaryEntryTable
 import ru.egoncharovsky.words.database.tables.WordTable
 
@@ -14,7 +15,7 @@ import ru.egoncharovsky.words.database.tables.WordTable
 @TypeConverters(LanguageConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun dictionaryEntryDao(): DictionaryEntryDao
-//    abstract fun wordDao(): Word
+    abstract fun wordDao(): WordDao
 
     companion object {
 

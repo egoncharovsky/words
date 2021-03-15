@@ -2,34 +2,38 @@ package ru.egoncharovsky.words.database.dao
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
-import ru.egoncharovsky.words.database.tables.DictionaryEntryWord
+import ru.egoncharovsky.words.database.tables.DictionaryEntryTable
+import ru.egoncharovsky.words.database.tables.DictionaryEntryWordJoin
 
 @Dao
 interface DictionaryEntryDao {
 
     @Transaction
     @Query("SELECT * FROM DictionaryEntryTable")
-    fun getAll(): Flow<List<DictionaryEntryWord>>
+    fun getAll(): Flow<List<DictionaryEntryWordJoin>>
 
     @Transaction
     @Query("SELECT * FROM DictionaryEntryTable WHERE id = :id")
-    fun find(id: Long): Flow<DictionaryEntryWord?>
+    fun find(id: Long): Flow<DictionaryEntryWordJoin?>
+
+    @Query("SELECT EXISTS(SELECT * FROM DictionaryEntryTable WHERE wordId = :wordId)")
+    suspend fun isExist(wordId: Long): Boolean
 
     @Transaction
     @Update
-    suspend fun update(entity: DictionaryEntryWord): Int
+    suspend fun update(entity: DictionaryEntryTable): Int
 
     @Transaction
     @Insert
-    suspend fun insert(entity: DictionaryEntryWord): Long
+    suspend fun insert(entity: DictionaryEntryTable): Long
 
     @Transaction
     @Insert
-    suspend fun insertAll(entity: Collection<DictionaryEntryWord>): List<Long>
+    suspend fun insertAll(entity: Collection<DictionaryEntryTable>): List<Long>
 
     @Transaction
     @Delete
-    suspend fun delete(entity: DictionaryEntryWord)
+    suspend fun delete(entity: DictionaryEntryTable)
 
     @Transaction
     @Query("DELETE FROM DictionaryEntryTable")
