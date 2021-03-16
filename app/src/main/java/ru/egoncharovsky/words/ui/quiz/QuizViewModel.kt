@@ -1,15 +1,19 @@
 package ru.egoncharovsky.words.ui.quiz
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import ru.egoncharovsky.words.domain.quiz.QuizManager
 import ru.egoncharovsky.words.domain.quiz.card.*
-import ru.egoncharovsky.words.repository.StudyListRepository
+import ru.egoncharovsky.words.repository.persistent.StudyListRepository
+import javax.inject.Inject
 
-class QuizViewModel : ViewModel() {
+@HiltViewModel
+class QuizViewModel @Inject constructor(
+    private val studyListRepository: StudyListRepository
+): ViewModel() {
 
     private val logger = KotlinLogging.logger {}
 
@@ -82,14 +86,17 @@ class QuizViewModel : ViewModel() {
     fun startQuiz(studyListId: Long) {
         logger.debug("Starting quiz for study list $studyListId")
 
-        val studyList = StudyListRepository.get(studyListId)
-        logger.trace("Study list loaded: $studyList")
+        viewModelScope.launch {
+            studyListRepository.get(studyListId).collect { studyList ->
+                logger.trace("Study list loaded: $studyList")
 
-        val words = studyList.words.toSet()
-        logger.trace("Total:${words.size} words:$words")
+                val words = studyList.words.toSet()
+                logger.trace("Total:${words.size} words:$words")
 
-        manager = QuizManager(words)
-        card.value = manager.start()
-        progress.value = manager.progressPercentage()
+                manager = QuizManager(words)
+                card.postValue(manager.start())
+                progress.postValue(manager.progressPercentage())
+            }
+        }
     }
 }

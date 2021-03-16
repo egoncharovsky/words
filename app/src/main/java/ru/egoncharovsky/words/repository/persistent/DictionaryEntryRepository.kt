@@ -59,4 +59,15 @@ class DictionaryEntryRepository @Inject constructor(
         return dao.searchWord("%$value%").map { list -> list.map { it.toEntity() } }
     }
 
+    suspend fun findDictionaryEntryIds(words: Set<Word>): List<Long> {
+        if (words.isEmpty()) return listOf()
+
+        val entries = dao.findByWordIds(words.map { it.id!! }.toSet())
+
+        return entries.map { it.dictionaryEntry.id!! }
+    }
+
+    fun getWords(dictionaryEntryIds: Set<Long>): Flow<Set<Word>> {
+        return dao.findByIds(dictionaryEntryIds).map { l -> l.map { it.word.toEntity() }.toSet() }
+    }
 }

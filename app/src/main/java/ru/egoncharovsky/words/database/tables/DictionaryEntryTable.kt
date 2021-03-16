@@ -3,6 +3,7 @@ package ru.egoncharovsky.words.database.tables
 import androidx.room.*
 import ru.egoncharovsky.words.domain.entity.DictionaryEntry
 
+// todo is this required? Can it be replaced by just Word?
 @Entity
 data class DictionaryEntryTable(
     @ColumnInfo(name = "dictionaryEntryId")

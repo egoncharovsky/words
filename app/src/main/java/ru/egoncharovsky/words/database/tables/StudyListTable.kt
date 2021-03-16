@@ -10,7 +10,7 @@ data class StudyListTable(
     val name: String,
 )
 
-@Entity(primaryKeys = ["studyListId", "wordId"])
+@Entity(primaryKeys = ["studyListId", "wordId"], indices = [Index("wordId")])
 data class StudyListWordCrossRef(
     val studyListId: Long,
     val wordId: Long

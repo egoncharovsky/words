@@ -49,4 +49,12 @@ interface DictionaryEntryDao {
         """
     )
     fun searchWord(pattern: String): Flow<List<DictionaryEntryWordJoin>>
+
+    @Transaction
+    @Query("SELECT * FROM DictionaryEntryTable WHERE dictionaryEntryId IN (:ids)")
+    fun findByIds(ids: Set<Long>): Flow<List<DictionaryEntryWordJoin>>
+
+    @Transaction
+    @Query("SELECT * FROM DictionaryEntryTable WHERE dictionaryEntryId IN (:ids)")
+    suspend fun findByWordIds(ids: Set<Long>): List<DictionaryEntryWordJoin>
 }

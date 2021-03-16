@@ -8,6 +8,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ru.egoncharovsky.words.database.AppDatabase
 import ru.egoncharovsky.words.database.dao.DictionaryEntryDao
+import ru.egoncharovsky.words.database.dao.StudyListDao
 import ru.egoncharovsky.words.database.dao.WordDao
 import javax.inject.Singleton
 
@@ -29,5 +30,10 @@ class DatabaseModule {
     @Provides
     fun provideWordDao(appDatabase: AppDatabase): WordDao {
         return appDatabase.wordDao()
+    }
+
+    @Provides
+    fun provideStudyListDao(appDatabase: AppDatabase): StudyListDao {
+        return appDatabase.studyListDao()
     }
 }
