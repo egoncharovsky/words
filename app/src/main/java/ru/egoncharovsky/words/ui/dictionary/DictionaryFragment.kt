@@ -13,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_dictionary.*
 import kotlinx.android.synthetic.main.fragment_dictionary_item.view.*
 import ru.egoncharovsky.words.R
-import ru.egoncharovsky.words.domain.entity.DictionaryEntry
+import ru.egoncharovsky.words.domain.entity.Word
 import ru.egoncharovsky.words.ui.RecyclerViewAdapter
 import ru.egoncharovsky.words.ui.items
 import ru.egoncharovsky.words.ui.observe
@@ -22,7 +22,7 @@ import ru.egoncharovsky.words.ui.observe
 open class DictionaryFragment : Fragment() {
 
     protected lateinit var dictionaryViewModel: DictionaryViewModel
-    protected lateinit var adapter: RecyclerViewAdapter<DictionaryEntry>
+    protected lateinit var adapter: RecyclerViewAdapter<Word>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,7 +30,7 @@ open class DictionaryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         dictionaryViewModel = ViewModelProvider(this).get(DictionaryViewModel::class.java)
-        adapter = DictionaryEntryAdapter()
+        adapter = WordAdapter()
 
         return inflater.inflate(R.layout.fragment_dictionary, container, false)
     }
@@ -73,10 +73,10 @@ open class DictionaryFragment : Fragment() {
             true
         }
         search.setOnClickListener {
-            search.setIconified(false);
+            search.isIconified = false
         }
 
-        observe(dictionaryViewModel.dictionaryEntries) {
+        observe(dictionaryViewModel.getWords()) {
             adapter.update(it)
         }
         observe(dictionaryViewModel.getSort()) { sort ->
@@ -92,12 +92,12 @@ open class DictionaryFragment : Fragment() {
         DictionaryViewModel.SortType.WORD_VALUE_DESC -> getString(R.string.word_value_desc)
     }
 
-    class DictionaryEntryAdapter : RecyclerViewAdapter<DictionaryEntry>() {
+    class WordAdapter : RecyclerViewAdapter<Word>() {
         override val itemLayoutId: Int = R.layout.fragment_dictionary_item
 
-        override fun bind(itemView: View, item: DictionaryEntry) {
-            itemView.wordValue.text = item.word.value
-            itemView.wordTranslation.text = item.word.translation
+        override fun bind(itemView: View, item: Word) {
+            itemView.wordValue.text = item.value
+            itemView.wordTranslation.text = item.translation
         }
     }
 }

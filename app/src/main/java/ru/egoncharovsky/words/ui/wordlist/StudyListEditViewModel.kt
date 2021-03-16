@@ -10,14 +10,14 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.egoncharovsky.words.domain.entity.StudyList
 import ru.egoncharovsky.words.domain.entity.Word
-import ru.egoncharovsky.words.repository.persistent.DictionaryEntryRepository
 import ru.egoncharovsky.words.repository.persistent.StudyListRepository
+import ru.egoncharovsky.words.repository.persistent.WordRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class StudyListEditViewModel @Inject constructor(
     private val studyListRepository: StudyListRepository,
-    private val dictionaryEntryRepository: DictionaryEntryRepository
+    private val wordRepository: WordRepository
 ) : ViewModel() {
 
     private val dataLoaded = MutableLiveData<Boolean>()
@@ -26,7 +26,6 @@ class StudyListEditViewModel @Inject constructor(
 
     private val name: MutableLiveData<String> = MutableLiveData()
     private val words: MutableLiveData<Set<Word>> = MutableLiveData()
-    private val selectedDictionaryEntryIds: MutableLiveData<LongArray> = MutableLiveData()
 
     private val nameIsValid: MutableLiveData<Boolean> = MutableLiveData()
     private val wordsAreValid: MutableLiveData<Boolean> = MutableLiveData()
@@ -51,26 +50,20 @@ class StudyListEditViewModel @Inject constructor(
                     name.postValue(it.name)
                     words.postValue(it.words)
 
-                    val selected = dictionaryEntryRepository.findDictionaryEntryIds(it.words)
-                    selectedDictionaryEntryIds.postValue(selected.toLongArray())
                     dataLoaded.postValue(true)
                 }
             }
         } else {
-            selectedDictionaryEntryIds.value = LongArray(0)
             dataLoaded.value = true
         }
     }
 
-    fun getSelectedDictionaryEntryIds(): LongArray = selectedDictionaryEntryIds.value!!
+    fun getSelectedWordIds(): LongArray = words.value?.map { it.id!! }?.toLongArray() ?: LongArray(0)
 
-    fun dictionaryEntriesSelected(dictionaryEntryIds: LongArray) {
-        selectedDictionaryEntryIds.value = dictionaryEntryIds
-
-        // todo: if list contains words which have been removed from the dictionary, they will be loosed here
+    fun wordsSelected(wordIds: LongArray) {
         viewModelScope.launch {
-            dictionaryEntryRepository.getWords(dictionaryEntryIds.toSet()).collect {
-                words.postValue(it)
+            wordRepository.get(wordIds.toSet()).collect {
+                words.postValue(it.toSet())
             }
         }
     }

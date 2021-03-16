@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_dictionary.*
 import kotlinx.android.synthetic.main.fragment_dictionary_item.view.wordTranslation
 import kotlinx.android.synthetic.main.fragment_dictionary_item.view.wordValue
 import ru.egoncharovsky.words.R
-import ru.egoncharovsky.words.domain.entity.DictionaryEntry
+import ru.egoncharovsky.words.domain.entity.Word
 import ru.egoncharovsky.words.ui.SelectableRecyclerViewAdapter
 import ru.egoncharovsky.words.ui.dictionary.DictionaryFragment
 import ru.egoncharovsky.words.ui.setNavigationResult
@@ -24,7 +24,7 @@ class ChooseWordsFragment : DictionaryFragment() {
     private val args: ChooseWordsFragmentArgs by navArgs()
 
     private lateinit var chooseWordsViewModel: ChooseWordsViewModel
-    private lateinit var selectableAdapter: SelectableRecyclerViewAdapter<DictionaryEntry, Long>
+    private lateinit var selectableAdapter: SelectableRecyclerViewAdapter<Word, Long>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         chooseWordsViewModel = ViewModelProvider(this).get(ChooseWordsViewModel::class.java).also {
@@ -63,16 +63,16 @@ class ChooseWordsFragment : DictionaryFragment() {
         selectableAdapter.tracker?.onSaveInstanceState(outState)
     }
 
-    class ChooseWordsAdapter : SelectableRecyclerViewAdapter<DictionaryEntry, Long>(StorageStrategy.createLongStorage()) {
+    class ChooseWordsAdapter : SelectableRecyclerViewAdapter<Word, Long>(StorageStrategy.createLongStorage()) {
         override val itemLayoutId: Int = R.layout.fragment_choose_words_item
 
-        override fun bind(itemView: View, item: DictionaryEntry, isActivated: Boolean) {
-            itemView.wordValue.text = item.word.value
-            itemView.wordTranslation.text = item.word.translation
+        override fun bind(itemView: View, item: Word, isActivated: Boolean) {
+            itemView.wordValue.text = item.value
+            itemView.wordTranslation.text = item.translation
             itemView.selectedCheckBox.isChecked = isActivated
         }
 
-        override fun getIdentifier(item: DictionaryEntry): Long = item.id!!
+        override fun getIdentifier(item: Word): Long = item.id!!
 
     }
 }

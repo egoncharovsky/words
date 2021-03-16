@@ -3,14 +3,15 @@ package ru.egoncharovsky.words.domain.importing
 import mu.KotlinLogging
 import ru.egoncharovsky.words.domain.entity.Language
 import ru.egoncharovsky.words.domain.entity.Word
-import ru.egoncharovsky.words.repository.persistent.DictionaryEntryRepository
+import ru.egoncharovsky.words.repository.persistent.WordRepository
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.nio.charset.Charset
+import java.util.*
 
 
 class DictionaryImporter(
-    private val dictionaryEntryRepository: DictionaryEntryRepository
+    private val wordRepository: WordRepository
 ) {
 
     private val logger = KotlinLogging.logger {}
@@ -20,16 +21,16 @@ class DictionaryImporter(
         val words = readWords(csvIS.reader(Charset.defaultCharset()))
 
         logger.debug("Saving ${words.size} words")
-        val saved = dictionaryEntryRepository.saveImportedWords(words)
-        logger.debug("Saved ${saved.size} new dictionary entries")
+        val saved = wordRepository.saveImportedWords(words)
+        logger.debug("Saved ${saved.size} new words from ${words.size}")
     }
 
     fun readWords(reader: InputStreamReader): Set<Word> = reader.useLines { lines ->
         lines.map { it.split(',') }.mapNotNull { line ->
-            val languageFrom = line[0]
-            val languageTo = line[1]
-            val value = line[2]
-            val translation = line[3]
+            val languageFrom = line[0].toLowerCase(Locale.getDefault())
+            val languageTo = line[1].toLowerCase(Locale.getDefault())
+            val value = line[2].toLowerCase(Locale.getDefault())
+            val translation = line[3].toLowerCase(Locale.getDefault())
 
             val word = Word(
                 value = value,

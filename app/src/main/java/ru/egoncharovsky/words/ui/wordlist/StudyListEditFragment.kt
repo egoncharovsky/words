@@ -51,7 +51,7 @@ class StudyListEditFragment : Fragment() {
         }
 
         observeNavigationResult<LongArray> {
-            studyListEditViewModel.dictionaryEntriesSelected(it)
+            studyListEditViewModel.wordsSelected(it)
         }
 
         observe(studyListEditViewModel.getStudyList()) {
@@ -77,7 +77,7 @@ class StudyListEditFragment : Fragment() {
 
         choose.setOnClickListener {
             findNavController().navigate(
-                StudyListEditFragmentDirections.chooseWords(studyListEditViewModel.getSelectedDictionaryEntryIds())
+                StudyListEditFragmentDirections.chooseWords(studyListEditViewModel.getSelectedWordIds())
             )
         }
         name.addTextChangedListener {

@@ -23,6 +23,16 @@ data class WordTable(
         language,
         translationLanguage
     )
+
+    companion object {
+        fun fromEntity(entity: Word) = WordTable(
+            entity.id,
+            entity.value,
+            entity.translation,
+            entity.language,
+            entity.translationLanguage
+        )
+    }
 }
 
 

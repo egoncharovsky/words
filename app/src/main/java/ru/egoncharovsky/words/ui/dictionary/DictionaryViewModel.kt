@@ -10,44 +10,47 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import ru.egoncharovsky.words.domain.entity.DictionaryEntry
-import ru.egoncharovsky.words.repository.persistent.DictionaryEntryRepository
+import ru.egoncharovsky.words.domain.entity.Word
+import ru.egoncharovsky.words.repository.persistent.WordRepository
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 open class DictionaryViewModel @Inject constructor(
-    private val repository: DictionaryEntryRepository
+    private val repository: WordRepository
 ) : ViewModel() {
+
+    private var request: Job? = null
 
     enum class SortType {
         DEFAULT {
-            override fun apply(list: List<DictionaryEntry>) = list.sortedBy { it.id }
+            override fun apply(list: List<Word>) = list.sortedBy { it.id }
         },
         WORD_VALUE_ASK {
-            override fun apply(list: List<DictionaryEntry>): List<DictionaryEntry> = list
-                .sortedBy { it.word.value.toLowerCase(Locale.ROOT) }
+            override fun apply(list: List<Word>) = list
+                .sortedBy { it.value.toLowerCase(Locale.ROOT) }
         },
         WORD_VALUE_DESC {
-            override fun apply(list: List<DictionaryEntry>): List<DictionaryEntry> =
-                list.sortedByDescending { it.word.value.toLowerCase(Locale.ROOT) }
+            override fun apply(list: List<Word>) =
+                list.sortedByDescending { it.value.toLowerCase(Locale.ROOT) }
         };
 
-        abstract fun apply(list: List<DictionaryEntry>): List<DictionaryEntry>
+        abstract fun apply(list: List<Word>): List<Word>
     }
 
     private val sort = MutableLiveData<SortType>().apply {
         value = SortType.DEFAULT
     }
-    val dictionaryEntries: MutableLiveData<List<DictionaryEntry>> = MutableLiveData()
+    private val words: MutableLiveData<List<Word>> = MutableLiveData()
 
     init {
         request(repository.getAll())
     }
 
     fun getSort(): LiveData<SortType> = sort
+    fun getWords(): LiveData<List<Word>> = words
 
-    private fun sorted(list: List<DictionaryEntry>) = sort.value!!.apply(list)
+    private fun sorted(list: List<Word>) = sort.value!!.apply(list)
 
     fun cancelSearch() {
         request(repository.getAll())
@@ -68,15 +71,16 @@ open class DictionaryViewModel @Inject constructor(
     }
 
     fun onSortChanged() {
-        dictionaryEntries.value?.let {
-             dictionaryEntries.value = sorted(it)
+        words.value?.let {
+             words.value = sorted(it)
         }
     }
 
-    private fun request(flow: Flow<List<DictionaryEntry>>): Job {
-        return viewModelScope.launch {
+    private fun request(flow: Flow<List<Word>>) {
+        request?.cancel()
+        request = viewModelScope.launch {
             flow.map { sorted(it) }.collect {
-                dictionaryEntries.postValue(it)
+                words.postValue(it)
             }
         }
     }
