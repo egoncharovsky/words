@@ -66,5 +66,6 @@
     <fragment
             android:id="@+id/importWordsFragment"
             android:name="ru.egoncharovsky.words.ui.importing.ImportWordsFragment"
-            android:label="@string/import_words"/>
+            android:label="@string/import_words"
+            tools:layout="@layout/fragment_import_words"/>
 </navigation>

@@ -54,6 +54,10 @@
 
     <string name="should_have_at_least_3_letters">Should have at least 3 letters</string>
     <string name="should_have_at_least_1">Should have at least 1</string>
+
     <string name="import_words">Import words</string>
+    <string name="choose_file">Choose file…</string>
+    <string name="supported_formats">Supported formats: %s</string>
+    <string name="clear_database">Clear database</string>
 
 </resources>

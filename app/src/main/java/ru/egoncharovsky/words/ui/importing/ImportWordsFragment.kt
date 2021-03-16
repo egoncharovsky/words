@@ -3,12 +3,17 @@ package ru.egoncharovsky.words.ui.importing
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_import_words.*
+import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.ui.RequestCode
+import ru.egoncharovsky.words.ui.observe
 
 
 @AndroidEntryPoint
@@ -16,14 +21,37 @@ open class ImportWordsFragment : Fragment() {
 
     private val importWordsViewModel: ImportWordsViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_import_words, container, false)
 
-        val intent = Intent()
-            .setType("text/comma-separated-values")
-            .setAction(Intent.ACTION_GET_CONTENT)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        supportedFormats.text = String.format(getString(R.string.supported_formats), "CSV")
 
-        startActivityForResult(Intent.createChooser(intent, "Select a CSV file"), RequestCode.SELECT_WORDS_FILE)
+        observe(importWordsViewModel.isImported()) {
+            if (it) {
+                Snackbar.make(requireParentFragment().requireView(), "Successfully imported", Snackbar.LENGTH_LONG).show()
+            }
+        }
+        observe(importWordsViewModel.isCleared()) {
+            if (it) {
+                Snackbar.make(requireParentFragment().requireView(), "Database cleared", Snackbar.LENGTH_LONG).show()
+            }
+        }
+
+        importing.setOnClickListener {
+            val intent = Intent()
+                .setType("*/*")
+                .putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("text/csv", "text/comma-separated-values"))
+                .setAction(Intent.ACTION_GET_CONTENT)
+
+            startActivityForResult(Intent.createChooser(intent, "Select a CSV file"), RequestCode.SELECT_WORDS_FILE)
+        }
+        clearDatabase.setOnClickListener {
+            importWordsViewModel.clearDatabase()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -31,8 +59,7 @@ open class ImportWordsFragment : Fragment() {
         if (requestCode == RequestCode.SELECT_WORDS_FILE && resultCode == Activity.RESULT_OK) {
             data?.data?.let { uri ->
                 context?.contentResolver?.openInputStream(uri)?.let { importWordsViewModel.importCsv(it) }
-                Snackbar.make(requireParentFragment().requireView(), "Successfully imported", Snackbar.LENGTH_LONG).show()
-                findNavController().navigateUp()
+                Snackbar.make(requireParentFragment().requireView(), "Import started", Snackbar.LENGTH_SHORT).show()
             }
         }
     }
