@@ -35,10 +35,8 @@ class WordRepository @Inject constructor(
     suspend fun saveImportedWords(words: Set<Word>): List<Long> {
         return database.withTransaction {
             words.mapNotNull { word ->
-                logger.trace("Find $word")
                 val found = dao.find(word.value, word.translation)
                 if (found == null) {
-                    logger.trace("Word $word not found")
                     dao.insert(WordTable.fromEntity(word))
                 } else null
             }
