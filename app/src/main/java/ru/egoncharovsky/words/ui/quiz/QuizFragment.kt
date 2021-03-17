@@ -46,11 +46,7 @@ class QuizFragment : Fragment() {
             }
         }
         nextButton.setOnClickListener {
-            if (childFragmentManager.fragments.isNotEmpty()) {
-                val transaction = childFragmentManager.beginTransaction()
-                childFragmentManager.fragments.forEach { transaction.remove(it) }
-                transaction.commitNow()
-            }
+            clearChildFragments()
             quizViewModel.clickNext()
         }
         observe(quizViewModel.getProgress()) {
@@ -65,4 +61,11 @@ class QuizFragment : Fragment() {
         timeIndicator.visibility = View.INVISIBLE
     }
 
+    private fun clearChildFragments() {
+        if (childFragmentManager.fragments.isNotEmpty()) {
+            val transaction = childFragmentManager.beginTransaction()
+            childFragmentManager.fragments.forEach { transaction.remove(it) }
+            transaction.commitNow()
+        }
+    }
 }
