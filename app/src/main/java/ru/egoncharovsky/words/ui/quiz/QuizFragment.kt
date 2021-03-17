@@ -5,17 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.domain.quiz.card.Card
 import ru.egoncharovsky.words.ui.observe
 
+@AndroidEntryPoint
 class QuizFragment : Fragment() {
 
-    private val quizViewModel: QuizViewModel by activityViewModels()
+    private val quizViewModel: QuizViewModel by viewModels()
     private val args: QuizFragmentArgs by navArgs()
 
     override fun onCreateView(

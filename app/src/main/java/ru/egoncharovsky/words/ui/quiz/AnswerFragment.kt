@@ -5,38 +5,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
+import androidx.fragment.app.viewModels
 import kotlinx.android.synthetic.main.fragment_quiz_answer.*
 import ru.egoncharovsky.words.R
-import ru.egoncharovsky.words.domain.quiz.card.Answer
 import ru.egoncharovsky.words.ui.getColor
 import ru.egoncharovsky.words.ui.observe
 
 class AnswerFragment : Fragment() {
 
-    private val quizViewModel: QuizViewModel by activityViewModels()
-
-    private lateinit var answerWithCallback: LiveData<QuizViewModel.QuestionWithCallback<Answer, String>>
-    private lateinit var answerCorrectness: LiveData<Boolean?>
+    private val quizViewModel: QuizViewModel by viewModels(
+        ownerProducer = { this.requireParentFragment() }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        answerWithCallback = quizViewModel.getAnswerModel()
-        answerCorrectness = quizViewModel.getAnswerCorrectness()
-
-        return LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_answer, container, false)
-    }
+    ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_answer, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        observe(answerWithCallback) {
-            word.text = it.question.word.value
+        observe(quizViewModel.getAnswerWitchCallback()) { answerWithCallback ->
+            word.text = answerWithCallback.question.word.value
             sendAnswer.isEnabled = true
+            sendAnswer.setOnClickListener {
+                answerWithCallback.sendAnswer(answerText.text.toString())
+            }
         }
-        observe(answerCorrectness) {
+        observe(quizViewModel.getAnswerCorrectness()) {
             it?.let {
                 if (it) {
                     answerCorrect.text = getString(R.string.answer_correct)
@@ -53,9 +48,6 @@ class AnswerFragment : Fragment() {
                 answerResult.visibility = View.VISIBLE
                 sendAnswer.isEnabled = false
             }
-        }
-        sendAnswer.setOnClickListener {
-            answerWithCallback.value?.sendAnswer(answerText.text.toString())
         }
     }
 }

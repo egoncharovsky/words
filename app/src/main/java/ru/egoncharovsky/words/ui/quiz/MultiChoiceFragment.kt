@@ -9,35 +9,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
+import androidx.fragment.app.viewModels
 import kotlinx.android.synthetic.main.fragment_quiz_meaning.wordValue
 import kotlinx.android.synthetic.main.fragment_quiz_multiple_choice.*
 import ru.egoncharovsky.words.R
-import ru.egoncharovsky.words.domain.quiz.card.MultiChoice
 import ru.egoncharovsky.words.ui.getColor
 import ru.egoncharovsky.words.ui.observe
 
 class MultiChoiceFragment : Fragment() {
 
-    private val quizViewModel: QuizViewModel by activityViewModels()
-
-    private lateinit var multiChoiceWithCallback: LiveData<QuizViewModel.QuestionWithCallback<MultiChoice, String>>
-    private lateinit var answerCorrectness: LiveData<Boolean?>
+    private val quizViewModel: QuizViewModel by viewModels(
+        ownerProducer = { this.requireParentFragment() }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        multiChoiceWithCallback = quizViewModel.getMultiChoiceModel()
-        answerCorrectness = quizViewModel.getAnswerCorrectness()
-
-        return LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_multiple_choice, container, false)
-    }
+    ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_multiple_choice, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        observe(multiChoiceWithCallback) { model ->
+        observe(quizViewModel.getMultiChoiceWithCallback()) { model ->
             wordValue.text = model.question.word.value
 
             buttons().forEachIndexed { index, button ->
@@ -59,7 +51,7 @@ class MultiChoiceFragment : Fragment() {
                 }
             }
         }
-        observe(answerCorrectness) {
+        observe(quizViewModel.getAnswerCorrectness()) {
             it?.let {
                 if (it) {
                     answerResult.text = getString(R.string.answer_result_good_job)

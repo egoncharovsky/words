@@ -5,8 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
+import androidx.fragment.app.viewModels
 import kotlinx.android.synthetic.main.fragment_quiz_meaning.*
 import kotlinx.android.synthetic.main.fragment_quiz_meaning.wordValue
 import kotlinx.android.synthetic.main.fragment_quiz_remember.*
@@ -16,33 +15,31 @@ import ru.egoncharovsky.words.ui.observe
 
 class RememberRightFragment : Fragment() {
 
-    private val quizViewModel: QuizViewModel by activityViewModels()
-
-    private lateinit var rememberRightWithCallback: LiveData<QuizViewModel.QuestionWithCallback<RememberRight, RememberRight.Option>>
+    private val quizViewModel: QuizViewModel by viewModels(
+        ownerProducer = { this.requireParentFragment() }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        rememberRightWithCallback = quizViewModel.getRememberRightModel()
-
-        return LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_remember_right, container, false)
-    }
+    ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_remember_right, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        observe(rememberRightWithCallback) { model ->
-            wordValue.text = model.question.word.value
-            wordTranslation.text = model.question.word.translation
+        observe(quizViewModel.getRememberRightWithCallback()) { rememberRightWithCallback ->
+            wordValue.text = rememberRightWithCallback.question.word.value
+            wordTranslation.text = rememberRightWithCallback.question.word.translation
+
+            no.setOnClickListener {
+                rememberRightWithCallback.sendAnswer(RememberRight.Option.NO)
+                buttons().forEach { it.visibility = View.GONE }
+            }
+            yes.setOnClickListener {
+                rememberRightWithCallback.sendAnswer(RememberRight.Option.YES)
+                buttons().forEach { it.visibility = View.GONE }
+            }
+
             buttons().forEach { it.isEnabled = true }
-        }
-        no.setOnClickListener {
-            rememberRightWithCallback.value?.sendAnswer(RememberRight.Option.NO)
-            buttons().forEach { it.visibility = View.GONE }
-        }
-        yes.setOnClickListener {
-            rememberRightWithCallback.value?.sendAnswer(RememberRight.Option.YES)
-            buttons().forEach { it.visibility = View.GONE }
         }
     }
 
