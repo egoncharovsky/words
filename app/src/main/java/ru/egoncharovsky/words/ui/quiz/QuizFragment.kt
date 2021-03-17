@@ -7,16 +7,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_quiz.*
 import ru.egoncharovsky.words.R
+import ru.egoncharovsky.words.databinding.FragmentQuizBinding
 import ru.egoncharovsky.words.domain.quiz.card.Card
 import ru.egoncharovsky.words.ui.observe
 
 @AndroidEntryPoint
 class QuizFragment : Fragment() {
 
+    private val binding: FragmentQuizBinding by viewBinding()
     private val quizViewModel: QuizViewModel by viewModels()
     private val args: QuizFragmentArgs by navArgs()
 
@@ -42,25 +44,25 @@ class QuizFragment : Fragment() {
         }
         observe(quizViewModel.getNextVisibility()) { visible ->
             if (visible) {
-                nextButton.visibility = View.VISIBLE
+                binding.nextButton.visibility = View.VISIBLE
             } else {
-                nextButton.visibility = View.GONE
+                binding.nextButton.visibility = View.GONE
             }
         }
-        nextButton.setOnClickListener {
+        binding.nextButton.setOnClickListener {
             clearChildFragments()
             quizViewModel.clickNext()
         }
         observe(quizViewModel.getProgress()) {
-            progressBar.progress = it
+            binding.progressBar.progress = it
         }
         observe(quizViewModel.getFinished()) {
             if (it) {
                 Snackbar.make(view, "Test finished!", Snackbar.LENGTH_LONG).show()
-                nextButton.visibility = View.INVISIBLE
+                binding.nextButton.visibility = View.INVISIBLE
             }
         }
-        timeIndicator.visibility = View.INVISIBLE
+        binding.timeIndicator.visibility = View.INVISIBLE
     }
 
     private fun clearChildFragments() {

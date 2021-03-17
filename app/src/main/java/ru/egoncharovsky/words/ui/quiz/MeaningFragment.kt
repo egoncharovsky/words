@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import kotlinx.android.synthetic.main.fragment_quiz_meaning.*
+import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.egoncharovsky.words.R
+import ru.egoncharovsky.words.databinding.FragmentQuizMeaningBinding
 import ru.egoncharovsky.words.ui.observe
 
 class MeaningFragment : Fragment() {
 
+    private val binding: FragmentQuizMeaningBinding by viewBinding()
     private val quizViewModel: QuizViewModel by viewModels(
         ownerProducer = { this.requireParentFragment() }
     )
@@ -24,8 +26,8 @@ class MeaningFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         observe(quizViewModel.getMeaning()) {
-            wordValue.text = it.meaning.word.value
-            wordTranslation.text = it.meaning.word.translation
+            binding.wordValue.text = it.meaning.word.value
+            binding.wordTranslation.text = it.meaning.word.translation
         }
     }
 }

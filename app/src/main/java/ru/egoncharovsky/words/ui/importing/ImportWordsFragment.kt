@@ -8,10 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_import_words.*
 import ru.egoncharovsky.words.R
+import ru.egoncharovsky.words.databinding.FragmentImportWordsBinding
 import ru.egoncharovsky.words.ui.RequestCode
 import ru.egoncharovsky.words.ui.observe
 
@@ -19,6 +20,7 @@ import ru.egoncharovsky.words.ui.observe
 @AndroidEntryPoint
 open class ImportWordsFragment : Fragment() {
 
+    private val binding: FragmentImportWordsBinding by viewBinding()
     private val importWordsViewModel: ImportWordsViewModel by viewModels()
 
     override fun onCreateView(
@@ -28,7 +30,7 @@ open class ImportWordsFragment : Fragment() {
     ): View? = inflater.inflate(R.layout.fragment_import_words, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        supportedFormats.text = String.format(getString(R.string.supported_formats), "CSV")
+        binding.supportedFormats.text = String.format(getString(R.string.supported_formats), "CSV")
 
         observe(importWordsViewModel.isImported()) {
             if (it) {
@@ -41,7 +43,7 @@ open class ImportWordsFragment : Fragment() {
             }
         }
 
-        importing.setOnClickListener {
+        binding.importing.setOnClickListener {
             val intent = Intent()
                 .setType("*/*")
                 .putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("text/csv", "text/comma-separated-values"))
@@ -49,7 +51,7 @@ open class ImportWordsFragment : Fragment() {
 
             startActivityForResult(Intent.createChooser(intent, "Select a CSV file"), RequestCode.SELECT_WORDS_FILE)
         }
-        clearDatabase.setOnClickListener {
+        binding.clearDatabase.setOnClickListener {
             importWordsViewModel.clearDatabase()
         }
     }

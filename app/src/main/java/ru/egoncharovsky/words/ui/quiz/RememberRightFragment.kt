@@ -6,15 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import kotlinx.android.synthetic.main.fragment_quiz_meaning.*
-import kotlinx.android.synthetic.main.fragment_quiz_meaning.wordValue
-import kotlinx.android.synthetic.main.fragment_quiz_remember.*
+import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.egoncharovsky.words.R
+import ru.egoncharovsky.words.databinding.FragmentQuizRememberRightBinding
 import ru.egoncharovsky.words.domain.quiz.card.RememberRight
 import ru.egoncharovsky.words.ui.observe
 
 class RememberRightFragment : Fragment() {
 
+    private val binding: FragmentQuizRememberRightBinding by viewBinding()
     private val quizViewModel: QuizViewModel by viewModels(
         ownerProducer = { this.requireParentFragment() }
     )
@@ -27,21 +27,27 @@ class RememberRightFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         observe(quizViewModel.getRememberRightWithCallback()) { rememberRightWithCallback ->
-            wordValue.text = rememberRightWithCallback.question.word.value
-            wordTranslation.text = rememberRightWithCallback.question.word.translation
+            binding.wordValue.text = rememberRightWithCallback.question.word.value
+            binding.wordTranslation.text = rememberRightWithCallback.question.word.translation
 
-            no.setOnClickListener {
+            binding.no.setOnClickListener {
                 rememberRightWithCallback.sendAnswer(RememberRight.Option.NO)
-                buttons().forEach { it.visibility = View.GONE }
+                hideButtons()
             }
-            yes.setOnClickListener {
+            binding.yes.setOnClickListener {
                 rememberRightWithCallback.sendAnswer(RememberRight.Option.YES)
-                buttons().forEach { it.visibility = View.GONE }
+                hideButtons()
             }
 
-            buttons().forEach { it.isEnabled = true }
+            enableButtons()
         }
     }
 
-    private fun buttons() = listOf(no, yes)
+    private fun hideButtons() = buttons().forEach { it.visibility = View.GONE }
+    private fun enableButtons() = buttons().forEach { it.isEnabled = true }
+
+    private fun buttons() = listOf(
+        binding.no,
+        binding.yes
+    )
 }

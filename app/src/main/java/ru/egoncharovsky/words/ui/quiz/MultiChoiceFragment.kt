@@ -10,14 +10,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import kotlinx.android.synthetic.main.fragment_quiz_meaning.wordValue
-import kotlinx.android.synthetic.main.fragment_quiz_multiple_choice.*
+import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.egoncharovsky.words.R
+import ru.egoncharovsky.words.databinding.FragmentQuizMultipleChoiceBinding
 import ru.egoncharovsky.words.ui.getColor
 import ru.egoncharovsky.words.ui.observe
 
 class MultiChoiceFragment : Fragment() {
 
+    private val binding: FragmentQuizMultipleChoiceBinding by viewBinding()
     private val quizViewModel: QuizViewModel by viewModels(
         ownerProducer = { this.requireParentFragment() }
     )
@@ -30,7 +31,7 @@ class MultiChoiceFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         observe(quizViewModel.getMultiChoiceWithCallback()) { model ->
-            wordValue.text = model.question.word.value
+            binding.wordValue.text = model.question.word.value
 
             buttons().forEachIndexed { index, button ->
                 model.question.options.elementAtOrNull(index)?.let { value ->
@@ -54,20 +55,26 @@ class MultiChoiceFragment : Fragment() {
         observe(quizViewModel.getAnswerCorrectness()) {
             it?.let {
                 if (it) {
-                    answerResult.text = getString(R.string.answer_result_good_job)
-                    answerResult.setTextColor(getColor(R.color.correct))
+                    binding.answerResult.text = getString(R.string.answer_result_good_job)
+                    binding.answerResult.setTextColor(getColor(R.color.correct))
                 } else {
-                    answerResult.text = getString(R.string.answer_result_lets_try_again)
-                    answerResult.setTextColor(getColor(R.color.incorrectLight))
+                    binding.answerResult.text = getString(R.string.answer_result_lets_try_again)
+                    binding.answerResult.setTextColor(getColor(R.color.incorrectLight))
                 }
-                answerResult.visibility = View.VISIBLE
+                binding.answerResult.visibility = View.VISIBLE
 
                 highlightButtons()
             }
         }
     }
 
-    private fun buttons() = listOf(option1, option2, option3, option4, option5)
+    private fun buttons() = listOf(
+        binding.option1,
+        binding.option2,
+        binding.option3,
+        binding.option4,
+        binding.option5
+    )
 
     private fun highlightButtons() {
         buttons().forEach { button ->

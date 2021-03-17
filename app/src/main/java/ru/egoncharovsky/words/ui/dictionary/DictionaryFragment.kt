@@ -6,13 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.SearchView
+import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_dictionary.*
-import kotlinx.android.synthetic.main.fragment_dictionary_item.view.*
 import ru.egoncharovsky.words.R
+import ru.egoncharovsky.words.databinding.FragmentDictionaryBinding
+import ru.egoncharovsky.words.databinding.FragmentDictionaryItemBinding
 import ru.egoncharovsky.words.domain.entity.Word
 import ru.egoncharovsky.words.ui.RecyclerViewAdapter
 import ru.egoncharovsky.words.ui.items
@@ -21,8 +23,9 @@ import ru.egoncharovsky.words.ui.observe
 @AndroidEntryPoint
 open class DictionaryFragment : Fragment() {
 
+    protected val binding: FragmentDictionaryBinding by viewBinding()
     protected lateinit var dictionaryViewModel: DictionaryViewModel
-    protected lateinit var adapter: RecyclerViewAdapter<Word>
+    protected lateinit var dictionaryAdapter: RecyclerViewAdapter<Word, *>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,16 +33,17 @@ open class DictionaryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         dictionaryViewModel = ViewModelProvider(this).get(DictionaryViewModel::class.java)
-        adapter = WordAdapter()
+        dictionaryAdapter = WordAdapter()
 
         return inflater.inflate(R.layout.fragment_dictionary, container, false)
     }
 
+    @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        dictionaryList.layoutManager = LinearLayoutManager(view.context)
-        dictionaryList.adapter = adapter
+        binding.dictionaryList.layoutManager = LinearLayoutManager(view.context)
+        binding.dictionaryList.adapter = dictionaryAdapter
 
-        val popup = PopupMenu(view.context, sortButton).apply {
+        val popup = PopupMenu(view.context, binding.sortButton).apply {
 
             DictionaryViewModel.SortType.values().forEach { sort ->
                 menu.add(sortTypeTitle(sort)).apply { isCheckable = true }
@@ -57,10 +61,10 @@ open class DictionaryFragment : Fragment() {
                 true
             }
         }
-        sortButton.setOnClickListener {
+        binding.sortButton.setOnClickListener {
             popup.show()
         }
-        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = true
 
             override fun onQueryTextChange(newText: String?): Boolean {
@@ -68,16 +72,16 @@ open class DictionaryFragment : Fragment() {
                 return true
             }
         })
-        search.setOnCloseListener {
+        binding.search.setOnCloseListener {
             dictionaryViewModel.cancelSearch()
             true
         }
-        search.setOnClickListener {
-            search.isIconified = false
+        binding.search.setOnClickListener {
+            binding.search.isIconified = false
         }
 
         observe(dictionaryViewModel.getWords()) {
-            adapter.update(it)
+            dictionaryAdapter.update(it)
         }
         observe(dictionaryViewModel.getSort()) { sort ->
             dictionaryViewModel.onSortChanged()
@@ -92,12 +96,13 @@ open class DictionaryFragment : Fragment() {
         DictionaryViewModel.SortType.WORD_VALUE_DESC -> getString(R.string.word_value_desc)
     }
 
-    class WordAdapter : RecyclerViewAdapter<Word>() {
-        override val itemLayoutId: Int = R.layout.fragment_dictionary_item
+    class WordAdapter : RecyclerViewAdapter<Word, FragmentDictionaryItemBinding>() {
+        override val bindingInflate: (inflater: LayoutInflater, parent: ViewGroup, attachToParent: Boolean) -> FragmentDictionaryItemBinding =
+            FragmentDictionaryItemBinding::inflate
 
-        override fun bind(itemView: View, item: Word) {
-            itemView.wordValue.text = item.value
-            itemView.wordTranslation.text = item.translation
+        override fun bind(binding: FragmentDictionaryItemBinding, item: Word) {
+            binding.wordValue.text = item.value
+            binding.wordTranslation.text = item.translation
         }
     }
 }

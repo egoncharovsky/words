@@ -11,10 +11,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_dictionary_item.view.*
-import kotlinx.android.synthetic.main.fragment_study_list_edit.*
 import ru.egoncharovsky.words.R
+import ru.egoncharovsky.words.databinding.FragmentStudyListEditBinding
+import ru.egoncharovsky.words.databinding.FragmentStudyListItemBinding
 import ru.egoncharovsky.words.domain.entity.Word
 import ru.egoncharovsky.words.ui.RecyclerViewAdapter
 import ru.egoncharovsky.words.ui.observe
@@ -23,8 +24,9 @@ import ru.egoncharovsky.words.ui.observeNavigationResult
 @AndroidEntryPoint
 class StudyListEditFragment : Fragment() {
 
+    private val binding: FragmentStudyListEditBinding by viewBinding()
     private val studyListEditViewModel: StudyListEditViewModel by viewModels()
-    private lateinit var adapter: RecyclerViewAdapter<Word>
+    private lateinit var adapter: RecyclerViewAdapter<Word, FragmentStudyListItemBinding>
     private val args: StudyListEditFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -40,14 +42,14 @@ class StudyListEditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         studyListEditViewModel.load(args.wordListId?.value)
 
-        words.layoutManager = LinearLayoutManager(view.context)
-        words.adapter = adapter
+        binding.words.layoutManager = LinearLayoutManager(view.context)
+        binding.words.adapter = adapter
 
-        count.text = String.format(getString(R.string.words_count), 0)
+        binding.count.text = String.format(getString(R.string.words_count), 0)
 
         observe(studyListEditViewModel.isDataLoaded()) {
-            choose.isActivated = it
-            name.isActivated = it
+            binding.choose.isActivated = it
+            binding.name.isActivated = it
         }
 
         observeNavigationResult<LongArray> {
@@ -55,35 +57,35 @@ class StudyListEditFragment : Fragment() {
         }
 
         observe(studyListEditViewModel.getStudyList()) {
-            name.setText(it.name, TextView.BufferType.EDITABLE)
+            binding.name.setText(it.name, TextView.BufferType.EDITABLE)
         }
         observe(studyListEditViewModel.getWords()) {
-            count.text = String.format(getString(R.string.words_count), it.size)
+            binding.count.text = String.format(getString(R.string.words_count), it.size)
             adapter.update(it.toList())
         }
 
         observe(studyListEditViewModel.isNameValid()) {
-            name.error = when (it) {
+            binding.name.error = when (it) {
                 false -> getString(R.string.should_have_at_least_3_letters)
                 true -> null
             }
         }
         observe(studyListEditViewModel.isWordsValid()) {
-            count.error = when (it) {
+            binding.count.error = when (it) {
                 false -> getString(R.string.should_have_at_least_1)
                 true -> null
             }
         }
 
-        choose.setOnClickListener {
+        binding.choose.setOnClickListener {
             findNavController().navigate(
                 StudyListEditFragmentDirections.chooseWords(studyListEditViewModel.getSelectedWordIds())
             )
         }
-        name.addTextChangedListener {
+        binding.name.addTextChangedListener {
             studyListEditViewModel.editName(it.toString())
         }
-        save.setOnClickListener {
+        binding.save.setOnClickListener {
             studyListEditViewModel.save()
         }
         observe(studyListEditViewModel.isSuccessfullySaved()) { successfully ->
@@ -93,13 +95,13 @@ class StudyListEditFragment : Fragment() {
         }
     }
 
-    inner class StudyListWordsAdapter : RecyclerViewAdapter<Word>() {
-        override val itemLayoutId: Int = R.layout.fragment_study_list_item
+    inner class StudyListWordsAdapter : RecyclerViewAdapter<Word, FragmentStudyListItemBinding>() {
+        override val bindingInflate: (inflater: LayoutInflater, parent: ViewGroup, attachToParent: Boolean) -> FragmentStudyListItemBinding =
+            FragmentStudyListItemBinding::inflate
 
-        override fun bind(itemView: View, item: Word) {
-            itemView.wordValue.text = item.value
-            itemView.wordTranslation.text = item.translation
+        override fun bind(binding: FragmentStudyListItemBinding, item: Word) {
+            binding.wordValue.text = item.value
+            binding.wordTranslation.text = item.translation
         }
-
     }
 }

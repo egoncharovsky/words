@@ -8,10 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_study_lists.*
-import kotlinx.android.synthetic.main.fragment_study_lists_item.view.*
 import ru.egoncharovsky.words.R
+import ru.egoncharovsky.words.databinding.FragmentStudyListsBinding
+import ru.egoncharovsky.words.databinding.FragmentStudyListsItemBinding
 import ru.egoncharovsky.words.domain.entity.StudyList
 import ru.egoncharovsky.words.ui.NavArgLongNullable
 import ru.egoncharovsky.words.ui.RecyclerViewAdapter
@@ -20,6 +21,7 @@ import ru.egoncharovsky.words.ui.observe
 @AndroidEntryPoint
 class StudyListsFragment : Fragment() {
 
+    private val binding: FragmentStudyListsBinding by viewBinding()
     private val studyListsViewModel: StudyListsViewModel by viewModels()
 
     override fun onCreateView(
@@ -30,34 +32,35 @@ class StudyListsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         observe(studyListsViewModel.studyLists) {
-            wordLists.layoutManager = LinearLayoutManager(view.context)
-            wordLists.adapter = WordListAdapter(it)
+            binding.wordLists.layoutManager = LinearLayoutManager(view.context)
+            binding.wordLists.adapter = WordListAdapter(it)
         }
 
-        addList.setOnClickListener {
+        binding.addList.setOnClickListener {
             findNavController().navigate(
                 StudyListsFragmentDirections.editWordList()
             )
         }
     }
 
-    inner class WordListAdapter(values: List<StudyList>) : RecyclerViewAdapter<StudyList>(values) {
-        override val itemLayoutId: Int = R.layout.fragment_study_lists_item
+    inner class WordListAdapter(values: List<StudyList>) :
+        RecyclerViewAdapter<StudyList, FragmentStudyListsItemBinding>(values) {
+        override val bindingInflate: (inflater: LayoutInflater, parent: ViewGroup, attachToParent: Boolean) -> FragmentStudyListsItemBinding =
+            FragmentStudyListsItemBinding::inflate
 
-        override fun bind(itemView: View, item: StudyList) {
-            itemView.name.text = item.name
-            itemView.count.text = String.format(getString(R.string.words_count), item.words.size)
-            itemView.editList.setOnClickListener {
+        override fun bind(binding: FragmentStudyListsItemBinding, item: StudyList) {
+            binding.name.text = item.name
+            binding.count.text = String.format(getString(R.string.words_count), item.words.size)
+            binding.editList.setOnClickListener {
                 findNavController().navigate(
                     StudyListsFragmentDirections.editWordList(NavArgLongNullable(item.id!!))
                 )
             }
-            itemView.study.setOnClickListener {
+            binding.study.setOnClickListener {
                 findNavController().navigate(
                     StudyListsFragmentDirections.startQuiz(item.id!!)
                 )
             }
         }
-
     }
 }
