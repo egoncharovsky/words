@@ -46,7 +46,7 @@
             tools:layout="@layout/fragment_study_list_edit">
         <argument
                 android:name="wordListId"
-                app:argType="ru.egoncharovsky.words.ui.NavArgLongNullable"
+                app:argType="ru.egoncharovsky.words.ui.NavArgLong"
                 app:nullable="true"
                 android:defaultValue="@null"/>
         <action

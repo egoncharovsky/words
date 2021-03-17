@@ -14,7 +14,7 @@ import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.databinding.FragmentStudyListsBinding
 import ru.egoncharovsky.words.databinding.FragmentStudyListsItemBinding
 import ru.egoncharovsky.words.domain.entity.StudyList
-import ru.egoncharovsky.words.ui.NavArgLongNullable
+import ru.egoncharovsky.words.ui.NavArgLong
 import ru.egoncharovsky.words.ui.RecyclerViewAdapter
 import ru.egoncharovsky.words.ui.observe
 
@@ -53,7 +53,7 @@ class StudyListsFragment : Fragment() {
             binding.count.text = String.format(getString(R.string.words_count), item.words.size)
             binding.editList.setOnClickListener {
                 findNavController().navigate(
-                    StudyListsFragmentDirections.editWordList(NavArgLongNullable(item.id!!))
+                    StudyListsFragmentDirections.editWordList(NavArgLong(item.id!!))
                 )
             }
             binding.study.setOnClickListener {

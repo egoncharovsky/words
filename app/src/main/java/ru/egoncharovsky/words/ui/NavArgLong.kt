@@ -3,7 +3,10 @@ package ru.egoncharovsky.words.ui
 import android.os.Parcel
 import android.os.Parcelable
 
-data class NavArgLongNullable(val value: Long) : Parcelable {
+/**
+ * Nullable navigation argument box for long
+ */
+data class NavArgLong(val value: Long) : Parcelable {
     constructor(parcel: Parcel) : this(parcel.readLong()) {
     }
 
@@ -15,12 +18,12 @@ data class NavArgLongNullable(val value: Long) : Parcelable {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<NavArgLongNullable> {
-        override fun createFromParcel(parcel: Parcel): NavArgLongNullable {
-            return NavArgLongNullable(parcel)
+    companion object CREATOR : Parcelable.Creator<NavArgLong> {
+        override fun createFromParcel(parcel: Parcel): NavArgLong {
+            return NavArgLong(parcel)
         }
 
-        override fun newArray(size: Int): Array<NavArgLongNullable?> {
+        override fun newArray(size: Int): Array<NavArgLong?> {
             return arrayOfNulls(size)
         }
     }
