@@ -40,7 +40,19 @@ class StudyListEditFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        studyListEditViewModel.load(args.wordListId?.value)
+        args.wordListId?.let {
+            val wordId = it.value
+            studyListEditViewModel.load(wordId)
+
+            binding.delete.visibility = View.VISIBLE
+            binding.delete.setOnClickListener {
+                studyListEditViewModel.delete(wordId)
+            }
+        } ?: kotlin.run {
+            studyListEditViewModel.new()
+
+            binding.delete.visibility = View.INVISIBLE
+        }
 
         binding.words.layoutManager = LinearLayoutManager(view.context)
         binding.words.adapter = adapter
@@ -88,7 +100,7 @@ class StudyListEditFragment : Fragment() {
         binding.save.setOnClickListener {
             studyListEditViewModel.save()
         }
-        observe(studyListEditViewModel.isSuccessfullySaved()) { successfully ->
+        observe(studyListEditViewModel.isFinished()) { successfully ->
             if (successfully) {
                 findNavController().navigateUp()
             }
