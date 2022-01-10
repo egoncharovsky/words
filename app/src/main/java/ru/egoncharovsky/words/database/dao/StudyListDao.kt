@@ -37,7 +37,7 @@ abstract class StudyListDao {
         val studyListId = entity.studyList.id!!
         val updatedCount = update(entity.studyList)
 
-        deleteAllStudyListWordCrossRef()
+        deleteStudyListWordCrossRefByStudyListId(studyListId)
         val crossRefs = toCrossRefs(studyListId, entity.words)
         insertAll(crossRefs)
         return updatedCount
@@ -46,8 +46,17 @@ abstract class StudyListDao {
     @Update
     abstract fun update(entity: StudyListTable): Int
 
-    @Query("DELETE FROM StudyListWordCrossRef")
-    abstract fun deleteAllStudyListWordCrossRef()
+    @Query("DELETE FROM StudyListWordCrossRef WHERE studyListId = :studyListId")
+    abstract fun deleteStudyListWordCrossRefByStudyListId(studyListId: Long)
+
+    @Transaction
+    open fun delete(id: Long) {
+        deleteStudyListWordCrossRefByStudyListId(id)
+        deleteById(id)
+    }
+
+    @Query("DELETE FROM StudyListTable WHERE studyListId = :id")
+    abstract fun deleteById(id: Long)
 
     private fun toCrossRefs(studyListId: Long, words: Set<WordTable>): Set<StudyListWordCrossRef> = words.map {
         StudyListWordCrossRef(
