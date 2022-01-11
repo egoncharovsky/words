@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 
 fun <D> Fragment.observe(@NonNull data: LiveData<D>, observer: Observer<in D>) {
@@ -35,6 +36,17 @@ fun Fragment.getDrawable(@DrawableRes resId: Int): Drawable {
 
 fun Menu.items(): List<MenuItem> = (0 until size()).map { i -> getItem(i) }.toList()
 
+
+fun Fragment.navigate(directions: NavDirections) {
+    hideKeyboard()
+    findNavController().navigate(directions)
+}
+
+fun Fragment.navigateUp() {
+    hideKeyboard()
+    findNavController().navigateUp()
+}
+
 fun <T> Fragment.getNavigationResult(key: String = "result") =
     findNavController().currentBackStackEntry?.savedStateHandle?.get<T>(key)
 
@@ -47,6 +59,7 @@ fun <T> Fragment.setNavigationResult(result: T, key: String = "result") {
 
 fun <D> Fragment.observeNavigationResult(key: String = "result", observer: Observer<in D>) =
         getNavigationResultLiveData<D>(key)?.observe(viewLifecycleOwner, observer)
+
 
 fun Fragment.hideKeyboard() {
     view?.let { activity?.hideKeyboard(it) }

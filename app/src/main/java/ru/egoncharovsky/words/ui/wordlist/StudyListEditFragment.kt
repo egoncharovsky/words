@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -17,9 +16,7 @@ import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.databinding.FragmentStudyListEditBinding
 import ru.egoncharovsky.words.databinding.FragmentStudyListItemBinding
 import ru.egoncharovsky.words.domain.entity.Word
-import ru.egoncharovsky.words.ui.RecyclerViewAdapter
-import ru.egoncharovsky.words.ui.observe
-import ru.egoncharovsky.words.ui.observeNavigationResult
+import ru.egoncharovsky.words.ui.*
 
 @AndroidEntryPoint
 class StudyListEditFragment : Fragment() {
@@ -90,9 +87,7 @@ class StudyListEditFragment : Fragment() {
         }
 
         binding.choose.setOnClickListener {
-            findNavController().navigate(
-                StudyListEditFragmentDirections.chooseWords(studyListEditViewModel.getSelectedWordIds())
-            )
+            navigate(StudyListEditFragmentDirections.chooseWords(studyListEditViewModel.getSelectedWordIds()))
         }
         binding.name.addTextChangedListener {
             studyListEditViewModel.editName(it.toString())
@@ -102,7 +97,7 @@ class StudyListEditFragment : Fragment() {
         }
         observe(studyListEditViewModel.isFinished()) { successfully ->
             if (successfully) {
-                findNavController().navigateUp()
+                navigateUp()
             }
         }
     }

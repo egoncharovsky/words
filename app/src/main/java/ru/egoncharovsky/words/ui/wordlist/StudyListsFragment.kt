@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,6 +15,7 @@ import ru.egoncharovsky.words.databinding.FragmentStudyListsItemBinding
 import ru.egoncharovsky.words.domain.entity.StudyList
 import ru.egoncharovsky.words.ui.NavArgLong
 import ru.egoncharovsky.words.ui.RecyclerViewAdapter
+import ru.egoncharovsky.words.ui.navigate
 import ru.egoncharovsky.words.ui.observe
 
 @AndroidEntryPoint
@@ -37,9 +37,7 @@ class StudyListsFragment : Fragment() {
         }
 
         binding.addList.setOnClickListener {
-            findNavController().navigate(
-                StudyListsFragmentDirections.editWordList()
-            )
+            navigate(StudyListsFragmentDirections.editWordList())
         }
     }
 
@@ -52,14 +50,10 @@ class StudyListsFragment : Fragment() {
             binding.name.text = item.name
             binding.count.text = String.format(getString(R.string.words_count), item.words.size)
             binding.editList.setOnClickListener {
-                findNavController().navigate(
-                    StudyListsFragmentDirections.editWordList(NavArgLong(item.id!!))
-                )
+                navigate(StudyListsFragmentDirections.editWordList(NavArgLong(item.id!!)))
             }
             binding.study.setOnClickListener {
-                findNavController().navigate(
-                    StudyListsFragmentDirections.startQuiz(item.id!!)
-                )
+                navigate(StudyListsFragmentDirections.startQuiz(item.id!!))
             }
         }
     }
