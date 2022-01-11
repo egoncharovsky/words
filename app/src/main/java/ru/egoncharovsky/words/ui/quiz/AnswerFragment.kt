@@ -10,6 +10,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.databinding.FragmentQuizAnswerBinding
 import ru.egoncharovsky.words.ui.getColor
+import ru.egoncharovsky.words.ui.hideKeyboard
 import ru.egoncharovsky.words.ui.observe
 
 class AnswerFragment : Fragment() {
@@ -31,6 +32,7 @@ class AnswerFragment : Fragment() {
             binding.sendAnswer.isEnabled = true
             binding.sendAnswer.setOnClickListener {
                 answerWithCallback.sendAnswer(binding.answerText.text.toString())
+                hideKeyboard()
             }
         }
         observe(quizViewModel.getAnswerCorrectness()) {

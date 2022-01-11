@@ -1,8 +1,12 @@
 package ru.egoncharovsky.words.ui
 
+import android.app.Activity
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.NonNull
@@ -43,4 +47,17 @@ fun <T> Fragment.setNavigationResult(result: T, key: String = "result") {
 
 fun <D> Fragment.observeNavigationResult(key: String = "result", observer: Observer<in D>) =
         getNavigationResultLiveData<D>(key)?.observe(viewLifecycleOwner, observer)
+
+fun Fragment.hideKeyboard() {
+    view?.let { activity?.hideKeyboard(it) }
+}
+
+fun Activity.hideKeyboard() {
+    hideKeyboard(currentFocus ?: View(this))
+}
+
+private fun Context.hideKeyboard(view: View) {
+    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+}
 
