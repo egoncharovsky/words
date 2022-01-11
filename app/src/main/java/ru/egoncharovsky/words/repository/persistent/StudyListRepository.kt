@@ -29,4 +29,6 @@ class StudyListRepository @Inject constructor(
             dao.update(StudyListWordJoin.fromEntity(studyList))
         }
     }
+
+    fun delete(id: Long) = dao.delete(id)
 }

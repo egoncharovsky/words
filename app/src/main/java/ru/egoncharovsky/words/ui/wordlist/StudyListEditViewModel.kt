@@ -30,7 +30,7 @@ class StudyListEditViewModel @Inject constructor(
     private val nameIsValid: MutableLiveData<Boolean> = MutableLiveData()
     private val wordsAreValid: MutableLiveData<Boolean> = MutableLiveData()
 
-    private val successfullySaved = MutableLiveData<Boolean>()
+    private val finished = MutableLiveData<Boolean>()
 
     fun isDataLoaded(): LiveData<Boolean> = dataLoaded
 
@@ -40,21 +40,21 @@ class StudyListEditViewModel @Inject constructor(
     fun isNameValid(): LiveData<Boolean> = nameIsValid
     fun isWordsValid(): LiveData<Boolean> = wordsAreValid
 
-    fun isSuccessfullySaved(): LiveData<Boolean> = successfullySaved
+    fun isFinished(): LiveData<Boolean> = finished
 
-    fun load(id: Long?) {
-        if (id != null) {
-            viewModelScope.launch {
-                studyListRepository.get(id).collect {
-                    studyList.postValue(it)
-                    name.postValue(it.name)
-                    words.postValue(it.words)
+    fun new() {
+        dataLoaded.value = true
+    }
 
-                    dataLoaded.postValue(true)
-                }
+    fun load(id: Long) {
+        viewModelScope.launch {
+            studyListRepository.get(id).collect {
+                studyList.postValue(it)
+                name.postValue(it.name)
+                words.postValue(it.words)
+
+                dataLoaded.postValue(true)
             }
-        } else {
-            dataLoaded.value = true
         }
     }
 
@@ -91,10 +91,17 @@ class StudyListEditViewModel @Inject constructor(
             )
             viewModelScope.launch(Dispatchers.IO) {
                 studyListRepository.save(entity)
-                successfullySaved.postValue(true)
+                finished.postValue(true)
             }
         } else {
-            successfullySaved.value = false
+            finished.value = false
+        }
+    }
+
+    fun delete(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            studyListRepository.delete(id)
+            finished.postValue(true)
         }
     }
 }

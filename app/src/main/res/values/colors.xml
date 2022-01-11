@@ -10,6 +10,8 @@
     <color name="correct">#4CAF50</color>
     <color name="incorrectLight">#8BE91E1E</color>
 
+    <color name="delete">#A6DA1001</color>
+
     <color name="no">#A6DA1001</color>
     <color name="maybe">#A6FFC107</color>
     <color name="yes">#A64CAF50</color>
