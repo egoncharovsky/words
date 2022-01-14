@@ -7,12 +7,74 @@
         android:layout_height="match_parent"
         tools:context=".ui.wordlist.ChooseWordsFragment">
 
-    <include
-            layout="@layout/fragment_dictionary"
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/content_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/content_margin"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="@dimen/content_margin"
+            android:id="@+id/searchLayout">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/searchInputLayout">
+
+            <ImageButton
+                    android:src="@android:drawable/ic_menu_sort_by_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sortButton"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:contentDescription="@string/sort"/>
+
+            <SearchView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/sortButton"
+                    android:id="@+id/search"
+                    android:layout_marginEnd="2dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <CheckBox
+                android:text="@string/show_already_included"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/searchInputLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                android:id="@+id/checkBox"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/searchLayout"
+            android:layout_marginTop="8dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dictionaryList"
+                tools:listitem="@layout/fragment_dictionary_item"
+                android:layout_marginHorizontal="@dimen/content_margin"/>
+
+    </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/accept"
