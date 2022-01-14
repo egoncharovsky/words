@@ -18,7 +18,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/wordValue"
                 android:layout_weight="1"
-                android:textSize="18sp"/>
+                android:textSize="@dimen/word_translation_text_size"/>
 
         <TextView
                 android:text="@string/translation"
@@ -26,6 +26,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/wordTranslation"
                 android:layout_weight="1"
-                android:textSize="18sp"/>
+                android:textSize="@dimen/word_translation_text_size"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -9,7 +9,8 @@
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/item_padding">
 
         <TextView
                 android:text="@string/word"
@@ -17,7 +18,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/wordValue"
                 android:layout_weight="1"
-                android:textSize="18sp"/>
+                android:textSize="@dimen/word_translation_text_size"/>
 
         <TextView
                 android:text="@string/translation"
@@ -25,6 +26,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/wordTranslation"
                 android:layout_weight="1"
-                android:textSize="18sp"/>
+                android:textSize="@dimen/word_translation_text_size"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

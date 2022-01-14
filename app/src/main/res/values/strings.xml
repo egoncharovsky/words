@@ -60,4 +60,6 @@
     <string name="supported_formats">Supported formats: %s</string>
     <string name="clear_database">Clear database</string>
 
+    <!-- Search filters -->
+    <string name="show_already_included">Show already included</string>
 </resources>

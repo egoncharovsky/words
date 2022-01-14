@@ -13,17 +13,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import ru.egoncharovsky.words.R
+import ru.egoncharovsky.words.databinding.FragmentDictionaryItemBinding
 import ru.egoncharovsky.words.databinding.FragmentStudyListEditBinding
-import ru.egoncharovsky.words.databinding.FragmentStudyListItemBinding
 import ru.egoncharovsky.words.domain.entity.Word
 import ru.egoncharovsky.words.ui.*
+import ru.egoncharovsky.words.ui.dictionary.DictionaryFragment
 
 @AndroidEntryPoint
 class StudyListEditFragment : Fragment() {
 
     private val binding: FragmentStudyListEditBinding by viewBinding()
     private val studyListEditViewModel: StudyListEditViewModel by viewModels()
-    private lateinit var adapter: RecyclerViewAdapter<Word, FragmentStudyListItemBinding>
+    private lateinit var adapter: RecyclerViewAdapter<Word, FragmentDictionaryItemBinding>
     private val args: StudyListEditFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -31,7 +32,7 @@ class StudyListEditFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        adapter = StudyListWordsAdapter()
+        adapter = DictionaryFragment.WordAdapter()
 
         return inflater.inflate(R.layout.fragment_study_list_edit, container, false)
     }
@@ -99,16 +100,6 @@ class StudyListEditFragment : Fragment() {
             if (successfully) {
                 navigateUp()
             }
-        }
-    }
-
-    inner class StudyListWordsAdapter : RecyclerViewAdapter<Word, FragmentStudyListItemBinding>() {
-        override val bindingInflate: (inflater: LayoutInflater, parent: ViewGroup, attachToParent: Boolean) -> FragmentStudyListItemBinding =
-            FragmentStudyListItemBinding::inflate
-
-        override fun bind(binding: FragmentStudyListItemBinding, item: Word) {
-            binding.wordValue.text = item.value
-            binding.wordTranslation.text = item.translation
         }
     }
 }
