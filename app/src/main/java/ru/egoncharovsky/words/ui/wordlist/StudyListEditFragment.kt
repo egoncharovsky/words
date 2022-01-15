@@ -17,7 +17,7 @@ import ru.egoncharovsky.words.databinding.FragmentDictionaryItemBinding
 import ru.egoncharovsky.words.databinding.FragmentStudyListEditBinding
 import ru.egoncharovsky.words.domain.entity.Word
 import ru.egoncharovsky.words.ui.*
-import ru.egoncharovsky.words.ui.dictionary.DictionaryFragment
+import ru.egoncharovsky.words.ui.dictionary.WordAdapter
 
 @AndroidEntryPoint
 class StudyListEditFragment : Fragment() {
@@ -32,7 +32,7 @@ class StudyListEditFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        adapter = DictionaryFragment.WordAdapter()
+        adapter = WordAdapter()
 
         return inflater.inflate(R.layout.fragment_study_list_edit, container, false)
     }
