@@ -17,7 +17,7 @@ class WordSearchWidget(
     private val sortButton: ImageButton,
     private val searchView: SearchView,
 
-    val model: WordSearchViewModel,
+    val model: WordSearchableViewModel,
     val fragment: Fragment,
 ) {
     private lateinit var sortMenu: PopupMenu
