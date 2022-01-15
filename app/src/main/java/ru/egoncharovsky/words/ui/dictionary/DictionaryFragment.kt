@@ -12,6 +12,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.databinding.FragmentDictionaryBinding
+import ru.egoncharovsky.words.databinding.FragmentDictionaryItemBinding
 import ru.egoncharovsky.words.domain.entity.Word
 import ru.egoncharovsky.words.ui.RecyclerViewAdapter
 import ru.egoncharovsky.words.ui.dictionary.search.WordSearchWidget
@@ -19,17 +20,18 @@ import ru.egoncharovsky.words.ui.dictionary.search.WordSearchWidget
 @AndroidEntryPoint
 open class DictionaryFragment : Fragment() {
 
-    protected val binding: FragmentDictionaryBinding by viewBinding()
-    protected lateinit var dictionaryViewModel: DictionaryViewModel
-    protected lateinit var dictionaryAdapter: RecyclerViewAdapter<Word, *>
+    private val binding: FragmentDictionaryBinding by viewBinding()
+
+    private lateinit var viewModel: DictionaryViewModel
+    private lateinit var adapter: RecyclerViewAdapter<Word, FragmentDictionaryItemBinding>
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        dictionaryViewModel = ViewModelProvider(this).get(DictionaryViewModel::class.java)
-        dictionaryAdapter = WordAdapter()
+        viewModel = ViewModelProvider(this).get(DictionaryViewModel::class.java)
+        adapter = WordAdapter()
 
         return inflater.inflate(R.layout.fragment_dictionary, container, false)
     }
@@ -37,15 +39,11 @@ open class DictionaryFragment : Fragment() {
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.dictionaryList.layoutManager = LinearLayoutManager(view.context)
-        binding.dictionaryList.adapter = dictionaryAdapter
+        binding.dictionaryList.adapter = adapter
 
-        WordSearchWidget(
-            binding.sortButton,
-            binding.search,
-            dictionaryViewModel,
-            this
-        ).onViewCreated(view) {
-            dictionaryAdapter.update(it)
-        }
+        WordSearchWidget(binding.sortButton, binding.search, viewModel, this)
+            .onViewCreated(view) {
+                adapter.update(it)
+            }
     }
 }
