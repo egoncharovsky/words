@@ -21,6 +21,11 @@ interface WordDao {
     @Query("SELECT * FROM WordTable WHERE value = :value AND translation = :translation")
     suspend fun find(value: String, translation: String): WordTable?
 
+    @Query("SELECT wt.* FROM WordTable wt " +
+            "LEFT JOIN StudyListWordCrossRef slw ON wt.wordId = slw.wordId " +
+            "WHERE slw.studyListId IS NULL")
+    suspend fun findNotIncludedInStudyLists(): List<WordTable>
+
     @Insert
     suspend fun insert(entity: WordTable): Long
 }

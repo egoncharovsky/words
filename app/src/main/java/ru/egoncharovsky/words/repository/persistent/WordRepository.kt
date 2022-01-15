@@ -42,4 +42,6 @@ class WordRepository @Inject constructor(
             }
         }
     }
+
+    suspend fun findNotIncludedInStudyLists() = dao.findNotIncludedInStudyLists()
 }
