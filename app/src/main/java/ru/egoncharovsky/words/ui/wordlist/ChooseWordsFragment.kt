@@ -48,6 +48,10 @@ class ChooseWordsFragment : Fragment() {
             }
 
         configureSelections(savedInstanceState)
+
+        binding.showAlreadyIncluded.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.searchFiltersUpdated(isChecked, binding.search.query.toString())
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -48,7 +48,7 @@ abstract class SelectableRecyclerViewAdapter<T, K, VB : ViewBinding>(
         tracker!!.addObserver(object : SelectionTracker.SelectionObserver<K>() {
             override fun onItemStateChanged(key: K, selected: Boolean) {
                 val selection = tracker!!.selection.toList()
-                logger.trace("Changed item $key to $selected selection is $selection")
+                logger.trace("Changed item $key to $selected, selection is $selection")
                 if (values.indexOfFirst { getIdentifier(it) == key } != RecyclerView.NO_POSITION) {
                     observer.onChanged(selection)
                 }

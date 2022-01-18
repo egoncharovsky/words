@@ -32,6 +32,11 @@ class WordRepository @Inject constructor(
         return dao.searchWords("%$value%").map { l -> l.map { it.toEntity() } }
     }
 
+    fun searchWordWithoutAlreadyIncluded(value: String, ids: Set<Long>): Flow<List<Word>> {
+        logger.trace("Search $value without already included")
+        return dao.searchWordsNotIncludedInStudyListsOrWithIds("%$value%", ids).map { l -> l.map { it.toEntity() } }
+    }
+
     suspend fun saveImportedWords(words: Set<Word>): List<Long> {
         return database.withTransaction {
             words.mapNotNull { word ->
@@ -43,5 +48,7 @@ class WordRepository @Inject constructor(
         }
     }
 
-    suspend fun findNotIncludedInStudyLists() = dao.findNotIncludedInStudyLists()
+    fun findWithoutAlreadyIncluded(ids: Set<Long>): Flow<List<Word>> {
+        return dao.findNotIncludedInStudyListsOrWithIds(ids).map { l -> l.map { it.toEntity() } }
+    }
 }

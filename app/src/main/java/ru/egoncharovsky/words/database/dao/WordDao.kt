@@ -23,8 +23,14 @@ interface WordDao {
 
     @Query("SELECT wt.* FROM WordTable wt " +
             "LEFT JOIN StudyListWordCrossRef slw ON wt.wordId = slw.wordId " +
-            "WHERE slw.studyListId IS NULL")
-    suspend fun findNotIncludedInStudyLists(): List<WordTable>
+            "WHERE slw.studyListId IS NULL OR wt.wordId IN (:ids)")
+    fun findNotIncludedInStudyListsOrWithIds(ids: Set<Long>): Flow<List<WordTable>>
+
+    @Query("SELECT wt.* FROM WordTable wt " +
+            "LEFT JOIN StudyListWordCrossRef slw ON wt.wordId = slw.wordId " +
+            "WHERE (slw.studyListId IS NULL OR wt.wordId IN (:ids)) " +
+            "AND value LIKE :pattern OR translation LIKE :pattern")
+    fun searchWordsNotIncludedInStudyListsOrWithIds(pattern: String, ids: Set<Long>): Flow<List<WordTable>>
 
     @Insert
     suspend fun insert(entity: WordTable): Long

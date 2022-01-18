@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/searchInputLayout"
                 app:layout_constraintStart_toStartOf="parent"
-                android:id="@+id/checkBox"/>
+                android:id="@+id/showAlreadyIncluded"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
