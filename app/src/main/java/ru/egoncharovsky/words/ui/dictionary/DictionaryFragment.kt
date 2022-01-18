@@ -6,11 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.databinding.FragmentDictionaryBinding
 import ru.egoncharovsky.words.databinding.FragmentDictionaryItemBinding
 import ru.egoncharovsky.words.domain.entity.Word
@@ -20,20 +18,20 @@ import ru.egoncharovsky.words.ui.dictionary.search.WordSearchWidget
 @AndroidEntryPoint
 open class DictionaryFragment : Fragment() {
 
-    private val binding: FragmentDictionaryBinding by viewBinding()
+    private lateinit var binding: FragmentDictionaryBinding
 
-    private lateinit var viewModel: DictionaryViewModel
+    private val viewModel: DictionaryViewModel by viewModels()
     private lateinit var adapter: RecyclerViewAdapter<Word, FragmentDictionaryItemBinding>
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        viewModel = ViewModelProvider(this).get(DictionaryViewModel::class.java)
+    ): View {
         adapter = WordAdapter()
 
-        return inflater.inflate(R.layout.fragment_dictionary, container, false)
+        binding = FragmentDictionaryBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     @CallSuper

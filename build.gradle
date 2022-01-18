@@ -1,11 +1,13 @@
 buildscript {
 
     ext {
-        kotlinVersion = '1.4.31'
-        roomVersion = '2.2.6'
-        hiltVersion = '2.31.2-alpha'
-        lifecycleVersion = '2.3.0'
-        navigationVersion = '2.3.4'
+        gradleVersion = '7.0.4'
+        kotlinVersion = '1.6.10'
+
+        roomVersion = '2.4.1'
+        hiltVersion = '2.40.5'
+        lifecycleVersion = '2.4.0'
+        navigationVersion = '2.3.5'
     }
 
     repositories {
@@ -14,7 +16,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:4.0.2"
+        classpath "com.android.tools.build:gradle:$gradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import ru.egoncharovsky.words.R
@@ -18,7 +17,7 @@ import ru.egoncharovsky.words.ui.observe
 @AndroidEntryPoint
 class QuizFragment : Fragment() {
 
-    private val binding: FragmentQuizBinding by viewBinding()
+    private lateinit var binding: FragmentQuizBinding
     private val quizViewModel: QuizViewModel by viewModels()
     private val args: QuizFragmentArgs by navArgs()
 
@@ -26,7 +25,10 @@ class QuizFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz, container, false)
+    ): View {
+        binding = FragmentQuizBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         quizViewModel.startQuiz(args.studyListId)

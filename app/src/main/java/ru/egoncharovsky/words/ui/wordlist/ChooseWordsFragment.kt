@@ -5,14 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
-import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.databinding.FragmentChooseWordsBinding
 import ru.egoncharovsky.words.databinding.FragmentChooseWordsItemBinding
 import ru.egoncharovsky.words.domain.entity.Word
@@ -24,18 +22,18 @@ import ru.egoncharovsky.words.ui.setNavigationResult
 @AndroidEntryPoint
 class ChooseWordsFragment : Fragment() {
 
-    private val binding: FragmentChooseWordsBinding by viewBinding()
+    private lateinit var binding: FragmentChooseWordsBinding
     private val args: ChooseWordsFragmentArgs by navArgs()
 
-    private lateinit var viewModel: ChooseWordsViewModel
+    private val viewModel: ChooseWordsViewModel by viewModels()
     private lateinit var adapter: SelectableRecyclerViewAdapter<Word, Long, FragmentChooseWordsItemBinding>
     private lateinit var tracker: SelectionTracker<Long>
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        viewModel = ViewModelProvider(this).get(ChooseWordsViewModel::class.java)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         adapter = ChooseWordsAdapter()
 
-        return inflater.inflate(R.layout.fragment_choose_words, container, false)
+        binding = FragmentChooseWordsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

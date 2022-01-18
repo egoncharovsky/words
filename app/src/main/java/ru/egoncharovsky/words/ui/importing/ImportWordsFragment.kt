@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import ru.egoncharovsky.words.R
@@ -18,7 +17,7 @@ import ru.egoncharovsky.words.ui.observe
 @AndroidEntryPoint
 open class ImportWordsFragment : Fragment() {
 
-    private val binding: FragmentImportWordsBinding by viewBinding()
+    private lateinit var binding: FragmentImportWordsBinding
     private val importWordsViewModel: ImportWordsViewModel by viewModels()
 
     private val importFile = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
@@ -30,7 +29,10 @@ open class ImportWordsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_import_words, container, false)
+    ): View {
+        binding = FragmentImportWordsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.supportedFormats.text = String.format(getString(R.string.supported_formats), "CSV")
