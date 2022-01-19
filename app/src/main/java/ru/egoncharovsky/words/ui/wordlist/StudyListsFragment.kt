@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.databinding.FragmentStudyListsBinding
@@ -21,14 +20,17 @@ import ru.egoncharovsky.words.ui.observe
 @AndroidEntryPoint
 class StudyListsFragment : Fragment() {
 
-    private val binding: FragmentStudyListsBinding by viewBinding()
+    private lateinit var binding: FragmentStudyListsBinding
     private val studyListsViewModel: StudyListsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_study_lists, container, false)
+    ): View {
+        binding = FragmentStudyListsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         observe(studyListsViewModel.studyLists) {

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.databinding.FragmentQuizAnswerBinding
 import ru.egoncharovsky.words.ui.getColor
@@ -15,7 +14,7 @@ import ru.egoncharovsky.words.ui.observe
 
 class AnswerFragment : Fragment() {
 
-    private val binding: FragmentQuizAnswerBinding by viewBinding()
+    private lateinit var binding: FragmentQuizAnswerBinding
     private val quizViewModel: QuizViewModel by viewModels(
         ownerProducer = { this.requireParentFragment() }
     )
@@ -24,7 +23,10 @@ class AnswerFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_answer, container, false)
+    ): View {
+        binding = FragmentQuizAnswerBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         observe(quizViewModel.getAnswerWitchCallback()) { answerWithCallback ->

@@ -5,41 +5,48 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/choose_words_item"
-        android:layout_margin="@dimen/item_margin">
+        android:layout_margin="@dimen/item_margin"
+>
 
-    <LinearLayout
-            android:orientation="horizontal"
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/item_background">
+            android:background="@drawable/item_background"
+            android:paddingHorizontal="@dimen/item_padding"
+            android:id="@+id/linearLayout">
 
         <TextView
                 android:text="@string/word"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/wordValue"
-                android:layout_weight="1"
-                android:textSize="24sp"/>
+                android:textSize="@dimen/word_translation_text_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/wordTranslation"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
                 android:text="@string/translation"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/wordTranslation"
-                android:layout_weight="1"
-                android:textSize="24sp"/>
+                android:textSize="@dimen/word_translation_text_size"
+                app:layout_constraintStart_toEndOf="@+id/wordValue"
+                app:layout_constraintEnd_toStartOf="@+id/selectedCheckBox"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
         <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:id="@+id/selectedCheckBox"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                />
-    </LinearLayout>
+                app:layout_constraintStart_toEndOf="@+id/wordTranslation"/>
 
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.cardview.widget.CardView>

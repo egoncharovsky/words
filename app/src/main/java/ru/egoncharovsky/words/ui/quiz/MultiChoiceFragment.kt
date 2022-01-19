@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.databinding.FragmentQuizMultipleChoiceBinding
 import ru.egoncharovsky.words.ui.getColor
@@ -18,7 +17,7 @@ import ru.egoncharovsky.words.ui.observe
 
 class MultiChoiceFragment : Fragment() {
 
-    private val binding: FragmentQuizMultipleChoiceBinding by viewBinding()
+    private lateinit var binding: FragmentQuizMultipleChoiceBinding
     private val quizViewModel: QuizViewModel by viewModels(
         ownerProducer = { this.requireParentFragment() }
     )
@@ -27,7 +26,10 @@ class MultiChoiceFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_multiple_choice, container, false)
+    ): View {
+        binding = FragmentQuizMultipleChoiceBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         observe(quizViewModel.getMultiChoiceWithCallback()) { model ->

@@ -4,63 +4,75 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
-import by.kirich1409.viewbindingdelegate.viewBinding
-import ru.egoncharovsky.words.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import ru.egoncharovsky.words.databinding.FragmentChooseWordsBinding
 import ru.egoncharovsky.words.databinding.FragmentChooseWordsItemBinding
 import ru.egoncharovsky.words.domain.entity.Word
 import ru.egoncharovsky.words.ui.SelectableRecyclerViewAdapter
-import ru.egoncharovsky.words.ui.dictionary.DictionaryFragment
+import ru.egoncharovsky.words.ui.dictionary.search.WordSearchWidget
 import ru.egoncharovsky.words.ui.navigateUp
 import ru.egoncharovsky.words.ui.setNavigationResult
 
-class ChooseWordsFragment : DictionaryFragment() {
+@AndroidEntryPoint
+class ChooseWordsFragment : Fragment() {
 
-    private val chooseBinding: FragmentChooseWordsBinding by viewBinding()
+    private lateinit var binding: FragmentChooseWordsBinding
     private val args: ChooseWordsFragmentArgs by navArgs()
 
-    private lateinit var chooseWordsViewModel: ChooseWordsViewModel
-    private lateinit var selectableAdapter: SelectableRecyclerViewAdapter<Word, Long, FragmentChooseWordsItemBinding>
+    private val viewModel: ChooseWordsViewModel by viewModels()
+    private lateinit var adapter: SelectableRecyclerViewAdapter<Word, Long, FragmentChooseWordsItemBinding>
     private lateinit var tracker: SelectionTracker<Long>
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        chooseWordsViewModel = ViewModelProvider(this).get(ChooseWordsViewModel::class.java).also {
-            dictionaryViewModel = it
-        }
-        selectableAdapter = ChooseWordsAdapter().also {
-            dictionaryAdapter = it
-        }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        adapter = ChooseWordsAdapter()
 
-        return inflater.inflate(R.layout.fragment_choose_words, container, false)
+        binding = FragmentChooseWordsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        binding.dictionaryList.layoutManager = LinearLayoutManager(view.context)
+        binding.dictionaryList.adapter = adapter
 
-        tracker = selectableAdapter.observe(binding.dictionaryList) {
-            chooseWordsViewModel.selectionUpdated(it)
+        WordSearchWidget(binding.sortButton, binding.search, viewModel, this)
+            .onViewCreated(view) {
+                adapter.update(it)
+            }
+
+        configureSelections(savedInstanceState)
+
+        binding.showAlreadyIncluded.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.searchFiltersUpdated(isChecked, binding.search.query.toString())
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        tracker.onSaveInstanceState(outState)
+    }
+
+    private fun configureSelections(savedInstanceState: Bundle?) {
+        tracker = adapter.observe(binding.dictionaryList) {
+            viewModel.selectionUpdated(it)
         }
         args.chosen?.let {
             tracker.setItemsSelected(it.toList(), true)
         }
 
-        chooseBinding.accept.setOnClickListener {
-            chooseWordsViewModel.getChosenDictionaryIds().value?.let {
+        binding.accept.setOnClickListener {
+            viewModel.getChosenDictionaryIds().value?.let {
                 setNavigationResult(it.toLongArray())
             }
             navigateUp()
         }
 
         tracker.onRestoreInstanceState(savedInstanceState)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        tracker.onSaveInstanceState(outState)
     }
 
     class ChooseWordsAdapter :

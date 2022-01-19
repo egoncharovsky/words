@@ -6,14 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import by.kirich1409.viewbindingdelegate.viewBinding
-import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.databinding.FragmentQuizMeaningBinding
 import ru.egoncharovsky.words.ui.observe
 
 class MeaningFragment : Fragment() {
 
-    private val binding: FragmentQuizMeaningBinding by viewBinding()
+    private lateinit var binding: FragmentQuizMeaningBinding
     private val quizViewModel: QuizViewModel by viewModels(
         ownerProducer = { this.requireParentFragment() }
     )
@@ -22,7 +20,10 @@ class MeaningFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_meaning, container, false)
+    ): View {
+        binding = FragmentQuizMeaningBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         observe(quizViewModel.getMeaning()) {

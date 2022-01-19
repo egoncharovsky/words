@@ -5,13 +5,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
-abstract class RecyclerViewAdapter<T, VB : ViewBinding>(
+/**
+ * VIB - view item binding
+ */
+abstract class RecyclerViewAdapter<T, VIB : ViewBinding>(
     protected var values: List<T> = listOf()
-) : RecyclerView.Adapter<RecyclerViewAdapter<T, VB>.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerViewAdapter<T, VIB>.ViewHolder>() {
 
-    abstract val bindingInflate: (inflater: LayoutInflater, parent: ViewGroup, attachToParent: Boolean) -> VB
+    abstract val bindingInflate: (inflater: LayoutInflater, parent: ViewGroup, attachToParent: Boolean) -> VIB
 
-    abstract fun bind(binding: VB, item: T)
+    abstract fun bind(binding: VIB, item: T)
 
     open fun update(values: List<T>) {
         this.values = values
@@ -26,7 +29,7 @@ abstract class RecyclerViewAdapter<T, VB : ViewBinding>(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(values[position])
 
-    open inner class ViewHolder(protected val binding: VB) : RecyclerView.ViewHolder(binding.root) {
+    open inner class ViewHolder(protected val binding: VIB) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: T) = bind(binding, item)
     }
 }

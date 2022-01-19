@@ -6,15 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import by.kirich1409.viewbindingdelegate.viewBinding
-import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.databinding.FragmentQuizRememberBinding
 import ru.egoncharovsky.words.domain.quiz.card.Remember
 import ru.egoncharovsky.words.ui.observe
 
 class RememberFragment : Fragment() {
 
-    private val binding: FragmentQuizRememberBinding by viewBinding()
+    private lateinit var binding: FragmentQuizRememberBinding
     private val quizViewModel: QuizViewModel by viewModels(
         ownerProducer = { this.requireParentFragment() }
     )
@@ -23,7 +21,10 @@ class RememberFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_quiz_remember, container, false)
+    ): View {
+        binding = FragmentQuizRememberBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         observe(quizViewModel.getRememberWithCallback()) { rememberWithCallback ->
