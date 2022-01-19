@@ -1,9 +1,7 @@
 package ru.egoncharovsky.words.database.dao
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -20,7 +18,8 @@ internal class WordDaoTest : DatabaseTest() {
     private val words = listOf(
         WordTable(1, "word", "перевод", Language.EN, Language.RU),
         WordTable(2, "word2", "перевод2", Language.EN, Language.RU),
-        WordTable(3, "word3", "перевод3", Language.EN, Language.RU)
+        WordTable(3, "word3", "перевод3", Language.EN, Language.RU),
+        WordTable(4, "word4", "перевод4", Language.EN, Language.RU)
     )
 
     @Before
@@ -32,29 +31,33 @@ internal class WordDaoTest : DatabaseTest() {
 
             val studyListDao = db.studyListDao()
             studyListDao.insert(StudyListTable(1, "List1"))
+            studyListDao.insert(StudyListTable(2, "List2"))
 
-            studyListDao.insertAll(listOf(
-                StudyListWordCrossRef(1, 1),
-                StudyListWordCrossRef(1, 2)
-            ))
+            studyListDao.insertAll(
+                listOf(
+                    StudyListWordCrossRef(1, 1),
+                    StudyListWordCrossRef(1, 2),
+
+                    StudyListWordCrossRef(2, 1),
+                )
+            )
+
         }
     }
 
     @Test(timeout = 1000)
-    fun testGet() {
-        GlobalScope.launch(Dispatchers.IO) {
-            wordDao.get(setOf(1, 2)).collect {
-                assertEquals(it, listOf(words[1], words[2]))
-            }
-        }
+    fun testGet() = runBlocking {
+        val actual = wordDao.get(setOf(1, 2)).take(1).single()
+
+        assertEquals(actual, listOf(words[0], words[1]))
     }
 
+
     @Test(timeout = 1000)
-    fun testFindNotIncludedInStudyLists() {
-        GlobalScope.launch(Dispatchers.IO) {
-            wordDao.findNotIncludedInStudyListsOrWithIds(setOf(2)).collect {
-                assertEquals(it, listOf(words[2], words[3]))
-            }
-        }
+    fun testFindNotIncludedInStudyLists() = runBlocking {
+        val actual = wordDao.findNotIncludedInStudyListsOrWithIds(setOf(1, 2)).take(1).single()
+
+        assertEquals(actual, listOf(words[1], words[2], words[3]))
     }
+
 }
