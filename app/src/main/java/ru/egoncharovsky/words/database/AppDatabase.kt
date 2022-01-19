@@ -5,12 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import mu.KotlinLogging
 import ru.egoncharovsky.words.database.converters.LanguageConverter
 import ru.egoncharovsky.words.database.dao.StudyListDao
 import ru.egoncharovsky.words.database.dao.WordDao
 import ru.egoncharovsky.words.database.tables.StudyListTable
 import ru.egoncharovsky.words.database.tables.StudyListWordCrossRef
 import ru.egoncharovsky.words.database.tables.WordTable
+import java.util.concurrent.Executors
 
 @Database(
     entities = [
@@ -29,6 +31,8 @@ abstract class AppDatabase : RoomDatabase() {
 
         private const val NAME = "words-db"
 
+        private val logger = KotlinLogging.logger { }
+
         @Volatile
         private var instance: AppDatabase? = null
 
@@ -39,11 +43,16 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context): AppDatabase {
-            return Room.databaseBuilder(
+            val dbBuilder = Room.databaseBuilder(
                 context,
                 AppDatabase::class.java,
                 NAME
-            ).build()
+            )
+            dbBuilder.setQueryCallback({ sqlQuery, bindArgs ->
+                logger.trace("SQL: $sqlQuery, Args: $bindArgs")
+            }, Executors.newSingleThreadExecutor())
+
+            return dbBuilder.build()
         }
     }
 }
