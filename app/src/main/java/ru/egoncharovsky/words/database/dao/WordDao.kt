@@ -21,17 +21,34 @@ interface WordDao {
     @Query("SELECT * FROM WordTable WHERE value = :value AND translation = :translation")
     suspend fun find(value: String, translation: String): WordTable?
 
-    @Query("SELECT wt.* FROM WordTable wt " +
-            "LEFT JOIN StudyListWordCrossRef slw ON wt.wordId = slw.wordId " +
-            "WHERE slw.studyListId IS NULL OR wt.wordId IN (:ids)")
-    fun findNotIncludedInStudyListsOrWithIds(ids: Set<Long>): Flow<List<WordTable>>
-
-    @Query("SELECT wt.* FROM WordTable wt " +
-            "LEFT JOIN StudyListWordCrossRef slw ON wt.wordId = slw.wordId " +
-            "WHERE (slw.studyListId IS NULL OR wt.wordId IN (:ids)) " +
-            "AND value LIKE :pattern OR translation LIKE :pattern")
-    fun searchWordsNotIncludedInStudyListsOrWithIds(pattern: String, ids: Set<Long>): Flow<List<WordTable>>
-
     @Insert
     suspend fun insert(entity: WordTable): Long
+
+    @Query(
+        """
+            SELECT wt.* FROM WordTable wt
+            LEFT JOIN StudyListWordCrossRef slw ON wt.wordId = slw.wordId 
+            WHERE slw.studyListId IS NULL
+        """
+    )
+    fun findNotIncludedInStudyLists(): Flow<List<WordTable>>
+
+    @Query(
+        """
+            SELECT wt.* FROM WordTable wt 
+            LEFT JOIN StudyListWordCrossRef slw ON wt.wordId = slw.wordId 
+            WHERE slw.studyListId IS NULL
+            AND wt.value LIKE :pattern OR wt.translation LIKE :pattern
+        """
+    )
+    fun searchNotIncludedInStudyLists(pattern: String): Flow<List<WordTable>>
+
+    @Query(
+        """
+            SELECT wt.* FROM WordTable wt
+            WHERE wt.wordId IN (:ids)
+            AND wt.value LIKE :pattern OR wt.translation LIKE :pattern
+        """
+    )
+    fun searchInWordsWithIds(pattern: String, ids: Set<Long>): Flow<List<WordTable>>
 }

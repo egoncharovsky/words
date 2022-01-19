@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ru.egoncharovsky.words.domain.importing.CsvParser
 import ru.egoncharovsky.words.domain.importing.DictionaryImporter
+import ru.egoncharovsky.words.domain.service.WordService
 import ru.egoncharovsky.words.repository.persistent.WordRepository
 import javax.inject.Singleton
 
@@ -23,6 +24,12 @@ class DomainModule {
     @Provides
     fun provideCsvParser(): CsvParser {
         return CsvParser()
+    }
+
+    @Singleton
+    @Provides
+    fun provideWordService(wordRepository: WordRepository): WordService {
+        return WordService(wordRepository)
     }
 
 }

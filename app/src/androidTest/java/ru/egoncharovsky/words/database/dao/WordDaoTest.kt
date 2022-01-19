@@ -19,7 +19,8 @@ internal class WordDaoTest : DatabaseTest() {
         WordTable(1, "word", "перевод", Language.EN, Language.RU),
         WordTable(2, "word2", "перевод2", Language.EN, Language.RU),
         WordTable(3, "word3", "перевод3", Language.EN, Language.RU),
-        WordTable(4, "word4", "перевод4", Language.EN, Language.RU)
+        WordTable(4, "word4", "перевод4", Language.EN, Language.RU),
+        WordTable(5, "another", "другой", Language.EN, Language.RU),
     )
 
     @Before
@@ -52,10 +53,23 @@ internal class WordDaoTest : DatabaseTest() {
         assertEquals(actual, listOf(words[0], words[1]))
     }
 
-
     @Test(timeout = 1000)
     fun testFindNotIncludedInStudyLists() = runBlocking {
-        val actual = wordDao.findNotIncludedInStudyListsOrWithIds(setOf(1, 2)).take(1).single()
+        val actual = wordDao.findNotIncludedInStudyLists().take(1).single()
+
+        assertEquals(actual, listOf(words[2], words[3], words[4]))
+    }
+
+    @Test(timeout = 1000)
+    fun testSearchNotIncludedInStudyLists() = runBlocking {
+        val actual = wordDao.searchNotIncludedInStudyLists("%word%").take(1).single()
+
+        assertEquals(actual, listOf(words[2], words[3]))
+    }
+
+    @Test
+    fun testSearchInWordsWithIds() = runBlocking {
+        val actual = wordDao.searchInWordsWithIds("%word%", setOf(2, 3, 4, 5)).take(1).single()
 
         assertEquals(actual, listOf(words[1], words[2], words[3]))
     }

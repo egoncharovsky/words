@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import ru.egoncharovsky.words.domain.entity.Word
+import ru.egoncharovsky.words.domain.service.WordService
 import ru.egoncharovsky.words.repository.persistent.WordRepository
 import ru.egoncharovsky.words.ui.dictionary.search.WordSearchViewModel
 import javax.inject.Inject
@@ -13,6 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ChooseWordsViewModel @Inject constructor(
     val wordRepository: WordRepository,
+    val wordService: WordService,
     savedStateHandle: SavedStateHandle
 ) : WordSearchViewModel() {
 
@@ -45,7 +47,7 @@ class ChooseWordsViewModel @Inject constructor(
         return if (showAlreadyIncluded.value!!) {
             wordRepository.getAll()
         } else {
-            wordRepository.findWithoutAlreadyIncluded(chosenDictionaryIds.value!!.toSet())
+            wordService.findHidingAlreadyIncluded(chosenDictionaryIds.value!!.toSet())
         }
     }
 
@@ -53,7 +55,7 @@ class ChooseWordsViewModel @Inject constructor(
         return if (showAlreadyIncluded.value!!) {
             wordRepository.searchWord(value)
         } else {
-            wordRepository.searchWordWithoutAlreadyIncluded(value, chosenDictionaryIds.value!!.toSet())
+            wordService.searchHidingAlreadyIncluded(value, chosenDictionaryIds.value!!.toSet())
         }
     }
 }
