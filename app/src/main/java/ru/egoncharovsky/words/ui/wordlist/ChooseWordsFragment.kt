@@ -90,6 +90,9 @@ class ChooseWordsFragment : Fragment() {
             if (highlightBackground(item.id!!)) {
                 binding.chooseWordItemLayout.background =
                     ContextCompat.getDrawable(context, R.drawable.item_background_highlight)
+            } else {
+                binding.chooseWordItemLayout.background =
+                    ContextCompat.getDrawable(context, R.drawable.item_background)
             }
 
             binding.wordValue.text = item.value
