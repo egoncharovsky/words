@@ -7,7 +7,7 @@ interface WordRepository {
     fun getAll(): Flow<List<Word>>
     fun get(ids: Set<Long>): Flow<List<Word>>
 
-    suspend fun saveImportedWords(words: Set<Word>): List<Long>
+    suspend fun saveImportedWords(words: List<Word>): List<Long>
 
     fun searchWord(value: String): Flow<List<Word>>
 

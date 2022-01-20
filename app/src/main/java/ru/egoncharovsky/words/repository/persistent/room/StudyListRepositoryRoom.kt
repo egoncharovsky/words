@@ -4,7 +4,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import mu.KotlinLogging
 import ru.egoncharovsky.words.database.dao.StudyListDao
-import ru.egoncharovsky.words.database.tables.StudyListWordJoin
+import ru.egoncharovsky.words.database.tables.StudyListTable.Companion.fromEntity
+import ru.egoncharovsky.words.database.tables.StudyListWordCrossRef.Companion.toWordIds
 import ru.egoncharovsky.words.domain.entity.StudyList
 import ru.egoncharovsky.words.repository.persistent.StudyListRepository
 import javax.inject.Inject
@@ -24,10 +25,10 @@ class StudyListRepositoryRoom @Inject constructor(
     override fun save(studyList: StudyList) {
         if (studyList.id == null) {
             logger.trace("Saving new $studyList")
-            dao.insert(StudyListWordJoin.fromEntity(studyList))
+            dao.insert(fromEntity(studyList), toWordIds(studyList))
         } else {
             logger.trace("Updating $studyList")
-            dao.update(StudyListWordJoin.fromEntity(studyList))
+            dao.update(fromEntity(studyList), toWordIds(studyList))
         }
     }
 

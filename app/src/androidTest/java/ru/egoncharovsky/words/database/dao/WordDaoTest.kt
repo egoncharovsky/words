@@ -1,26 +1,29 @@
 package ru.egoncharovsky.words.database.dao
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import ru.egoncharovsky.words.DatabaseTest
 import ru.egoncharovsky.words.database.tables.StudyListTable
 import ru.egoncharovsky.words.database.tables.StudyListWordCrossRef
 import ru.egoncharovsky.words.database.tables.WordTable
 import ru.egoncharovsky.words.domain.entity.Language
 
+@RunWith(AndroidJUnit4::class)
 internal class WordDaoTest : DatabaseTest() {
     private lateinit var wordDao: WordDao
 
     private val words = listOf(
-        WordTable(1, "word", "перевод", Language.EN, Language.RU),
-        WordTable(2, "word2", "перевод2", Language.EN, Language.RU),
-        WordTable(3, "word3", "перевод3", Language.EN, Language.RU),
-        WordTable(4, "word4", "перевод4", Language.EN, Language.RU),
-        WordTable(5, "another", "другой", Language.EN, Language.RU),
+        WordTable(1, 0L, "word", "перевод", Language.EN, Language.RU),
+        WordTable(2, 0L, "word2", "перевод2", Language.EN, Language.RU),
+        WordTable(3, 0L, "word3", "перевод3", Language.EN, Language.RU),
+        WordTable(4, 0L, "word4", "перевод4", Language.EN, Language.RU),
+        WordTable(5, 0L, "another", "другой", Language.EN, Language.RU),
     )
 
     @Before

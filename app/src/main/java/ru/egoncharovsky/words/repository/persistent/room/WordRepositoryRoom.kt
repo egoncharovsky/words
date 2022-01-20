@@ -33,7 +33,7 @@ class WordRepositoryRoom @Inject constructor(
         return dao.searchWords("%$value%").map { l -> l.map { it.toEntity() } }
     }
 
-    override suspend fun saveImportedWords(words: Set<Word>): List<Long> {
+    override suspend fun saveImportedWords(words: List<Word>): List<Long> {
         return database.withTransaction {
             words.mapNotNull { word ->
                 val found = dao.find(word.value, word.translation)
