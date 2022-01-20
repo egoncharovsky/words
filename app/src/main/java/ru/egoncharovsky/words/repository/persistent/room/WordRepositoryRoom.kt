@@ -55,4 +55,13 @@ class WordRepositoryRoom @Inject constructor(
     override fun searchInWordsWithIds(value: String, ids: Set<Long>): Flow<List<Word>> {
         return dao.searchInWordsWithIds(value, ids).map { l -> l.map { it.toEntity() } }
     }
+
+    override fun findWordsIdsIncludedInStudyListsExcluding(studyListId: Long?): Flow<Set<Long>> {
+        return (studyListId?.let {
+            dao.findWordsIdsIncludedInStudyListsExcluding(it)
+        } ?: run {
+            dao.findWordsIdsIncludedInStudyLists()
+        })
+            .map { it.toSet() }
+    }
 }

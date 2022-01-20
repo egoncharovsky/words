@@ -51,4 +51,23 @@ interface WordDao {
         """
     )
     fun searchInWordsWithIds(pattern: String, ids: Set<Long>): Flow<List<WordTable>>
+
+    @Query(
+        """
+            SELECT wt.wordId FROM WordTable wt
+            LEFT JOIN StudyListWordCrossRef slw ON wt.wordId = slw.wordId 
+            WHERE slw.studyListId IS NOT NULL
+        """
+    )
+    fun findWordsIdsIncludedInStudyLists(): Flow<List<Long>>
+
+    @Query(
+        """
+            SELECT wt.wordId FROM WordTable wt
+            LEFT JOIN StudyListWordCrossRef slw ON wt.wordId = slw.wordId 
+            WHERE slw.studyListId IS NOT NULL
+             AND slw.studyListId != :studyListId
+        """
+    )
+    fun findWordsIdsIncludedInStudyListsExcluding(studyListId: Long): Flow<List<Long>>
 }

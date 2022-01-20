@@ -1,4 +1,4 @@
-package ru.egoncharovsky.words.database.dao
+package ru.egoncharovsky.words.repository.persistent
 
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.take
@@ -11,21 +11,22 @@ import ru.egoncharovsky.words.database.tables.StudyListTable
 import ru.egoncharovsky.words.database.tables.StudyListWordCrossRef
 import ru.egoncharovsky.words.database.tables.WordTable
 import ru.egoncharovsky.words.domain.entity.Language
+import ru.egoncharovsky.words.repository.persistent.room.WordRepositoryRoom
 
-internal class WordDaoTest : DatabaseTest() {
-    private lateinit var wordDao: WordDao
+internal class WordRepositoryTest : DatabaseTest() {
+
+    lateinit var wordRepository: WordRepository
 
     private val words = listOf(
         WordTable(1, "word", "перевод", Language.EN, Language.RU),
         WordTable(2, "word2", "перевод2", Language.EN, Language.RU),
         WordTable(3, "word3", "перевод3", Language.EN, Language.RU),
-        WordTable(4, "word4", "перевод4", Language.EN, Language.RU),
-        WordTable(5, "another", "другой", Language.EN, Language.RU),
+        WordTable(4, "word4", "перевод4", Language.EN, Language.RU)
     )
 
     @Before
     fun setUp() {
-        wordDao = db.wordDao()
+        val wordDao = db.wordDao()
 
         runBlocking {
             words.forEach { wordDao.insert(it) }
@@ -33,44 +34,38 @@ internal class WordDaoTest : DatabaseTest() {
             val studyListDao = db.studyListDao()
             studyListDao.insert(StudyListTable(1, "List1"))
             studyListDao.insert(StudyListTable(2, "List2"))
+            studyListDao.insert(StudyListTable(3, "List3"))
 
             studyListDao.insertAll(
                 listOf(
                     StudyListWordCrossRef(1, 1),
                     StudyListWordCrossRef(1, 2),
-
                     StudyListWordCrossRef(2, 1),
+                    StudyListWordCrossRef(3, 3),
                 )
             )
         }
+
+        wordRepository = WordRepositoryRoom(wordDao, db)
     }
 
-    @Test(timeout = 1000)
-    fun testGet() = runBlocking {
-        val actual = wordDao.get(setOf(1, 2)).take(1).single()
-
-        assertEquals(listOf(words[0], words[1]), actual)
+    @Test
+    fun testFindWordsIdsIncludedInStudyLists(): Unit = runBlocking {
+        assertEquals(
+            setOf<Long>(1, 2, 3),
+            wordRepository.findWordsIdsIncludedInStudyListsExcluding().take(1).single()
+        )
+        assertEquals(
+            setOf<Long>(1, 3),
+            wordRepository.findWordsIdsIncludedInStudyListsExcluding(1).take(1).single()
+        )
+        assertEquals(
+            setOf<Long>(1, 2, 3),
+            wordRepository.findWordsIdsIncludedInStudyListsExcluding(2).take(1).single()
+        )
+        assertEquals(
+            setOf<Long>(1, 2),
+            wordRepository.findWordsIdsIncludedInStudyListsExcluding(3).take(1).single()
+        )
     }
-
-    @Test(timeout = 1000)
-    fun testFindNotIncludedInStudyLists() = runBlocking {
-        val actual = wordDao.findNotIncludedInStudyLists().take(1).single()
-
-        assertEquals(listOf(words[2], words[3], words[4]), actual)
-    }
-
-    @Test(timeout = 1000)
-    fun testSearchNotIncludedInStudyLists() = runBlocking {
-        val actual = wordDao.searchNotIncludedInStudyLists("%word%").take(1).single()
-
-        assertEquals(listOf(words[2], words[3]), actual)
-    }
-
-    @Test(timeout = 1000)
-    fun testSearchInWordsWithIds() = runBlocking {
-        val actual = wordDao.searchInWordsWithIds("%word%", setOf(2, 3, 4, 5)).take(1).single()
-
-        assertEquals(listOf(words[1], words[2], words[3]), actual)
-    }
-
 }

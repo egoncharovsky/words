@@ -10,8 +10,10 @@ interface WordRepository {
     suspend fun saveImportedWords(words: Set<Word>): List<Long>
 
     fun searchWord(value: String): Flow<List<Word>>
+
     fun findNotIncludedInStudyLists(): Flow<List<Word>>
     fun searchNotIncludedInStudyLists(value: String): Flow<List<Word>>
     fun searchInWordsWithIds(value: String, ids: Set<Long>): Flow<List<Word>>
+    fun findWordsIdsIncludedInStudyListsExcluding(studyListId: Long? = null): Flow<Set<Long>>
 }
 
