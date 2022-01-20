@@ -17,5 +17,6 @@
     <color name="yes">#A64CAF50</color>
 
     <color name="itemSelected">#80C8C8C8</color>
+    <color name="itemHighlight">#80BBDEFB</color>
 
 </resources>

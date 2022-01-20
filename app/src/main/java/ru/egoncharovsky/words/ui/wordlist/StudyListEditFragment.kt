@@ -42,13 +42,13 @@ class StudyListEditFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        args.wordListId?.let {
-            val wordId = it.value
-            studyListEditViewModel.load(wordId)
+        args.studyListId?.let {
+            val studyListId = it.value
+            studyListEditViewModel.load(studyListId)
 
             binding.delete.visibility = View.VISIBLE
             binding.delete.setOnClickListener {
-                studyListEditViewModel.delete(wordId)
+                studyListEditViewModel.delete(studyListId)
             }
         } ?: kotlin.run {
             studyListEditViewModel.new()
@@ -92,7 +92,7 @@ class StudyListEditFragment : Fragment() {
         }
 
         binding.choose.setOnClickListener {
-            navigate(StudyListEditFragmentDirections.chooseWords(studyListEditViewModel.getSelectedWordIds()))
+            navigate(StudyListEditFragmentDirections.chooseWords(args.studyListId, studyListEditViewModel.getSelectedWordIds()))
         }
         binding.name.addTextChangedListener {
             studyListEditViewModel.editName(it.toString())

@@ -1,4 +1,4 @@
-package ru.egoncharovsky.words.database
+package ru.egoncharovsky.words
 
 import android.content.Context
 import androidx.room.Room
@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.After
 import org.junit.Before
 import org.junit.runner.RunWith
+import ru.egoncharovsky.words.database.AppDatabase
 import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
