@@ -1,9 +1,11 @@
 package ru.egoncharovsky.words.ui.wordlist
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -11,6 +13,7 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.databinding.FragmentChooseWordsBinding
 import ru.egoncharovsky.words.databinding.FragmentChooseWordsItemBinding
 import ru.egoncharovsky.words.domain.entity.Word
@@ -30,7 +33,7 @@ class ChooseWordsFragment : Fragment() {
     private lateinit var tracker: SelectionTracker<Long>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        adapter = ChooseWordsAdapter()
+        adapter = ChooseWordsAdapter(requireContext(), viewModel::isIncludedInAnotherList)
 
         binding = FragmentChooseWordsBinding.inflate(inflater, container, false)
         return binding.root
@@ -75,12 +78,20 @@ class ChooseWordsFragment : Fragment() {
         tracker.onRestoreInstanceState(savedInstanceState)
     }
 
-    class ChooseWordsAdapter :
+    class ChooseWordsAdapter(
+        val context: Context,
+        val highlightBackground: (Long) -> Boolean
+        ) :
         SelectableRecyclerViewAdapter<Word, Long, FragmentChooseWordsItemBinding>(StorageStrategy.createLongStorage()) {
         override val bindingInflate: (inflater: LayoutInflater, parent: ViewGroup, attachToParent: Boolean) -> FragmentChooseWordsItemBinding =
             FragmentChooseWordsItemBinding::inflate
 
         override fun bind(binding: FragmentChooseWordsItemBinding, item: Word, isActivated: Boolean) {
+            if (highlightBackground(item.id!!)) {
+                binding.chooseWordItemLayout.background =
+                    ContextCompat.getDrawable(context, R.drawable.item_background_highlight)
+            }
+
             binding.wordValue.text = item.value
             binding.wordTranslation.text = item.translation
             binding.selectedCheckBox.isChecked = isActivated
