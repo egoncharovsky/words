@@ -15,8 +15,8 @@ abstract class WordSearchViewModel : ViewModel(), WordSearchableViewModel {
 
     private var request: Job? = null
 
-    private val sort = MutableLiveData<WordSearchWidget.SortType>().apply {
-        value = WordSearchWidget.SortType.DEFAULT
+    private val sort = MutableLiveData<SortType>().apply {
+        value = SortType.DEFAULT
     }
     private val words: MutableLiveData<List<Word>> = MutableLiveData<List<Word>>()
 
@@ -24,7 +24,7 @@ abstract class WordSearchViewModel : ViewModel(), WordSearchableViewModel {
         request(getAllRequest())
     }
 
-    override fun setSort(sortType: WordSearchWidget.SortType) {
+    override fun setSort(sortType: SortType) {
         this.sort.value = sortType
     }
 
@@ -48,7 +48,7 @@ abstract class WordSearchViewModel : ViewModel(), WordSearchableViewModel {
         }
     }
 
-    override fun getSort(): LiveData<WordSearchWidget.SortType>  = sort
+    override fun getSort(): LiveData<SortType> = sort
 
     override fun getWords(): LiveData<List<Word>> = words
 
@@ -63,5 +63,30 @@ abstract class WordSearchViewModel : ViewModel(), WordSearchableViewModel {
             }
         }
     }
+
     private fun sorted(list: List<Word>) = sort.value!!.apply(list)
+
+    enum class SortType {
+        DEFAULT {
+            override fun apply(list: List<Word>) = list.sortedBy { it.id }
+        },
+        WORD_VALUE_ASK {
+            override fun apply(list: List<Word>) = list
+                .sortedBy { it.value.lowercase() }
+        },
+        WORD_VALUE_DESC {
+            override fun apply(list: List<Word>) =
+                list.sortedByDescending { it.value.lowercase() }
+        },
+        WORD_UPLOAD_DATE_ASK {
+            override fun apply(list: List<Word>): List<Word> =
+                list.sortedWith(compareBy<Word> { it.createdAt }.thenBy { it.id })
+        },
+        WORD_UPLOAD_DATE_DESC {
+            override fun apply(list: List<Word>): List<Word> =
+                list.sortedWith(compareByDescending<Word> { it.createdAt }.thenByDescending { it.id })
+        };
+
+        abstract fun apply(list: List<Word>): List<Word>
+    }
 }

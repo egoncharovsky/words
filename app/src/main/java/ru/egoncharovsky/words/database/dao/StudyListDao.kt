@@ -1,11 +1,15 @@
 package ru.egoncharovsky.words.database.dao
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import ru.egoncharovsky.words.database.tables.StudyListTable
 import ru.egoncharovsky.words.database.tables.StudyListWordCrossRef
+import ru.egoncharovsky.words.database.tables.StudyListWordCrossRef.Companion.toCrossRefs
 import ru.egoncharovsky.words.database.tables.StudyListWordJoin
-import ru.egoncharovsky.words.database.tables.WordTable
 
 @Dao
 abstract class StudyListDao {
@@ -19,9 +23,9 @@ abstract class StudyListDao {
     abstract fun get(id: Long): Flow<StudyListWordJoin>
 
     @Transaction
-    open fun insert(entity: StudyListWordJoin): Long {
-        val studyListId = insert(entity.studyList)
-        val crossRefs = toCrossRefs(studyListId, entity.words)
+    open fun insert(entity: StudyListTable, wordIds: Set<Long>): Long {
+        val studyListId = insert(entity)
+        val crossRefs = toCrossRefs(studyListId, wordIds)
         insertAll(crossRefs)
         return studyListId
     }
@@ -33,12 +37,12 @@ abstract class StudyListDao {
     abstract fun insertAll(entity: Collection<StudyListWordCrossRef>): List<Long>
 
     @Transaction
-    open fun update(entity: StudyListWordJoin): Int {
-        val studyListId = entity.studyList.id!!
-        val updatedCount = update(entity.studyList)
+    open fun update(entity: StudyListTable, wordIds: Set<Long>): Int {
+        val studyListId = entity.id!!
+        val updatedCount = update(entity)
 
         deleteStudyListWordCrossRefByStudyListId(studyListId)
-        val crossRefs = toCrossRefs(studyListId, entity.words)
+        val crossRefs = toCrossRefs(studyListId, wordIds)
         insertAll(crossRefs)
         return updatedCount
     }
@@ -57,11 +61,4 @@ abstract class StudyListDao {
 
     @Query("DELETE FROM StudyListTable WHERE studyListId = :id")
     abstract fun deleteById(id: Long)
-
-    private fun toCrossRefs(studyListId: Long, words: Set<WordTable>): Set<StudyListWordCrossRef> = words.map {
-        StudyListWordCrossRef(
-            studyListId,
-            it.id!!
-        )
-    }.toSet()
 }

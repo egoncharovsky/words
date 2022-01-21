@@ -10,8 +10,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import ru.egoncharovsky.words.R
 import ru.egoncharovsky.words.domain.entity.Word
+import ru.egoncharovsky.words.ui.dictionary.search.WordSearchViewModel.SortType
 import ru.egoncharovsky.words.ui.items
-import java.util.*
 
 class WordSearchWidget(
     private val sortButton: ImageButton,
@@ -21,22 +21,6 @@ class WordSearchWidget(
     val fragment: Fragment,
 ) {
     private lateinit var sortMenu: PopupMenu
-
-    enum class SortType {
-        DEFAULT {
-            override fun apply(list: List<Word>) = list.sortedBy { it.id }
-        },
-        WORD_VALUE_ASK {
-            override fun apply(list: List<Word>) = list
-                .sortedBy { it.value.toLowerCase(Locale.ROOT) }
-        },
-        WORD_VALUE_DESC {
-            override fun apply(list: List<Word>) =
-                list.sortedByDescending { it.value.toLowerCase(Locale.ROOT) }
-        };
-
-        abstract fun apply(list: List<Word>): List<Word>
-    }
 
     fun onViewCreated(view: View, resultsObserver: Observer<List<Word>>) {
         sortMenu = configureSortingMenu(view.context, sortButton)
@@ -95,6 +79,8 @@ class WordSearchWidget(
         SortType.DEFAULT -> fragment.getString(R.string.default_value)
         SortType.WORD_VALUE_ASK -> fragment.getString(R.string.word_value_ask)
         SortType.WORD_VALUE_DESC -> fragment.getString(R.string.word_value_desc)
+        SortType.WORD_UPLOAD_DATE_ASK -> fragment.getString(R.string.word_uploaded_asc)
+        SortType.WORD_UPLOAD_DATE_DESC -> fragment.getString(R.string.word_uploaded_desc)
     }
 
     private fun configureObservers(lifecycleOwner: LifecycleOwner, resultsObserver: Observer<List<Word>>) {

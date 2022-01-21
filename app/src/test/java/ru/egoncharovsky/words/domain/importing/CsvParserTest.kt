@@ -12,7 +12,7 @@ internal class CsvParserTest {
     @Test
     fun parseCsvLine() {
         assertEquals(
-            Word(null, "word", "слово", Language.EN, Language.RU),
+            Word("word", "слово", Language.EN, Language.RU),
             parser.parseCsvLine("английский,русский,word,слово")
         )
     }
@@ -20,7 +20,7 @@ internal class CsvParserTest {
     @Test
     fun `parse with spaces`() {
         assertEquals(
-            Word(null, "word and translate", "слово и его перевод", Language.EN, Language.RU),
+            Word("word and translate", "слово и его перевод", Language.EN, Language.RU),
             parser.parseCsvLine("английский,русский,word and translate,\"слово и его перевод\"")
         )
     }
@@ -28,7 +28,7 @@ internal class CsvParserTest {
     @Test
     fun `parse with commas in quotes`() {
         assertEquals(
-            Word(null, "word, and translate", "слово, и его перевод", Language.EN, Language.RU),
+            Word("word, and translate", "слово, и его перевод", Language.EN, Language.RU),
             parser.parseCsvLine("английский,русский,\"word, and translate\",\"слово, и его перевод\"")
         )
     }

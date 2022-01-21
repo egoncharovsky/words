@@ -14,8 +14,8 @@ import ru.egoncharovsky.words.domain.entity.Word
 internal class WordServiceTest {
 
     private val words = listOf(
-        Word(1, "word", "слово", Language.EN, Language.RU),
-        Word(2, "word2", "слово2", Language.EN, Language.RU)
+        Word(1, null, "word", "слово", Language.EN, Language.RU),
+        Word(2, null, "word2", "слово2", Language.EN, Language.RU)
     )
 
     @Test
