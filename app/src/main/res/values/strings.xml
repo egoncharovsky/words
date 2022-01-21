@@ -44,6 +44,8 @@
     <string name="default_value">default</string>
     <string name="word_value_ask">word 🔻</string>
     <string name="word_value_desc">word 🔺</string>
+    <string name="word_uploaded_asc">uploaded 🔻</string>
+    <string name="word_uploaded_desc">uploaded 🔺</string>
     <string name="words_count">Words: %d</string>
 
     <string name="name_hint">Name…</string>
