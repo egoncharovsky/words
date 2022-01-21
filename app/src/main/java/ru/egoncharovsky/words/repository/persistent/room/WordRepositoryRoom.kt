@@ -29,8 +29,18 @@ class WordRepositoryRoom @Inject constructor(
     }
 
     override fun searchWord(value: String): Flow<List<Word>> {
-        logger.trace("Search $value")
+        logger.trace("Search '$value'")
         return dao.searchWords("%$value%").map { l -> l.map { it.toEntity() } }
+    }
+
+    override fun searchNotIncludedInStudyLists(value: String): Flow<List<Word>> {
+        logger.trace("Search not included in study lists '$value'")
+        return dao.searchNotIncludedInStudyLists("%$value%").map { l -> l.map { it.toEntity() } }
+    }
+
+    override fun searchInWordsWithIds(value: String, ids: Set<Long>): Flow<List<Word>> {
+        logger.trace("Search '$value' in words $ids")
+        return dao.searchInWordsWithIds("%$value%", ids).map { l -> l.map { it.toEntity() } }
     }
 
     override suspend fun saveImportedWords(words: List<Word>): List<Long> {
@@ -46,14 +56,6 @@ class WordRepositoryRoom @Inject constructor(
 
     override fun findNotIncludedInStudyLists(): Flow<List<Word>> {
         return dao.findNotIncludedInStudyLists().map { l -> l.map { it.toEntity() } }
-    }
-
-    override fun searchNotIncludedInStudyLists(value: String): Flow<List<Word>> {
-        return dao.searchNotIncludedInStudyLists(value).map { l -> l.map { it.toEntity() } }
-    }
-
-    override fun searchInWordsWithIds(value: String, ids: Set<Long>): Flow<List<Word>> {
-        return dao.searchInWordsWithIds(value, ids).map { l -> l.map { it.toEntity() } }
     }
 
     override fun findWordsIdsIncludedInStudyListsExcluding(studyListId: Long?): Flow<Set<Long>> {
