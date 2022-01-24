@@ -9,8 +9,10 @@ import mu.KotlinLogging
 import ru.egoncharovsky.words.database.converters.LanguageConverter
 import ru.egoncharovsky.words.database.dao.StudyListDao
 import ru.egoncharovsky.words.database.dao.WordDao
+import ru.egoncharovsky.words.database.dao.WordPopularityDao
 import ru.egoncharovsky.words.database.tables.StudyListTable
 import ru.egoncharovsky.words.database.tables.StudyListWordCrossRef
+import ru.egoncharovsky.words.database.tables.WordPopularity
 import ru.egoncharovsky.words.database.tables.WordTable
 import java.util.concurrent.Executors
 
@@ -18,7 +20,8 @@ import java.util.concurrent.Executors
     entities = [
         WordTable::class,
         StudyListTable::class,
-        StudyListWordCrossRef::class
+        StudyListWordCrossRef::class,
+        WordPopularity::class
     ],
     version = 1
 )
@@ -26,6 +29,7 @@ import java.util.concurrent.Executors
 abstract class AppDatabase : RoomDatabase() {
     abstract fun wordDao(): WordDao
     abstract fun studyListDao(): StudyListDao
+    abstract fun wordPopularityDao(): WordPopularityDao
 
     companion object {
 

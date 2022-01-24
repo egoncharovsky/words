@@ -9,6 +9,7 @@ import dagger.hilt.components.SingletonComponent
 import ru.egoncharovsky.words.database.AppDatabase
 import ru.egoncharovsky.words.database.dao.StudyListDao
 import ru.egoncharovsky.words.database.dao.WordDao
+import ru.egoncharovsky.words.database.dao.WordPopularityDao
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -29,5 +30,10 @@ class DatabaseModule {
     @Provides
     fun provideStudyListDao(appDatabase: AppDatabase): StudyListDao {
         return appDatabase.studyListDao()
+    }
+
+    @Provides
+    fun provideWordPopularityDao(appDatabase: AppDatabase): WordPopularityDao {
+        return appDatabase.wordPopularityDao()
     }
 }

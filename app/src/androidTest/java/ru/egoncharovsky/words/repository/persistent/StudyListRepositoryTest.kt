@@ -31,7 +31,7 @@ internal class StudyListRepositoryTest : DatabaseTest() {
     @Before
     fun setUp() {
         val studyListDao = db.studyListDao()
-        val wordRepository = WordRepositoryRoom(db.wordDao(), db)
+        val wordRepository = WordRepositoryRoom(db.wordDao(), db.wordPopularityDao(), db)
 
         runBlocking {
             wordRepository.saveImportedWords(words)

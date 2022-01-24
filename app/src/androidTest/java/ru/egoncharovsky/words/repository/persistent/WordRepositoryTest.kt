@@ -25,7 +25,7 @@ internal class WordRepositoryTest : DatabaseTest() {
 
     @Before
     fun setUp() {
-        wordRepository = WordRepositoryRoom(db.wordDao(), db)
+        wordRepository = WordRepositoryRoom(db.wordDao(), db.wordPopularityDao(), db)
     }
 
     @Test
@@ -122,6 +122,22 @@ internal class WordRepositoryTest : DatabaseTest() {
 
             val saved = wordRepository.getAll().take(1).single()[0]
             assertEquals(dateTime, saved.createdAt)
+        }
+    }
+
+    @Test
+    fun testUpgradePopularityRatings() {
+        runBlocking {
+            db.wordDao().insert(WordTable(1, 0L, "word", "перевод", Language.EN, Language.RU))
+        }
+
+        val ratings = mapOf(1L to 100)
+
+        runBlocking {
+            wordRepository.upgradePopularityRatings(ratings)
+
+            val saved = wordRepository.getPopularityRatings().take(1).single()
+            assertEquals(ratings, saved)
         }
     }
 
