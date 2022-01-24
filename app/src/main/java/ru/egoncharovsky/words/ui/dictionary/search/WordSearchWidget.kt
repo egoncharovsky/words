@@ -23,33 +23,9 @@ class WordSearchWidget(
     private lateinit var sortMenu: PopupMenu
 
     fun onViewCreated(view: View, resultsObserver: Observer<List<Word>>) {
-        sortMenu = configureSortingMenu(view.context, sortButton)
+//        sortMenu = configureSortingMenu(view.context, sortButton)
         configureSearchInput(searchView)
-        configureObservers(fragment.viewLifecycleOwner, resultsObserver)
-    }
-
-    private fun configureSortingMenu(context: Context, button: ImageButton): PopupMenu {
-        val popup = PopupMenu(context, button).apply {
-            SortType.values().forEach { sort ->
-                menu.add(sortTypeTitle(sort)).apply { isCheckable = true }
-            }
-            menu.setGroupCheckable(0, true, true)
-
-            setOnMenuItemClickListener { item ->
-                val sortType = SortType.values().find {
-                    sortTypeTitle(it) == item.title
-                } ?: throw EnumConstantNotPresentException(
-                    SortType::class.java,
-                    "for title ${item.title}"
-                )
-                model.setSort(sortType)
-                true
-            }
-        }
-        button.setOnClickListener {
-            popup.show()
-        }
-        return popup
+        configureObservers(fragment.viewLifecycleOwner, view.context, sortButton, resultsObserver)
     }
 
     private fun configureSearchInput(searchView: SearchView) {
@@ -81,15 +57,60 @@ class WordSearchWidget(
         SortType.WORD_VALUE_DESC -> fragment.getString(R.string.word_value_desc)
         SortType.WORD_UPLOAD_DATE_ASK -> fragment.getString(R.string.word_uploaded_asc)
         SortType.WORD_UPLOAD_DATE_DESC -> fragment.getString(R.string.word_uploaded_desc)
+        SortType.WORD_POPULARITY_ASK -> fragment.getString(R.string.word_popularity_asc)
+        SortType.WORD_POPULARITY_DESC -> fragment.getString(R.string.word_popularity_desc)
     }
 
-    private fun configureObservers(lifecycleOwner: LifecycleOwner, resultsObserver: Observer<List<Word>>) {
+    private fun configureObservers(
+        lifecycleOwner: LifecycleOwner,
+        context: Context,
+        sortButton: ImageButton,
+        resultsObserver: Observer<List<Word>>
+    ) {
         // search results
         model.getWords().observe(lifecycleOwner, resultsObserver)
-        // apply sorting
-        model.getSort().observe(lifecycleOwner) { sort ->
-            model.onSortChanged()
-            setCheckedSortType(sortMenu, sort)
+
+        model.getWordsPopularity().observe(lifecycleOwner) { rating ->
+            val sortMenu = configureSortingMenu(context, sortButton, rating)
+
+            // apply sorting
+            model.getSort().observe(lifecycleOwner) { sort ->
+                model.onSortChanged()
+                setCheckedSortType(sortMenu, sort)
+            }
         }
+    }
+
+    private fun configureSortingMenu(
+        context: Context, button: ImageButton,
+        popularityRating: Map<Long, Int>
+    ): PopupMenu {
+        val popup = PopupMenu(context, button).apply {
+
+            if (popularityRating.isEmpty()) {
+                SortType.values()
+                    .filterNot { it == SortType.WORD_POPULARITY_ASK || it == SortType.WORD_POPULARITY_DESC }
+            } else {
+                SortType.values().toList()
+            }.forEach { sort ->
+                menu.add(sortTypeTitle(sort)).apply { isCheckable = true }
+            }
+            menu.setGroupCheckable(0, true, true)
+
+            setOnMenuItemClickListener { item ->
+                val sortType = SortType.values().find {
+                    sortTypeTitle(it) == item.title
+                } ?: throw EnumConstantNotPresentException(
+                    SortType::class.java,
+                    "for title ${item.title}"
+                )
+                model.setSort(sortType)
+                true
+            }
+        }
+        button.setOnClickListener {
+            popup.show()
+        }
+        return popup
     }
 }

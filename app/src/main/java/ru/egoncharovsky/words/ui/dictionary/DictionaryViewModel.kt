@@ -10,7 +10,7 @@ import javax.inject.Inject
 @HiltViewModel
 open class DictionaryViewModel @Inject constructor(
     private val repository: WordRepository
-) : WordSearchViewModel() {
+) : WordSearchViewModel(repository) {
 
     init {
         onInit()
