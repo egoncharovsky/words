@@ -41,11 +41,13 @@
     <string name="sort">sort</string>
     <string name="direction">direction</string>
 
-    <string name="default_value">default</string>
-    <string name="word_value_ask">word 🔻</string>
-    <string name="word_value_desc">word 🔺</string>
-    <string name="word_uploaded_asc">uploaded 🔻</string>
-    <string name="word_uploaded_desc">uploaded 🔺</string>
+    <string name="default_value">No</string>
+    <string name="word_value_ask">Alphabetical🔻</string>
+    <string name="word_value_desc">Alphabetical🔺</string>
+    <string name="word_uploaded_asc">Most recent</string>
+    <string name="word_uploaded_desc">Oldest</string>
+    <string name="word_popularity_asc">Unpopular</string>
+    <string name="word_popularity_desc">Most popular</string>
     <string name="words_count">Words: %d</string>
 
     <string name="name_hint">Name…</string>
@@ -61,6 +63,9 @@
     <string name="choose_file">Choose file…</string>
     <string name="supported_formats">Supported formats: %s</string>
     <string name="clear_database">Clear database</string>
+
+    <string name="successfully_imported">Successfully imported</string>
+    <string name="words_popularity_updated">Words popularity updated</string>
 
     <!-- Search filters -->
     <string name="show_already_included">Show already included</string>

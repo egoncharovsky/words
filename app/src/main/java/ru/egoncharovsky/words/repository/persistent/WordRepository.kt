@@ -15,5 +15,8 @@ interface WordRepository {
     fun searchNotIncludedInStudyLists(value: String): Flow<List<Word>>
     fun searchInWordsWithIds(value: String, ids: Set<Long>): Flow<List<Word>>
     fun findWordsIdsIncludedInStudyListsExcluding(studyListId: Long? = null): Flow<Set<Long>>
+
+    fun getPopularityRatings(): Flow<Map<Long, Int>>
+    suspend fun upgradePopularityRatings(ratings: Map<Long, Int>)
 }
 

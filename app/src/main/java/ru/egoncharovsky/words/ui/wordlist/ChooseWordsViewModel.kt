@@ -17,10 +17,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChooseWordsViewModel @Inject constructor(
-    val wordRepository: WordRepository,
-    val wordService: WordService,
+    private val wordRepository: WordRepository,
+    private val wordService: WordService,
     savedStateHandle: SavedStateHandle
-) : WordSearchViewModel() {
+) : WordSearchViewModel(wordRepository) {
 
     private val studyListId: Long? = savedStateHandle.get<NavArgLong>("studyListId")?.value
     private val chosenDictionaryIds: MutableLiveData<List<Long>> = MutableLiveData<List<Long>>()

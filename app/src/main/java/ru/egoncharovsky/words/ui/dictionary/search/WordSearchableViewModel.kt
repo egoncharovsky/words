@@ -12,4 +12,5 @@ interface WordSearchableViewModel {
 
     fun getSort(): LiveData<SortType>
     fun getWords(): LiveData<List<Word>>
+    fun getWordsPopularity(): LiveData<Map<Long, Int>>
 }

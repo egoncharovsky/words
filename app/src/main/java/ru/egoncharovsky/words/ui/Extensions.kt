@@ -17,6 +17,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import java.io.InputStream
 
 fun <D> Fragment.observe(@NonNull data: LiveData<D>, observer: Observer<in D>) {
     data.observe(viewLifecycleOwner, observer)
@@ -32,6 +33,15 @@ fun Fragment.getColor(@ColorRes resId: Int): Int {
 
 fun Fragment.getDrawable(@DrawableRes resId: Int): Drawable {
     return resources.getDrawable(resId, context!!.theme)
+}
+
+fun Fragment.openRaw(name: String): InputStream? {
+    val id = resources.getIdentifier("words_statistic", "raw", requireContext().packageName)
+    return if (id != 0) {
+        resources.openRawResource(id)
+    } else {
+        null
+    }
 }
 
 fun Menu.items(): List<MenuItem> = (0 until size()).map { i -> getItem(i) }.toList()
@@ -58,7 +68,7 @@ fun <T> Fragment.setNavigationResult(result: T, key: String = "result") {
 }
 
 fun <D> Fragment.observeNavigationResult(key: String = "result", observer: Observer<in D>) =
-        getNavigationResultLiveData<D>(key)?.observe(viewLifecycleOwner, observer)
+    getNavigationResultLiveData<D>(key)?.observe(viewLifecycleOwner, observer)
 
 
 fun Fragment.hideKeyboard() {

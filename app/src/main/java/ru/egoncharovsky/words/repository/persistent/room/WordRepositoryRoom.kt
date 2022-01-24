@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.map
 import mu.KotlinLogging
 import ru.egoncharovsky.words.database.AppDatabase
 import ru.egoncharovsky.words.database.dao.WordDao
+import ru.egoncharovsky.words.database.dao.WordPopularityDao
+import ru.egoncharovsky.words.database.tables.WordPopularity
 import ru.egoncharovsky.words.database.tables.WordTable
 import ru.egoncharovsky.words.domain.entity.Word
 import ru.egoncharovsky.words.repository.persistent.WordRepository
@@ -15,6 +17,7 @@ import javax.inject.Singleton
 @Singleton
 class WordRepositoryRoom @Inject constructor(
     private val dao: WordDao,
+    private val popularityDao: WordPopularityDao,
     private val database: AppDatabase
 ) : WordRepository {
 
@@ -65,5 +68,16 @@ class WordRepositoryRoom @Inject constructor(
             dao.findWordsIdsIncludedInStudyLists()
         })
             .map { it.toSet() }
+    }
+
+    override fun getPopularityRatings(): Flow<Map<Long, Int>> {
+        return popularityDao.getAll().map { l -> l.map { it.wordId to it.rating }.toMap() }
+    }
+
+    override suspend fun upgradePopularityRatings(ratings: Map<Long, Int>) {
+        database.withTransaction {
+            popularityDao.deleteAll()
+            popularityDao.insertAll(ratings.map { WordPopularity(it.key, it.value) })
+        }
     }
 }
