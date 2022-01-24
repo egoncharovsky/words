@@ -36,7 +36,7 @@ fun Fragment.getDrawable(@DrawableRes resId: Int): Drawable {
 }
 
 fun Fragment.openRaw(name: String): InputStream? {
-    val id = resources.getIdentifier("words_statistic", "raw", requireContext().packageName)
+    val id = resources.getIdentifier(name, "raw", requireContext().packageName)
     return if (id != 0) {
         resources.openRawResource(id)
     } else {
