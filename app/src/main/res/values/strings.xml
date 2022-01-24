@@ -62,6 +62,9 @@
     <string name="supported_formats">Supported formats: %s</string>
     <string name="clear_database">Clear database</string>
 
+    <string name="successfully_imported">Successfully imported</string>
+    <string name="words_popularity_updated">Words popularity updated</string>
+
     <!-- Search filters -->
     <string name="show_already_included">Show already included</string>
 </resources>
