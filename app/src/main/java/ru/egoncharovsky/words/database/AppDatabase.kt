@@ -12,7 +12,7 @@ import ru.egoncharovsky.words.database.dao.WordDao
 import ru.egoncharovsky.words.database.dao.WordPopularityDao
 import ru.egoncharovsky.words.database.tables.StudyListTable
 import ru.egoncharovsky.words.database.tables.StudyListWordCrossRef
-import ru.egoncharovsky.words.database.tables.WordPopularity
+import ru.egoncharovsky.words.database.tables.WordPopularityTable
 import ru.egoncharovsky.words.database.tables.WordTable
 import java.util.concurrent.Executors
 
@@ -21,7 +21,7 @@ import java.util.concurrent.Executors
         WordTable::class,
         StudyListTable::class,
         StudyListWordCrossRef::class,
-        WordPopularity::class
+        WordPopularityTable::class
     ],
     version = 1
 )

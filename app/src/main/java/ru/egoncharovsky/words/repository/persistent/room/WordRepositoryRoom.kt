@@ -7,7 +7,7 @@ import mu.KotlinLogging
 import ru.egoncharovsky.words.database.AppDatabase
 import ru.egoncharovsky.words.database.dao.WordDao
 import ru.egoncharovsky.words.database.dao.WordPopularityDao
-import ru.egoncharovsky.words.database.tables.WordPopularity
+import ru.egoncharovsky.words.database.tables.WordPopularityTable
 import ru.egoncharovsky.words.database.tables.WordTable
 import ru.egoncharovsky.words.domain.entity.Word
 import ru.egoncharovsky.words.repository.persistent.WordRepository
@@ -77,7 +77,7 @@ class WordRepositoryRoom @Inject constructor(
     override suspend fun upgradePopularityRatings(ratings: Map<Long, Int>) {
         database.withTransaction {
             popularityDao.deleteAll()
-            popularityDao.insertAll(ratings.map { WordPopularity(it.key, it.value) })
+            popularityDao.insertAll(ratings.map { WordPopularityTable(it.key, it.value) })
         }
     }
 }

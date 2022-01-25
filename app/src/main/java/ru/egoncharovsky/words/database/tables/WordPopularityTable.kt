@@ -13,7 +13,7 @@ import androidx.room.PrimaryKey
         onDelete = CASCADE
     )]
 )
-data class WordPopularity(
+data class WordPopularityTable(
     @PrimaryKey
     val wordId: Long,
     val rating: Int
