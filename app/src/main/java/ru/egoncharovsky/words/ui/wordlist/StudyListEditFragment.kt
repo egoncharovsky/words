@@ -16,7 +16,6 @@ import ru.egoncharovsky.words.databinding.FragmentDictionaryItemBinding
 import ru.egoncharovsky.words.databinding.FragmentStudyListEditBinding
 import ru.egoncharovsky.words.domain.entity.Word
 import ru.egoncharovsky.words.ui.RecyclerViewAdapter
-import ru.egoncharovsky.words.ui.dictionary.WordAdapter
 import ru.egoncharovsky.words.ui.navigate
 import ru.egoncharovsky.words.ui.navigateUp
 import ru.egoncharovsky.words.ui.observe
@@ -34,7 +33,7 @@ class StudyListEditFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         adapter = WordAdapter()
 
         binding = FragmentStudyListEditBinding.inflate(inflater, container, false)
@@ -104,6 +103,16 @@ class StudyListEditFragment : Fragment() {
             if (successfully) {
                 navigateUp()
             }
+        }
+    }
+
+    class WordAdapter : RecyclerViewAdapter<Word, FragmentDictionaryItemBinding>() {
+        override val bindingInflate: (inflater: LayoutInflater, parent: ViewGroup, attachToParent: Boolean) -> FragmentDictionaryItemBinding =
+            FragmentDictionaryItemBinding::inflate
+
+        override fun bind(binding: FragmentDictionaryItemBinding, item: Word) {
+            binding.wordValue.text = item.value
+            binding.wordTranslation.text = item.translation
         }
     }
 }

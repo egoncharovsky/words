@@ -1,14 +1,14 @@
 <resources>
     <string name="text_placeholder">Text placeholder</string>
 
+    <!-- application titles -->
     <string name="app_name">words</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Words</string>
     <string name="nav_header_subtitle">egoncharovsky@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <!-- navigation -->
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -16,12 +16,17 @@
     <string name="my_dictionary">My dictionary</string>
     <string name="my_word_lists">My lists</string>
 
-    <string name="choose_translation">Choose translation</string>
-    <string name="write_translation">Write translation</string>
+
     <string name="answer">Answer</string>
     <string name="word">Word</string>
+    <string name="popularity">Popularity: %d</string>
     <string name="translation">Translation</string>
     <string name="translation_hint">Translation…</string>
+
+    <!-- quiz -->
+    <string name="choose_translation">Choose translation</string>
+    <string name="write_translation">Write translation</string>
+
     <string name="choice1">Choice 1</string>
     <string name="choice2">Choice 2</string>
     <string name="choice3">Choice 3</string>
@@ -33,13 +38,16 @@
     <string name="answer_result_good_job">Good job!</string>
     <string name="answer_result_lets_try_again">Let\'s try again</string>
     <string name="next">Next</string>
+
     <string name="do_you_remember">Do you remember?</string>
+    <string name="is_it_right">Is it right?</string>
+
     <string name="no">No</string>
     <string name="maybe">Maybe</string>
     <string name="yes">Yes</string>
-    <string name="is_it_right">Is it right?</string>
+
+    <!-- words sorting -->
     <string name="sort">sort</string>
-    <string name="direction">direction</string>
 
     <string name="default_value">No</string>
     <string name="word_value_ask">Alphabetical🔻</string>
@@ -50,6 +58,7 @@
     <string name="word_popularity_desc">Most popular</string>
     <string name="words_count">Words: %d</string>
 
+    <!-- study list -->
     <string name="name_hint">Name…</string>
     <string name="choose_hint">Choose…</string>
     <string name="word_list">List</string>
@@ -59,6 +68,7 @@
     <string name="should_have_at_least_3_letters">Should have at least 3 letters</string>
     <string name="should_have_at_least_1">Should have at least 1</string>
 
+    <!-- import -->
     <string name="import_words">Import words</string>
     <string name="choose_file">Choose file…</string>
     <string name="supported_formats">Supported formats: %s</string>
@@ -67,6 +77,6 @@
     <string name="successfully_imported">Successfully imported</string>
     <string name="words_popularity_updated">Words popularity updated</string>
 
-    <!-- Search filters -->
+    <!-- search filters -->
     <string name="show_already_included">Show already included</string>
 </resources>

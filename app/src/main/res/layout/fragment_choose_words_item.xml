@@ -21,6 +21,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/wordValue"
                 android:textSize="@dimen/word_translation_text_size"
+                android:layout_margin="@dimen/item_margin"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/wordTranslation"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -32,10 +33,23 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/wordTranslation"
                 android:textSize="@dimen/word_translation_text_size"
+                android:layout_margin="@dimen/item_margin"
                 app:layout_constraintStart_toEndOf="@+id/wordValue"
                 app:layout_constraintEnd_toStartOf="@+id/selectedCheckBox"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+                android:text="@string/popularity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/wordPopularity"
+                android:textSize="@dimen/subscript_text_size"
+                android:visibility="visible"
+                android:layout_margin="@dimen/item_margin"
+                app:layout_constraintTop_toBottomOf="@+id/wordValue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         <CheckBox
                 android:layout_width="48dp"
