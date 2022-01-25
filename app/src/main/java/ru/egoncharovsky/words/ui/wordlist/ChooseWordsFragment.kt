@@ -32,8 +32,16 @@ class ChooseWordsFragment : Fragment() {
     private lateinit var adapter: SelectableRecyclerViewAdapter<Word, Long, FragmentChooseWordsItemBinding>
     private lateinit var tracker: SelectionTracker<Long>
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        adapter = ChooseWordsAdapter(requireContext(), viewModel::isIncludedInAnotherList)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        adapter = ChooseWordsAdapter(
+            requireContext(),
+            viewModel::isIncludedInAnotherList,
+            this::getPopularity
+        )
 
         binding = FragmentChooseWordsBinding.inflate(inflater, container, false)
         return binding.root
@@ -60,6 +68,12 @@ class ChooseWordsFragment : Fragment() {
         tracker.onSaveInstanceState(outState)
     }
 
+    private fun getPopularity(id: Long): String? {
+        return viewModel.getPopularityOf(id)?.let {
+            String.format(getString(R.string.popularity), it)
+        }
+    }
+
     private fun configureSelections(savedInstanceState: Bundle?) {
         tracker = adapter.observe(binding.dictionaryList) {
             viewModel.selectionUpdated(it)
@@ -80,13 +94,18 @@ class ChooseWordsFragment : Fragment() {
 
     class ChooseWordsAdapter(
         val context: Context,
-        val highlightBackground: (Long) -> Boolean
-        ) :
+        val highlightBackground: (Long) -> Boolean,
+        val getPopularity: (Long) -> String?
+    ) :
         SelectableRecyclerViewAdapter<Word, Long, FragmentChooseWordsItemBinding>(StorageStrategy.createLongStorage()) {
         override val bindingInflate: (inflater: LayoutInflater, parent: ViewGroup, attachToParent: Boolean) -> FragmentChooseWordsItemBinding =
             FragmentChooseWordsItemBinding::inflate
 
-        override fun bind(binding: FragmentChooseWordsItemBinding, item: Word, isActivated: Boolean) {
+        override fun bind(
+            binding: FragmentChooseWordsItemBinding,
+            item: Word,
+            isActivated: Boolean
+        ) {
             if (highlightBackground(item.id!!)) {
                 binding.chooseWordItemLayout.background =
                     ContextCompat.getDrawable(context, R.drawable.item_background_highlight)
@@ -97,6 +116,14 @@ class ChooseWordsFragment : Fragment() {
 
             binding.wordValue.text = item.value
             binding.wordTranslation.text = item.translation
+
+            getPopularity(item.id)?.let {
+                binding.wordPopularity.text = it
+                binding.wordPopularity.visibility = View.VISIBLE
+            } ?: run {
+                binding.wordPopularity.visibility = View.GONE
+            }
+
             binding.selectedCheckBox.isChecked = isActivated
         }
 

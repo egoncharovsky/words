@@ -10,7 +10,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
+            android:padding="@dimen/item_padding">
 
         <TextView
                 android:text="@string/word"
@@ -18,7 +18,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/wordValue"
                 android:layout_weight="1"
-                android:textSize="@dimen/word_translation_text_size"/>
+                android:textSize="@dimen/word_translation_text_size"
+                android:layout_margin="@dimen/item_margin"/>
 
         <TextView
                 android:text="@string/translation"
@@ -26,6 +27,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/wordTranslation"
                 android:layout_weight="1"
-                android:textSize="@dimen/word_translation_text_size"/>
+                android:textSize="@dimen/word_translation_text_size"
+                android:layout_margin="@dimen/item_margin"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -59,6 +59,8 @@ abstract class WordSearchViewModel(
 
     override fun getWordsPopularity(): LiveData<Map<Long, Int>> = wordsPopularity
 
+    fun getPopularityOf(id: Long): Int? = wordsPopularity.value?.get(id)
+
     abstract fun getAllRequest(): Flow<List<Word>>
     abstract fun searchWordRequest(value: String): Flow<List<Word>>
 
