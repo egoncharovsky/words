@@ -2,7 +2,13 @@ package ru.egoncharovsky.words.domain.quiz
 
 import mu.KotlinLogging
 import ru.egoncharovsky.words.domain.entity.Word
-import ru.egoncharovsky.words.domain.quiz.card.*
+import ru.egoncharovsky.words.domain.quiz.card.Answer
+import ru.egoncharovsky.words.domain.quiz.card.Card
+import ru.egoncharovsky.words.domain.quiz.card.Meaning
+import ru.egoncharovsky.words.domain.quiz.card.MultiChoice
+import ru.egoncharovsky.words.domain.quiz.card.Question
+import ru.egoncharovsky.words.domain.quiz.card.Remember
+import ru.egoncharovsky.words.domain.quiz.card.RememberRight
 import kotlin.reflect.KClass
 
 class QuizManager(
@@ -31,7 +37,7 @@ class QuizManager(
         logger.trace("Answered: $answer (correct: $correct) to $question")
 
         val card = if (correct) {
-            when(question) {
+            when (question) {
                 is Remember -> RememberRight(question.word)
                 else -> next()
             }
@@ -80,7 +86,7 @@ class QuizManager(
     }
 
     private fun questionCard(type: KClass<out Question<out Any>>, word: Word): Card {
-        return when(type) {
+        return when (type) {
             Answer::class -> Answer(word, word.translation)
             MultiChoice::class -> {
                 val options = shuffler
@@ -89,6 +95,7 @@ class QuizManager(
                     .map { it.translation }
                 return MultiChoice(word, options, word.translation)
             }
+
             Remember::class -> Remember(word)
             else -> throw IllegalArgumentException("Unsupported question type $type")
         }

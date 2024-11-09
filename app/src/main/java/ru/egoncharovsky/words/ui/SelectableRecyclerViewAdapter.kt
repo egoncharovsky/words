@@ -5,7 +5,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.recyclerview.selection.*
+import androidx.recyclerview.selection.ItemDetailsLookup
+import androidx.recyclerview.selection.ItemKeyProvider
+import androidx.recyclerview.selection.SelectionPredicates
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import mu.KotlinLogging
@@ -27,7 +31,7 @@ abstract class SelectableRecyclerViewAdapter<T, K : Any, VB : ViewBinding>(
 
     final override fun bind(binding: VB, item: T) = bind(binding, item, false)
 
-    fun observe(recyclerView: RecyclerView, observer: Observer<List<K>>) : SelectionTracker<K> {
+    fun observe(recyclerView: RecyclerView, observer: Observer<List<K>>): SelectionTracker<K> {
         if (tracker == null) {
             val keyProvider = ItemKeyProviderImpl()
             tracker = SelectionTracker.Builder(
@@ -76,7 +80,8 @@ abstract class SelectableRecyclerViewAdapter<T, K : Any, VB : ViewBinding>(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         @Suppress("UNCHECKED_CAST")
-        val selectableViewHolder = holder as SelectableRecyclerViewAdapter<T, K, VB>.SelectableViewHolder
+        val selectableViewHolder =
+            holder as SelectableRecyclerViewAdapter<T, K, VB>.SelectableViewHolder
 
         val value = values[position]
         val selected = tracker?.run { isSelected(getIdentifier(value)) } ?: false
@@ -107,7 +112,8 @@ abstract class SelectableRecyclerViewAdapter<T, K : Any, VB : ViewBinding>(
         }
     }
 
-    inner class ItemDetailsLookupImpl(private val recyclerView: RecyclerView) : ItemDetailsLookup<K>() {
+    inner class ItemDetailsLookupImpl(private val recyclerView: RecyclerView) :
+        ItemDetailsLookup<K>() {
 
         @Suppress("UNCHECKED_CAST")
         override fun getItemDetails(event: MotionEvent): ItemDetails<K>? {

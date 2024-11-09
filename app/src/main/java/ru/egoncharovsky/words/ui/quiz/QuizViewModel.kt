@@ -1,19 +1,28 @@
 package ru.egoncharovsky.words.ui.quiz
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import ru.egoncharovsky.words.domain.quiz.QuizManager
-import ru.egoncharovsky.words.domain.quiz.card.*
+import ru.egoncharovsky.words.domain.quiz.card.Answer
+import ru.egoncharovsky.words.domain.quiz.card.Card
+import ru.egoncharovsky.words.domain.quiz.card.Meaning
+import ru.egoncharovsky.words.domain.quiz.card.MultiChoice
+import ru.egoncharovsky.words.domain.quiz.card.Question
+import ru.egoncharovsky.words.domain.quiz.card.Remember
+import ru.egoncharovsky.words.domain.quiz.card.RememberRight
 import ru.egoncharovsky.words.repository.persistent.StudyListRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class QuizViewModel @Inject constructor(
     private val studyListRepository: StudyListRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val logger = KotlinLogging.logger {}
 

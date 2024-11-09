@@ -2,7 +2,12 @@ package ru.egoncharovsky.words.domain.quiz
 
 import org.junit.jupiter.api.Test
 import ru.egoncharovsky.words.domain.entity.Word
-import ru.egoncharovsky.words.domain.quiz.card.*
+import ru.egoncharovsky.words.domain.quiz.card.Card
+import ru.egoncharovsky.words.domain.quiz.card.Meaning
+import ru.egoncharovsky.words.domain.quiz.card.MultiChoice
+import ru.egoncharovsky.words.domain.quiz.card.Question
+import ru.egoncharovsky.words.domain.quiz.card.Remember
+import ru.egoncharovsky.words.domain.quiz.card.RememberRight
 import java.util.function.Predicate
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -52,10 +57,12 @@ internal class QuizManagerTest {
                 is Meaning -> {
                     showed.add(card.word)
                 }
+
                 is MultiChoice -> {
                     assertTrue(showed.contains(card.word))
                     assertTrue(showed.map { it.translation }.containsAll(card.options))
                 }
+
                 is Question<*> -> {
                     assertTrue(showed.contains(card.word))
                 }
@@ -98,11 +105,13 @@ internal class QuizManagerTest {
         val questionCount = wordCards.filterIsInstance<Question<*>>().count()
 
         // progress limit = meaning (1) + questions (5) + right (1) = 7, here is 6 + 1 = 7 questions
-        assertEquals(progressLimit + 1, questionCount, """
+        assertEquals(
+            progressLimit + 1, questionCount, """
             |wordCards: $wordCards
-            |cards:     ${cards.joinToString { it::class.simpleName + ":" + it.word.value}}
-            |allCards:  ${allCards.joinToString { it::class.simpleName + ":" + it.word.value}}
-        """.trimMargin())
+            |cards:     ${cards.joinToString { it::class.simpleName + ":" + it.word.value }}
+            |allCards:  ${allCards.joinToString { it::class.simpleName + ":" + it.word.value }}
+        """.trimMargin()
+        )
     }
 
     @Test
@@ -110,7 +119,8 @@ internal class QuizManagerTest {
         val words = QuizTest.dictionary.take(1)
         val manager = QuizManager(words.toSet())
 
-        val cards = manager.takeAllUpToPredicate {it is Remember}
+        val cards = manager.takeAllUpToPredicate { it is Remember }
+
         @Suppress("UNCHECKED_CAST")
         val rememberCard = cards.last() as Question<A>
         val nextCard = manager.next(rememberCard, rememberCard.correctAnswer())
@@ -126,7 +136,7 @@ internal class QuizManagerTest {
         cards.add(card!!)
         while (card != null) {
             card = nextWithRightAnswer(card)
-            card?.let {  cards.add(card)}
+            card?.let { cards.add(card) }
         }
         return cards
     }
@@ -147,14 +157,17 @@ internal class QuizManagerTest {
         is Meaning -> {
             next(card)
         }
+
         is Remember -> {
             next(card, card.correctAnswer())
         }
+
         is Question<*> -> {
             @Suppress("UNCHECKED_CAST")
             val question: Question<Any> = card as Question<Any>
             next(question, question.correctAnswer())
         }
+
         else -> throw IllegalStateException("Unknown card type ${card::class}")
     }
 
