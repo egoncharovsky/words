@@ -28,7 +28,7 @@ open class ImportWordsFragment : Fragment() {
 
     private val importFile =
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-            context?.contentResolver?.openInputStream(uri)
+            context?.contentResolver?.openInputStream(uri!!)
                 ?.let { viewModel.importCsv(it) }
             Snackbar.make(
                 requireParentFragment().requireView(),

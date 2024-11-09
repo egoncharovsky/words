@@ -91,7 +91,7 @@ class StudyListEditFragment : Fragment() {
         }
 
         binding.choose.setOnClickListener {
-            navigate(StudyListEditFragmentDirections.chooseWords(args.studyListId, studyListEditViewModel.getSelectedWordIds()))
+            navigate(StudyListEditFragmentDirections.chooseWords(studyListEditViewModel.getSelectedWordIds(), args.studyListId))
         }
         binding.name.addTextChangedListener {
             studyListEditViewModel.editName(it.toString())

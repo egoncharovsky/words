@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import mu.KotlinLogging
 
-abstract class SelectableRecyclerViewAdapter<T, K, VB : ViewBinding>(
+abstract class SelectableRecyclerViewAdapter<T, K : Any, VB : ViewBinding>(
     private val keyStorageStrategy: StorageStrategy<K>,
     val selectionByShortPress: Boolean = true,
     val multiSelection: Boolean = true,

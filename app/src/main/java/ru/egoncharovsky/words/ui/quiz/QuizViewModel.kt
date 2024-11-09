@@ -29,19 +29,19 @@ class QuizViewModel @Inject constructor(
     fun getCard(): LiveData<Card> = card
 
     fun getAnswerWitchCallback(): LiveData<QuestionWithCallback<Answer, String>> =
-        Transformations.map(card) { QuestionWithCallback(it as Answer) }
+        card.map { QuestionWithCallback(it as Answer) }
 
     fun getMeaning(): LiveData<MeaningWithShowedTrigger> =
-        Transformations.map(card) { MeaningWithShowedTrigger(it as Meaning) }
+        card.map { MeaningWithShowedTrigger(it as Meaning) }
 
     fun getMultiChoiceWithCallback(): LiveData<QuestionWithCallback<MultiChoice, String>> =
-        Transformations.map(card) { QuestionWithCallback(it as MultiChoice) }
+        card.map { QuestionWithCallback(it as MultiChoice) }
 
     fun getRememberWithCallback(): LiveData<QuestionWithCallback<Remember, Remember.Option>> =
-        Transformations.map(card) { QuestionWithCallback(it as Remember) }
+        card.map { QuestionWithCallback(it as Remember) }
 
     fun getRememberRightWithCallback(): LiveData<QuestionWithCallback<RememberRight, RememberRight.Option>> =
-        Transformations.map(card) { QuestionWithCallback(it as RememberRight) }
+        card.map { QuestionWithCallback(it as RememberRight) }
 
     fun getAnswerCorrectness(): LiveData<Boolean?> = answerIsCorrect
     fun getNextVisibility(): LiveData<Boolean> = nextIsVisible
